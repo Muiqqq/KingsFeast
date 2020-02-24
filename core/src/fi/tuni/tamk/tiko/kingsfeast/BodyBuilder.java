@@ -1,16 +1,13 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.CircleMapObject;
 import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -21,6 +18,8 @@ import com.badlogic.gdx.utils.Array;
  * transforming into StaticBodies, support for Dynamic and/or Kinematic bodies needs to be added,
  * if needed.
  *
+ * Turns out box2d doesn't support ellipses (without turning them into polygons), and Tiled maps
+ * can't create straight up circles, only ellipses. -> Circular objects are not currently supported.
  */
 public class BodyBuilder {
     // unitScale is for pixels -> meters conversion
@@ -45,7 +44,6 @@ public class BodyBuilder {
 
         Array<RectangleMapObject> rectangleObjects = mapObjects.getByType(RectangleMapObject.class);
         Array<PolygonMapObject> polygonObjects = mapObjects.getByType(PolygonMapObject.class);
-        Array<CircleMapObject> circleObjects = mapObjects.getByType(CircleMapObject.class);
 
         for (RectangleMapObject rectangleObject : rectangleObjects) {
             createStaticBody(world, getRectangleShape(rectangleObject), userData);
@@ -53,10 +51,6 @@ public class BodyBuilder {
 
         for (PolygonMapObject polygonObject : polygonObjects) {
             createStaticBody(world, getPolygonShape(polygonObject), userData);
-        }
-
-        for (CircleMapObject circleObject : circleObjects) {
-            createStaticBody(world, getCircleShape(circleObject), userData);
         }
     }
 
@@ -95,20 +89,6 @@ public class BodyBuilder {
 
         polygon.set(worldVertices);
         return polygon;
-    }
-
-    /**
-     * Turns a CircleMapObject into a CircleShape. Probably doesn't work with ellipses.
-     *
-     * @param circleObject This gets transformed.
-     * @return CircleShape. Used to create a circular body later.
-     */
-    private static CircleShape getCircleShape(CircleMapObject circleObject) {
-        Circle circle = circleObject.getCircle();
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(circle.radius * unitScale);
-        circleShape.setPosition(new Vector2(circle.x * unitScale, circle.y * unitScale));
-        return circleShape;
     }
 
     /**
