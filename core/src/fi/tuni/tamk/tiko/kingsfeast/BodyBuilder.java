@@ -67,6 +67,8 @@ public class BodyBuilder {
         return polygon;
     }
 
+    // This doesn't do anything since box2d doesn't support ellipses. There are no circle objects
+    // in Tiled Map. No idea why libgdx contains support for them.
     private static CircleShape getCircleShape(CircleMapObject circleObject) {
         Circle circle = circleObject.getCircle();
         CircleShape circleShape = new CircleShape();
