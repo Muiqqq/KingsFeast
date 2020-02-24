@@ -29,6 +29,8 @@ public class Main extends ApplicationAdapter {
 	private Box2DDebugRenderer box2DDebugRenderer;
 	private WorldContactListener worldContactListener;
 
+	//PUSHI KOMMENTTI
+
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
