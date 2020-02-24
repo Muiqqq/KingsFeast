@@ -16,8 +16,9 @@ public class Main extends ApplicationAdapter {
 	private final boolean DEBUG_PHYSICS = true;
 
 	// Initial values, work in progress. Pixels -> meters.
-	private final float GAME_WIDTH = 800 / 100f;
-	private final float GAME_HEIGHT = 450 / 100f;
+	private final float unitScale = 1 / 100f;
+	private final float GAME_WIDTH = 800 * unitScale;
+	private final float GAME_HEIGHT = 450 * unitScale;
 	private final Vector2 gravity = new Vector2(0, -9.8f);
 
 	private SpriteBatch batch;
@@ -54,8 +55,8 @@ public class Main extends ApplicationAdapter {
 
 		batch.begin();
 		batch.draw(img, 0, 0,
-				img.getWidth() / 100f,
-				img.getHeight() / 100f);
+				img.getWidth() * unitScale,
+				img.getHeight() * unitScale);
 
 		batch.end();
 
