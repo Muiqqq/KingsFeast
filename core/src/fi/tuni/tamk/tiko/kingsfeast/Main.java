@@ -2,12 +2,14 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -23,14 +25,14 @@ public class Main extends ApplicationAdapter {
     private final Vector2 gravity = new Vector2(0, -9.8f);
 
     private SpriteBatch batch;
-    private Texture img;
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
     private OrthographicCamera camera;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
+    private ShapeRenderer shapeRenderer;
     private WorldContactListener worldContactListener;
-
+    private FoodPlate foodPlate;
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -42,11 +44,13 @@ public class Main extends ApplicationAdapter {
         // tiledMapRenderer
 
         box2DDebugRenderer = new Box2DDebugRenderer();
+        shapeRenderer = new ShapeRenderer();
 
         worldContactListener = new WorldContactListener();
         world.setContactListener(worldContactListener);
 
-        img = new Texture("badlogic.jpg");
+        inputProcessing();
+        foodPlate = new FoodPlate(unitScale);
     }
 
     @Override
@@ -55,14 +59,10 @@ public class Main extends ApplicationAdapter {
         Util.clearScreen();
 
         batch.begin();
-        batch.draw(img, 0, 0,
-                img.getWidth() * unitScale,
-                img.getHeight() * unitScale);
-
         batch.end();
 
         if(DEBUG_PHYSICS) {
-            box2DDebugRenderer.render(world, camera.combined);
+            drawDebug();
         }
 
         Util.worldStep(world, Gdx.graphics.getDeltaTime());
@@ -71,6 +71,55 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose () {
         batch.dispose();
-        img.dispose();
+    }
+
+    // Input handling goes here. Remember to document what goes in these methods for future
+    // reference.
+    private void inputProcessing() {
+        Gdx.input.setInputProcessor(new InputAdapter() {
+
+            @Override
+            public boolean touchDragged(int screenX, int screenY, int pointer) {
+                // transforms screen coordinates to game coords.
+                Vector3 screenCoordinates = new Vector3(screenX, screenY, 0);
+                camera.unproject(screenCoordinates);
+
+                // calculates throw
+                foodPlate.calculateAngleAndDistance(screenCoordinates.x,
+                        screenCoordinates.y,
+                        unitScale);
+
+                return true;
+            }
+
+            @Override
+            public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                foodPlate.createBody(world, unitScale);
+                foodPlate.firingPos.set(foodPlate.anchor.cpy());
+                return true;
+            }
+        });
+    }
+
+    private void drawDebug() {
+        box2DDebugRenderer.render(world, camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+
+        shapeRenderer.rect(foodPlate.anchor.x - 5,
+                foodPlate.anchor.y - 5,
+                10,
+                10);
+
+        shapeRenderer.rect(foodPlate.firingPos.x - 5,
+                foodPlate.firingPos.y - 5,
+                10,
+                10);
+
+        shapeRenderer.line(foodPlate.anchor.x,
+                foodPlate.anchor.y,
+                foodPlate.firingPos.x,
+                foodPlate.firingPos.y);
+
+        shapeRenderer.end();
     }
 }

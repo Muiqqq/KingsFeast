@@ -6,7 +6,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 /**
- * Contains contact handling.
+ * Contains contact handling. This might need to be implemented as an inner class
+ * in Main class.
  */
 public class WorldContactListener implements ContactListener {
 
