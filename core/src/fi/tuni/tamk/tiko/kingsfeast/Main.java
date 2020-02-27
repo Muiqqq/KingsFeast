@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Main extends ApplicationAdapter {
     // TODO: Add documentation everywhere.
+    // TODO: Make camera follow the foodPlate, within a levels bounds.
 
     private final boolean DEBUG_PHYSICS = true;
 
@@ -33,6 +34,7 @@ public class Main extends ApplicationAdapter {
     private ShapeRenderer shapeRenderer;
     private WorldContactListener worldContactListener;
     private FoodPlate foodPlate;
+
     @Override
     public void create () {
         batch = new SpriteBatch();
@@ -61,7 +63,7 @@ public class Main extends ApplicationAdapter {
         batch.begin();
         batch.end();
 
-        if(DEBUG_PHYSICS) {
+        if (DEBUG_PHYSICS) {
             drawDebug();
         }
 
@@ -80,11 +82,13 @@ public class Main extends ApplicationAdapter {
 
             @Override
             public boolean touchDragged(int screenX, int screenY, int pointer) {
-                // transforms screen coordinates to game coords.
+                // transforms screen coordinates to game coordinates.
+                // InputProcessor returns values with x = 0, y = 0 in top left,
+                // so they have to be transformed.
                 Vector3 screenCoordinates = new Vector3(screenX, screenY, 0);
                 camera.unproject(screenCoordinates);
 
-                // calculates throw
+                // calculates throw based on the dragging.
                 foodPlate.calculateAngleAndDistance(screenCoordinates.x,
                         screenCoordinates.y,
                         unitScale);
@@ -94,7 +98,11 @@ public class Main extends ApplicationAdapter {
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                // Currently the physics object gets created when the user lets go of
+                // mouse button, or stops touching the screen. Could be done differently.
                 foodPlate.createBody(world, unitScale);
+
+                // This just resets the firing position back to the anchor.
                 foodPlate.firingPos.set(foodPlate.anchor.cpy());
                 return true;
             }
@@ -103,6 +111,8 @@ public class Main extends ApplicationAdapter {
 
     private void drawDebug() {
         box2DDebugRenderer.render(world, camera.combined);
+
+        // Following code draws the rectangles and the line you see when testing.
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
         shapeRenderer.rect(foodPlate.anchor.x - 5,

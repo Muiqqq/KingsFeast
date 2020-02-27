@@ -11,6 +11,16 @@ import com.badlogic.gdx.physics.box2d.World;
  * TODO: DOCUMENTATION!
  *
  * Has to be refactored based on other additions to code.
+ *
+ * Restitution and friction can be set with body.getFixture().setRestitution()
+ * / body.getFixture().setFriction() in createBody(). Values for those are currently default.
+ *
+ * Anchor's position is currently set in a dumb, slow to modify way. Look at its
+ * initialization to change its position. Will eventually be based on wherever the royal
+ * sling is in a given level.
+ *
+ * Texture etc. could be stored here, as well as everything else a food plate could need.
+ * Documentation is work in progress.
  */
 public class FoodPlate {
     private final float MAX_STRENGTH = 15f;
@@ -35,6 +45,7 @@ public class FoodPlate {
         firingPos = anchor.cpy();
     }
 
+    // Gets the angle between two points
     private float angleBetweenTwoPoints() {
         float angle = MathUtils.atan2(anchor.y - firingPos.y, anchor.x - firingPos.x);
         angle %= 2 * MathUtils.PI;
@@ -44,11 +55,13 @@ public class FoodPlate {
         return angle;
     }
 
+    // Gets the distance between two points
     private float distanceBetweenTwoPoints() {
         return (float) Math.sqrt(((anchor.x - firingPos.x) * (anchor.x - firingPos.x)) +
                 ((anchor.y - firingPos.y) * (anchor.y - firingPos.y)));
     }
 
+    // Calculates angle and distance of the throw
     public void calculateAngleAndDistance(float screenX, float screenY, float unitScale) {
         firingPos.set(Util.convertMetresToPixels(screenX, unitScale),
                 Util.convertMetresToPixels(screenY, unitScale));
@@ -69,6 +82,7 @@ public class FoodPlate {
                 anchor.y + (distance * -MathUtils.sin(angle)));
     }
 
+    // Creates a body with a velocity based on calculations above.
     public void createBody(World world, float unitScale) {
         CircleShape circleShape = new CircleShape();
         circleShape.setRadius(plateRadius);
@@ -88,7 +102,7 @@ public class FoodPlate {
         System.out.println("velocityX: " + velocityX + " + velocityY: " + velocityY);
         System.out.println("angle: " + angle);
         System.out.println("drag distance: " + distance);
-        System.out.println("anchor position: " + anchor);
-        System.out.println("release position: " + firingPos);
+        System.out.println("anchor position (pixels): " + anchor);
+        System.out.println("release position (pixels): " + firingPos);
     }
 }
