@@ -22,7 +22,7 @@ public class GameScreen extends ScreenAdapter {
     // Initial values, work in progress. Pixels -> meters.
     private final float unitScale = 1 / 100f;
     private final float GAME_WIDTH = 800 * unitScale;
-    private final float GAME_HEIGHT = 450 * unitScale;
+    private final float GAME_HEIGHT = 480 * unitScale;
     private final Vector2 gravity = new Vector2(0, -9.8f);
 
     private SpriteBatch batch;

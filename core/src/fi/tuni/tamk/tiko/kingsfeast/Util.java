@@ -12,6 +12,7 @@ public class Util {
 
     private static double accumulator = 0;
     private static float TIME_STEP = 1 / 60f;
+
     // Jussi's method for world stepping
     public static void worldStep(World world, float deltaTime) {
         float frameTime = deltaTime;
