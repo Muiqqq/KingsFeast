@@ -12,7 +12,12 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
+/**
+ * All main gameplay stuff happens in this screen.
+ * This is the previous main class.
+ */
 public class GameScreen extends ScreenAdapter {
     // TODO: Add documentation everywhere.
     // TODO: Make camera follow the foodPlate, within a levels bounds.
@@ -68,11 +73,8 @@ public class GameScreen extends ScreenAdapter {
         batch.begin();
         batch.end();
 
-        if (DEBUG_PHYSICS) {
-            drawDebug();
-        }
-
-        Util.worldStep(world, Gdx.graphics.getDeltaTime());
+        drawDebug();
+        Util.worldStep(world, delta);
     }
 
     @Override
@@ -118,26 +120,28 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void drawDebug() {
-        box2DDebugRenderer.render(world, camera.combined);
+        if (DEBUG_PHYSICS) {
+            box2DDebugRenderer.render(world, camera.combined);
 
-        // Following code draws the rectangles and the line you see when testing.
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            // Following code draws the rectangles and the line you see when testing.
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-        shapeRenderer.rect(foodPlate.anchor.x - 5,
-                foodPlate.anchor.y - 5,
-                10,
-                10);
+            shapeRenderer.rect(foodPlate.anchor.x - 5,
+                    foodPlate.anchor.y - 5,
+                    10,
+                    10);
 
-        shapeRenderer.rect(foodPlate.firingPos.x - 5,
-                foodPlate.firingPos.y - 5,
-                10,
-                10);
+            shapeRenderer.rect(foodPlate.firingPos.x - 5,
+                    foodPlate.firingPos.y - 5,
+                    10,
+                    10);
 
-        shapeRenderer.line(foodPlate.anchor.x,
-                foodPlate.anchor.y,
-                foodPlate.firingPos.x,
-                foodPlate.firingPos.y);
+            shapeRenderer.line(foodPlate.anchor.x,
+                    foodPlate.anchor.y,
+                    foodPlate.firingPos.x,
+                    foodPlate.firingPos.y);
 
-        shapeRenderer.end();
+            shapeRenderer.end();
+        }
     }
 }
