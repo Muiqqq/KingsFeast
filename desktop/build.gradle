@@ -26,7 +26,7 @@ task debug(dependsOn: classes, type: JavaExec) {
 
 task dist(type: Jar) {
     manifest {
-        attributes 'Main-Class': project.mainClassName
+        attributes 'KingsFeast-Class': project.mainClassName
     }
     dependsOn configurations.runtimeClasspath
     from {

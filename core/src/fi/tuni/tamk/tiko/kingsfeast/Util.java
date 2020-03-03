@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Supposed to contain universally useful methods. Meant to reduce cluttering
- * of Main class.
+ * of KingsFeast class.
  */
 public class Util {
 

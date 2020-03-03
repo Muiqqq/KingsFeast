@@ -1,8 +1,8 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
-public class Main extends ApplicationAdapter {
+public class GameScreen extends ScreenAdapter {
     // TODO: Add documentation everywhere.
     // TODO: Make camera follow the foodPlate, within a levels bounds.
 
@@ -35,8 +35,13 @@ public class Main extends ApplicationAdapter {
     private WorldContactListener worldContactListener;
     private FoodPlate foodPlate;
 
+    /**
+     * Screens use show() instead of create()
+     *
+     * They are pretty much the same thing.
+     */
     @Override
-    public void create () {
+    public void show() {
         batch = new SpriteBatch();
         world = new World(gravity, false);
         camera = new OrthographicCamera();
@@ -56,7 +61,7 @@ public class Main extends ApplicationAdapter {
     }
 
     @Override
-    public void render () {
+    public void render(float delta) {
         batch.setProjectionMatrix(camera.combined);
         Util.clearScreen();
 
@@ -71,12 +76,15 @@ public class Main extends ApplicationAdapter {
     }
 
     @Override
-    public void dispose () {
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void dispose() {
         batch.dispose();
     }
 
-    // Input handling goes here. Remember to document what goes in these methods for future
-    // reference.
     private void inputProcessing() {
         Gdx.input.setInputProcessor(new InputAdapter() {
 

@@ -99,6 +99,7 @@ public class FoodPlate {
         float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
         body.setLinearVelocity(velocityX, velocityY);
 
+        // debugging stuff
         System.out.println("velocityX: " + velocityX + " + velocityY: " + velocityY);
         System.out.println("angle: " + angle);
         System.out.println("drag distance: " + distance);
