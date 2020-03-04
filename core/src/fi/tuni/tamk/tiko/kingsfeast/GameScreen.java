@@ -10,13 +10,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 
 /**
  * All main gameplay stuff happens in this screen.
@@ -108,7 +106,7 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void update() {
-        enableFiring();
+        enableThrowing();
         camera.update();
     }
 
@@ -168,7 +166,7 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    private void enableFiring() {
+    private void enableThrowing() {
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos);
 
