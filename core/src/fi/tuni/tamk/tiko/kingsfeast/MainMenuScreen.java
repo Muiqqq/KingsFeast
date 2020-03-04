@@ -37,6 +37,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     // screens use show() instead of create()
     // same thing essentially.
+    @Override
     public void show() {
 
         // create the stage with a viewport.
@@ -53,17 +54,21 @@ public class MainMenuScreen extends ScreenAdapter {
 
     // screen flickers when resizing during runtime,
     // might be worth checking other viewport options.
+
+    @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
     // stage.act() calls every single actor's act() method.
     // stage.draw() draws all actors.
+    @Override
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
     }
 
+    @Override
     public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
