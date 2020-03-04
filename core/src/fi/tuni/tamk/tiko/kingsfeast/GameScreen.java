@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -39,7 +40,11 @@ public class GameScreen extends ScreenAdapter {
     private ShapeRenderer shapeRenderer;
     private WorldContactListener worldContactListener;
     private FoodPlate foodPlate;
+    private Vector3 touchPos;
+    private Rectangle firingBounds;
+    private boolean canFire;
 
+    // TODO: rename shit and refactor shit to a better form
     /**
      * Screens use show() instead of create()
      *
@@ -55,6 +60,8 @@ public class GameScreen extends ScreenAdapter {
         // tiledMap
         // tiledMapRenderer
 
+        touchPos = new Vector3();
+
         box2DDebugRenderer = new Box2DDebugRenderer();
         shapeRenderer = new ShapeRenderer();
 
@@ -63,6 +70,8 @@ public class GameScreen extends ScreenAdapter {
 
         inputProcessing();
         foodPlate = new FoodPlate(unitScale);
+        firingBounds = new Rectangle(foodPlate.anchor.x, foodPlate.anchor.y, 20, 20);
+        canFire = false;
     }
 
     @Override
@@ -74,6 +83,7 @@ public class GameScreen extends ScreenAdapter {
         batch.end();
 
         drawDebug();
+        update();
         Util.worldStep(world, delta);
     }
 
@@ -87,6 +97,24 @@ public class GameScreen extends ScreenAdapter {
         batch.dispose();
     }
 
+    private void update() {
+        enableFiring();
+    }
+
+    private void enableFiring() {
+        touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+        camera.unproject(touchPos);
+
+        if(Gdx.input.justTouched()) {
+            if(firingBounds.contains(touchPos.x / unitScale, touchPos.y / unitScale)) {
+                canFire = true;
+
+                System.out.println("touchPosX: " + touchPos.x / unitScale);
+                System.out.println("touchPosY: " + touchPos.y / unitScale);
+            }
+        }
+    }
+
     private void inputProcessing() {
         Gdx.input.setInputProcessor(new InputAdapter() {
 
@@ -95,14 +123,15 @@ public class GameScreen extends ScreenAdapter {
                 // transforms screen coordinates to game coordinates.
                 // InputProcessor returns values with x = 0, y = 0 in top left,
                 // so they have to be transformed.
-                Vector3 screenCoordinates = new Vector3(screenX, screenY, 0);
-                camera.unproject(screenCoordinates);
+                if(canFire) {
+                    Vector3 screenCoordinates = new Vector3(screenX, screenY, 0);
+                    camera.unproject(screenCoordinates);
 
-                // calculates throw based on the dragging.
-                foodPlate.calculateAngleAndDistance(screenCoordinates.x,
-                        screenCoordinates.y,
-                        unitScale);
-
+                    // calculates throw based on the dragging.
+                    foodPlate.calculateAngleAndDistance(screenCoordinates.x,
+                            screenCoordinates.y,
+                            unitScale);
+                }
                 return true;
             }
 
@@ -110,11 +139,16 @@ public class GameScreen extends ScreenAdapter {
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 // Currently the physics object gets created when the user lets go of
                 // mouse button, or stops touching the screen. Could be done differently.
-                foodPlate.createBody(world, unitScale);
+                if (canFire) {
+                    foodPlate.createBody(world, unitScale);
 
-                // This just resets the firing position back to the anchor.
-                foodPlate.firingPos.set(foodPlate.anchor.cpy());
-                return true;
+                    // This just resets the firing position back to the anchor.
+                    foodPlate.firingPos.set(foodPlate.anchor.cpy());
+                    canFire = false;
+                    return true;
+                } else {
+                    return false;
+                }
             }
         });
     }
@@ -128,8 +162,8 @@ public class GameScreen extends ScreenAdapter {
 
             shapeRenderer.rect(foodPlate.anchor.x - 5,
                     foodPlate.anchor.y - 5,
-                    10,
-                    10);
+                    20,
+                    20);
 
             shapeRenderer.rect(foodPlate.firingPos.x - 5,
                     foodPlate.firingPos.y - 5,
