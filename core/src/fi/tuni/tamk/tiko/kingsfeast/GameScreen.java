@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -144,24 +145,24 @@ public class GameScreen extends ScreenAdapter {
     private void drawDebug() {
         if (DEBUG_PHYSICS) {
             box2DDebugRenderer.render(world, camera.combined);
-
             // Following code draws the rectangles and the line you see when testing.
+            shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-            shapeRenderer.rect(foodPlate.anchor.x - 5,
-                    foodPlate.anchor.y - 5,
-                    10,
-                    10);
+            shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.anchor.x - 5, unitScale),
+                    Util.convertPixelsToMetres(foodPlate.anchor.y - 5, unitScale),
+                    Util.convertPixelsToMetres(10, unitScale),
+                    Util.convertPixelsToMetres(10, unitScale));
 
-            shapeRenderer.rect(foodPlate.firingPos.x - 5,
-                    foodPlate.firingPos.y - 5,
-                    10,
-                    10);
+            shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.firingPos.x - 5, unitScale),
+                    Util.convertPixelsToMetres(foodPlate.firingPos.y - 5, unitScale),
+                    Util.convertPixelsToMetres(10, unitScale),
+                    Util.convertPixelsToMetres(10, unitScale));
 
-            shapeRenderer.line(foodPlate.anchor.x,
-                    foodPlate.anchor.y,
-                    foodPlate.firingPos.x,
-                    foodPlate.firingPos.y);
+            shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x, unitScale),
+                    Util.convertPixelsToMetres(foodPlate.anchor.y, unitScale),
+                    Util.convertPixelsToMetres(foodPlate.firingPos.x, unitScale),
+                    Util.convertPixelsToMetres(foodPlate.firingPos.y, unitScale));
 
             shapeRenderer.end();
         }
