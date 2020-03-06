@@ -14,6 +14,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
@@ -28,9 +32,12 @@ public class GameScreen extends ScreenAdapter {
 
     // Initial values, work in progress. Pixels -> meters.
     private final float unitScale = 1 / 100f;
-    private final float GAME_WIDTH = 800 * unitScale;
-    private final float GAME_HEIGHT = 480 * unitScale;
+    private final float GAME_WIDTH = 928 * unitScale;
+    private final float GAME_HEIGHT = 544 * unitScale;
     private final Vector2 gravity = new Vector2(0, -9.8f);
+
+    // levels class will contain variables and constants for different levels.
+    private float LEVEL_WIDTH;
 
     private SpriteBatch batch;
     private TiledMap tiledMap;
@@ -39,7 +46,6 @@ public class GameScreen extends ScreenAdapter {
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private ShapeRenderer shapeRenderer;
-    private WorldContactListener worldContactListener;
     private FoodPlate foodPlate;
     private Vector3 touchPos;
     private Rectangle firingBounds;
@@ -59,19 +65,24 @@ public class GameScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
 
-        tiledMap = new TmxMapLoader().load("pantestmap.tmx");
+        tiledMap = new TmxMapLoader().load("cameratestmap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
-
-        touchPos = new Vector3();
+        LEVEL_WIDTH = Util.getLevelWidth(tiledMap) * unitScale;
 
         box2DDebugRenderer = new Box2DDebugRenderer();
         shapeRenderer = new ShapeRenderer();
 
-        worldContactListener = new WorldContactListener();
-        world.setContactListener(worldContactListener);
+        BodyBuilder.transformObjectsToBodies(tiledMap, world,
+                "collision", "walls", unitScale);
 
+        BodyBuilder.transformObjectsToBodies(tiledMap, world,
+                "goal", "goal", unitScale);
+
+        contactProcessing();
         inputProcessing();
         foodPlate = new FoodPlate(unitScale);
+
+        touchPos = new Vector3();
 
         // bounds should be set to something representing the object being flung from the sling
         // eventually.
@@ -107,6 +118,12 @@ public class GameScreen extends ScreenAdapter {
 
     private void update() {
         enableThrowing();
+        foodPlate.destroyBody(world, this);
+        foodPlate.checkIfBodyStopped();
+        snapCameraToBody();
+        handleCameraLimits();
+
+        // all camera methods have to be before camera.update();
         camera.update();
     }
 
@@ -140,6 +157,39 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
+    public void contactProcessing() {
+        world.setContactListener(new ContactListener() {
+
+            @Override
+            public void beginContact(Contact contact) {
+                String userDataA = (String) contact.getFixtureA().getBody().getUserData();
+                String userDataB = (String) contact.getFixtureB().getBody().getUserData();
+
+                if (userDataA.equals("foodPlate") && userDataB.equals("goal") ||
+                        userDataB.equals("foodPlate") && userDataA.equals("goal")) {
+
+                    foodPlate.removeBody = true;
+                    foodPlate.isPlateFlying = false;
+                }
+            }
+
+            @Override
+            public void endContact(Contact contact) {
+
+            }
+
+            @Override
+            public void preSolve(Contact contact, Manifold oldManifold) {
+
+            }
+
+            @Override
+            public void postSolve(Contact contact, ContactImpulse impulse) {
+
+            }
+        });
+    }
+
     private void drawDebug() {
         if (DEBUG_PHYSICS) {
             box2DDebugRenderer.render(world, camera.combined);
@@ -166,12 +216,51 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    // put camera stuff in util maybe? might not work
+    private void handleCameraLimits() {
+        if (camera.position.x - (camera.viewportWidth / 2) <= 0)  {
+            camera.position.x = 0 + camera.viewportWidth / 2;
+        }
+
+        if (camera.position.x + (camera.viewportWidth / 2) >= LEVEL_WIDTH) {
+            camera.position.x = LEVEL_WIDTH - (camera.viewportWidth / 2);
+        }
+    }
+
+    private void snapCameraToBody() {
+        if (foodPlate.isPlateFlying) {
+            camera.position.x = foodPlate.body.getWorldCenter().x;
+        }
+    }
+
+    public void cameraReset() {
+        camera.position.x = 0 + (camera.viewportWidth / 2);
+    }
+
+    private void handleCameraPanning(Vector3 tmp, Vector3 lastTouch, int screenX) {
+        float posX = Util.convertMetresToPixels(touchPos.x, unitScale);
+        float posY = Util.convertMetresToPixels(touchPos.y, unitScale);
+        if (!foodPlate.isPlateFlying) {
+            if (!firingBounds.contains(posX, posY) && !canThrow) {
+                tmp.set(screenX, 0, 0);
+                camera.unproject(tmp);
+                tmp.sub(lastTouch).scl(-0.1f, 0, 0);
+                camera.translate(tmp);
+            }
+        }
+    }
+
+
+    // TODO: Move below methods to FoodPlate class
+    // these might belong in FoodPlate?
     private void enableThrowing() {
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos);
+        float posX = Util.convertMetresToPixels(touchPos.x, unitScale);
+        float posY = Util.convertMetresToPixels(touchPos.y, unitScale);
 
         if (Gdx.input.justTouched()) {
-            if (firingBounds.contains(touchPos.x / unitScale, touchPos.y / unitScale)) {
+            if (firingBounds.contains(posX, posY)) {
                 canThrow = true;
 
                 System.out.println("touchPosX: " + touchPos.x / unitScale);
@@ -180,20 +269,8 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    // put these in util maybe? might not work because of camera stuff.
-    private void handleCameraPanning(Vector3 tmp, Vector3 lastTouch, int screenX) {
-        if (!firingBounds.contains(touchPos.x / unitScale, touchPos.y / unitScale) &&
-                !canThrow) {
-
-            tmp.set(screenX, 0, 0);
-            camera.unproject(tmp);
-            tmp.sub(lastTouch).scl(-0.1f, 0, 0);
-            camera.translate(tmp);
-        }
-    }
-
     private void handleThrowCalculations(int screenX, int screenY) {
-        if (canThrow) {
+        if (canThrow && !foodPlate.isPlateFlying) {
             // transforms screen coordinates to game coordinates.
             // InputProcessor returns values with x = 0, y = 0 in top left,
             // so they have to be transformed.
@@ -208,8 +285,8 @@ public class GameScreen extends ScreenAdapter {
     }
 
     private void handleThrowing() {
-        if (canThrow) {
-            foodPlate.createBody(world, unitScale);
+        if (canThrow && !foodPlate.isPlateFlying) {
+            foodPlate.body = foodPlate.createBody(world, unitScale);
 
             // This just resets the firing position back to the anchor.
             foodPlate.firingPos.set(foodPlate.anchor.cpy());

@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -30,10 +31,16 @@ public class FoodPlate {
     private final float plateRadius = 0.10f;
     private final float plateDensity = 2.0f;
 
+    private float recentSpeed;
+
     Vector2 anchor;
     Vector2 firingPos;
     private float distance;
     private float angle;
+
+    Body body;
+    boolean isPlateFlying = false;
+    boolean removeBody = false;
 
     public FoodPlate(float unitScale) {
         // anchor pos will come from the slings position once that's implemented.
@@ -83,27 +90,62 @@ public class FoodPlate {
     }
 
     // Creates a body with a velocity based on calculations above.
-    public void createBody(World world, float unitScale) {
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(plateRadius);
-        circleShape.setPosition(new Vector2(Util.convertPixelsToMetres(firingPos.x, unitScale),
-                Util.convertPixelsToMetres(firingPos.y, unitScale)));
+    public Body createBody(World world, float unitScale) {
+        if (!isPlateFlying) {
+            isPlateFlying = true;
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius(plateRadius);
+            circleShape.setPosition(new Vector2(Util.convertPixelsToMetres(firingPos.x, unitScale),
+                    Util.convertPixelsToMetres(firingPos.y, unitScale)));
 
-        BodyDef bd = new BodyDef();
-        bd.type = BodyDef.BodyType.DynamicBody;
-        Body body = world.createBody(bd);
-        body.createFixture(circleShape, plateDensity);
-        circleShape.dispose();
+            BodyDef bd = new BodyDef();
+            bd.type = BodyDef.BodyType.DynamicBody;
+            Body body = world.createBody(bd);
+            body.setUserData("foodPlate");
+            body.createFixture(circleShape, plateDensity);
+            body.getFixtureList().get(0).setFriction(0.1f);
+            circleShape.dispose();
 
-        float velocityX = Math.abs( (MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f)));
-        float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
-        body.setLinearVelocity(velocityX, velocityY);
+            float velocityX = Math.abs( (MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f)));
+            float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
+            body.setLinearVelocity(velocityX, velocityY);
 
-        // debugging stuff
-        System.out.println("velocityX: " + velocityX + " + velocityY: " + velocityY);
-        System.out.println("angle: " + angle);
-        System.out.println("drag distance: " + distance);
-        System.out.println("anchor position (pixels): " + anchor);
-        System.out.println("release position (pixels): " + firingPos);
+            // This slows the velocity by the specified amount every time step. correct value
+            // has to be tested through trial and error.
+            body.setLinearDamping(0.33f);
+
+            // used to check if body has stopped moving so it can be cleared.
+            recentSpeed = body.getLinearVelocity().len();
+
+            // debugging stuff
+            System.out.println("velocityX: " + velocityX + " + velocityY: " + velocityY);
+            System.out.println("angle: " + angle);
+            System.out.println("drag distance: " + distance);
+            System.out.println("anchor position (pixels): " + anchor);
+            System.out.println("release position (pixels): " + firingPos);
+
+            return body;
+        } else {
+            return null;
+        }
+    }
+
+    public void checkIfBodyStopped() {
+        if (isPlateFlying) {
+            float currentSpeed = body.getLinearVelocity().len();
+            recentSpeed = 0.1f * currentSpeed + 0.9f * recentSpeed;
+            if (recentSpeed < 0.075f) {
+                removeBody = true;
+                isPlateFlying = false;
+            }
+        }
+    }
+
+    public void destroyBody(World world, GameScreen gameScreen) {
+        if (removeBody) {
+            world.destroyBody(body);
+            removeBody = false;
+            gameScreen.cameraReset();
+        }
     }
 }
