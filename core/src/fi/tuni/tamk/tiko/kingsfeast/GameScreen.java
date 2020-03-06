@@ -25,8 +25,9 @@ import com.badlogic.gdx.physics.box2d.World;
  * This is the previous main class.
  */
 public class GameScreen extends ScreenAdapter {
-    // TODO: Add documentation everywhere.
-    // TODO: Make camera follow the foodPlate, within a levels bounds.
+    // TODO: Add documentation everywhere
+    //  -Move throwing related methods to FoodPlate class if possible
+    //  -Contact handling should happen in case specific methods
 
     private final boolean DEBUG_PHYSICS = true;
 
@@ -49,9 +50,9 @@ public class GameScreen extends ScreenAdapter {
     private FoodPlate foodPlate;
     private Vector3 touchPos;
     private Rectangle firingBounds;
-    private boolean canThrow;
 
-    // TODO: rename shit and refactor shit to a better form
+    // put this in FoodPlate too if possible
+    private boolean canThrow;
 
     /**
      * Screens use show() instead of create()
@@ -157,7 +158,7 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
-    public void contactProcessing() {
+    private void contactProcessing() {
         world.setContactListener(new ContactListener() {
 
             @Override
@@ -165,6 +166,7 @@ public class GameScreen extends ScreenAdapter {
                 String userDataA = (String) contact.getFixtureA().getBody().getUserData();
                 String userDataB = (String) contact.getFixtureB().getBody().getUserData();
 
+                // if foodplate collided with goal -> destroy it's body
                 if (userDataA.equals("foodPlate") && userDataB.equals("goal") ||
                         userDataB.equals("foodPlate") && userDataA.equals("goal")) {
 
@@ -250,8 +252,6 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-
-    // TODO: Move below methods to FoodPlate class
     // these might belong in FoodPlate?
     private void enableThrowing() {
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);

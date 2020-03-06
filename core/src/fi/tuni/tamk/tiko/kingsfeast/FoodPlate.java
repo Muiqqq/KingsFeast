@@ -1,6 +1,5 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -110,7 +109,7 @@ public class FoodPlate {
             float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
             body.setLinearVelocity(velocityX, velocityY);
 
-            // This slows the velocity by the specified amount every time step. correct value
+            // This slows the velocity by the specified amount every time step. Value we should use
             // has to be tested through trial and error.
             body.setLinearDamping(0.33f);
 
@@ -130,6 +129,7 @@ public class FoodPlate {
         }
     }
 
+    // if plate has almost stopped -> mark it for removal.
     public void checkIfBodyStopped() {
         if (isPlateFlying) {
             float currentSpeed = body.getLinearVelocity().len();
@@ -141,6 +141,7 @@ public class FoodPlate {
         }
     }
 
+    // removes the plate body so game can continue
     public void destroyBody(World world, GameScreen gameScreen) {
         if (removeBody) {
             world.destroyBody(body);
