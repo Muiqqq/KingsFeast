@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -28,6 +27,7 @@ public class GameScreen extends ScreenAdapter {
     // TODO: Add documentation everywhere
     //  -Move throwing related methods to FoodPlate class if possible
     //  -Contact handling should happen in case specific methods
+    private final KingsFeast kingsFeast;
 
     private final boolean DEBUG_PHYSICS = true;
 
@@ -38,9 +38,7 @@ public class GameScreen extends ScreenAdapter {
 
     private final Vector2 gravity = new Vector2(0, -9.8f);
 
-    // levels class will contain variables and constants for different levels.
-    private float LEVEL_WIDTH;
-
+    private LevelData levelData;
     private SpriteBatch batch;
     private TiledMap tiledMap;
     private TiledMapRenderer tiledMapRenderer;
@@ -50,10 +48,15 @@ public class GameScreen extends ScreenAdapter {
     private ShapeRenderer shapeRenderer;
     private FoodPlate foodPlate;
     private Vector3 touchPos;
-    private Rectangle firingBounds;
+    private Rectangle throwBounds;
 
     // put this in FoodPlate too if possible
     private boolean canThrow;
+    private boolean wasTouchDragged = false;
+
+    GameScreen(KingsFeast kingsFeast) {
+        this.kingsFeast = kingsFeast;
+    }
     /**
      * Screens use show() instead of create()
      *
@@ -61,14 +64,14 @@ public class GameScreen extends ScreenAdapter {
      */
     @Override
     public void show() {
+        levelData = kingsFeast.getLevels().get(kingsFeast.getCurrentLevel());
         batch = new SpriteBatch();
         world = new World(gravity, false);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
 
-        tiledMap = new TmxMapLoader().load("cameratestmap.tmx");
+        tiledMap = levelData.getTiledMap();
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
-        LEVEL_WIDTH = Util.getLevelWidth(tiledMap) * unitScale;
 
         box2DDebugRenderer = new Box2DDebugRenderer();
         shapeRenderer = new ShapeRenderer();
@@ -81,13 +84,13 @@ public class GameScreen extends ScreenAdapter {
 
         contactProcessing();
         inputProcessing();
-        foodPlate = new FoodPlate();
+        foodPlate = new FoodPlate(levelData.getSlingAnchorPos());
 
         touchPos = new Vector3();
 
         // bounds should be set to something representing the object being flung from the sling
         // eventually.
-        firingBounds = new Rectangle(0, 0, 128, 128);
+        throwBounds = levelData.getTHROW_BOUNDS();
         canThrow = false;
     }
 
@@ -123,6 +126,7 @@ public class GameScreen extends ScreenAdapter {
         foodPlate.checkIfBodyStopped();
         snapCameraToBody();
         handleCameraLimits();
+        swapLevel();
 
         // all camera methods have to be before camera.update();
         camera.update();
@@ -224,8 +228,8 @@ public class GameScreen extends ScreenAdapter {
             camera.position.x = 0 + camera.viewportWidth / 2;
         }
 
-        if (camera.position.x + (camera.viewportWidth / 2) >= LEVEL_WIDTH) {
-            camera.position.x = LEVEL_WIDTH - (camera.viewportWidth / 2);
+        if (camera.position.x + (camera.viewportWidth / 2) >= levelData.getLEVEL_WIDTH()) {
+            camera.position.x = levelData.getLEVEL_WIDTH() - (camera.viewportWidth / 2);
         }
     }
 
@@ -243,7 +247,7 @@ public class GameScreen extends ScreenAdapter {
         float posX = Util.convertMetresToPixels(touchPos.x);
         float posY = Util.convertMetresToPixels(touchPos.y);
         if (!foodPlate.isPlateFlying) {
-            if (!firingBounds.contains(posX, posY) && !canThrow) {
+            if (!throwBounds.contains(posX, posY) && !canThrow) {
                 tmp.set(screenX, 0, 0);
                 camera.unproject(tmp);
                 tmp.sub(lastTouch).scl(-0.1f, 0, 0);
@@ -260,7 +264,7 @@ public class GameScreen extends ScreenAdapter {
         float posY = Util.convertMetresToPixels(touchPos.y);
 
         if (Gdx.input.justTouched()) {
-            if (firingBounds.contains(posX, posY)) {
+            if (throwBounds.contains(posX, posY)) {
                 canThrow = true;
 
                 System.out.println("touchPosX: " + touchPos.x / unitScale);
@@ -281,16 +285,33 @@ public class GameScreen extends ScreenAdapter {
             foodPlate.calculateAngleAndDistance(screenCoordinates.x,
                     screenCoordinates.y,
                     unitScale);
+
+            wasTouchDragged = true;
         }
     }
 
     private void handleThrowing() {
-        if (canThrow && !foodPlate.isPlateFlying) {
+        if (canThrow && !foodPlate.isPlateFlying && wasTouchDragged) {
             foodPlate.body = foodPlate.createBody(world);
 
             // This just resets the firing position back to the anchor.
             foodPlate.firingPos.set(foodPlate.anchor.cpy());
             canThrow = false;
+            wasTouchDragged = false;
+        }
+    }
+
+    // swaps the level to the next one if current one is finished (all objects have been thrown)
+    // currently just loops back to beginning.
+    private void swapLevel() {
+        if (foodPlate.allPlatesThrown) {
+            if (kingsFeast.getCurrentLevel() < kingsFeast.getLevels().size - 1) {
+                kingsFeast.incrementCurrentLevel();
+                kingsFeast.setScreen(new GameScreen(kingsFeast));
+            } else {
+                kingsFeast.setCurrentLevel(0);
+                kingsFeast.setScreen(new GameScreen(kingsFeast));
+            }
         }
     }
 }

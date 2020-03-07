@@ -40,15 +40,15 @@ class FoodPlate {
     Body body;
     boolean isPlateFlying = false;
     boolean removeBody = false;
+    boolean allPlatesThrown = false;
 
-    FoodPlate() {
+    FoodPlate(Vector2 anchor) {
         // anchor pos will come from the slings position once that's implemented.
-        anchor = new Vector2(Util.convertMetresToPixels(1.28f),
-                Util.convertMetresToPixels(1.28f));
+        this.anchor = anchor;
 
-        System.out.println(anchor);
+        System.out.println(this.anchor);
 
-        firingPos = anchor.cpy();
+        firingPos = this.anchor.cpy();
     }
 
     // Gets the angle between two points
@@ -147,6 +147,9 @@ class FoodPlate {
             world.destroyBody(body);
             removeBody = false;
             gameScreen.cameraReset();
+
+            // TEMPORARY!!
+            allPlatesThrown = true;
         }
     }
 }

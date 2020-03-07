@@ -1,6 +1,5 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  * Quick mockup to test different screens. Will eventually become the actual main menu.
  */
 public class MainMenuScreen extends ScreenAdapter {
-    private final Game game;
+    private final KingsFeast kingsFeast;
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
     // Placeholder values
@@ -30,8 +29,8 @@ public class MainMenuScreen extends ScreenAdapter {
     private Texture playPressedTexture;
 
     // Constructor here takes the game object so we can swap to a different screen from this one.
-    MainMenuScreen(Game game) {
-        this.game = game;
+    MainMenuScreen(KingsFeast kingsFeast) {
+        this.kingsFeast = kingsFeast;
     }
 
     // screens use show() instead of create()
@@ -100,7 +99,7 @@ public class MainMenuScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
-                game.setScreen(new GameScreen());
+                kingsFeast.setScreen(new GameScreen(kingsFeast));
                 dispose();
             }
         });

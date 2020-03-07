@@ -21,7 +21,7 @@ import com.badlogic.gdx.utils.Array;
  * Turns out box2d doesn't support ellipses (without turning them into polygons), and Tiled maps
  * can't create straight up circles, only ellipses. -> Circular objects are not currently supported.
  */
-public class BodyBuilder {
+class BodyBuilder {
     // unitScale is for pixels -> meters conversion
     private static float unitScale = 0.0f;
 
@@ -36,7 +36,7 @@ public class BodyBuilder {
      *                 bodies from different object layers from one another.
      * @param scale Used to change pixels to meters. Box2d needs meters.
      */
-    public static void transformObjectsToBodies(TiledMap tiledMap, World world,
+    static void transformObjectsToBodies(TiledMap tiledMap, World world,
                                                 String layer, String userData, float scale) {
 
         unitScale = scale;

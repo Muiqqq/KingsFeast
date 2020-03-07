@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="-1" width="48" height="17" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="12">
+ <layer id="1" name="Tile Layer 1" width="48" height="17">
+  <data encoding="base64" compression="zlib">
+   eJztwQENAAAAwqD3T20ON6AAAAA+DAzAAAE=
+  </data>
+ </layer>
+ <objectgroup id="3" name="collision">
+  <object id="1" x="0" y="0" width="32" height="544"/>
+  <object id="2" x="32" y="512" width="1504" height="32"/>
+  <object id="3" x="1504" y="1.18366" width="32" height="510.816"/>
+  <object id="4" x="0" y="0" width="1504" height="32"/>
+ </objectgroup>
+ <objectgroup id="4" name="goal">
+  <object id="8" x="1168.54" y="507.413" width="128" height="32"/>
+ </objectgroup>
+</map>
