@@ -22,7 +22,7 @@ import com.badlogic.gdx.physics.box2d.World;
  * Texture etc. could be stored here, as well as everything else a food plate could need.
  * Documentation is work in progress.
  */
-public class FoodPlate {
+class FoodPlate {
     private final float MAX_STRENGTH = 15f;
     private final float MAX_DISTANCE = 100f;
     private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
@@ -41,10 +41,10 @@ public class FoodPlate {
     boolean isPlateFlying = false;
     boolean removeBody = false;
 
-    public FoodPlate(float unitScale) {
+    FoodPlate() {
         // anchor pos will come from the slings position once that's implemented.
-        anchor = new Vector2(Util.convertMetresToPixels(1.28f, unitScale),
-                Util.convertMetresToPixels(1.28f, unitScale));
+        anchor = new Vector2(Util.convertMetresToPixels(1.28f),
+                Util.convertMetresToPixels(1.28f));
 
         System.out.println(anchor);
 
@@ -68,9 +68,9 @@ public class FoodPlate {
     }
 
     // Calculates angle and distance of the throw
-    public void calculateAngleAndDistance(float screenX, float screenY, float unitScale) {
-        firingPos.set(Util.convertMetresToPixels(screenX, unitScale),
-                Util.convertMetresToPixels(screenY, unitScale));
+    void calculateAngleAndDistance(float screenX, float screenY, float unitScale) {
+        firingPos.set(Util.convertMetresToPixels(screenX),
+                Util.convertMetresToPixels(screenY));
         distance = distanceBetweenTwoPoints();
         angle = angleBetweenTwoPoints();
 
@@ -89,13 +89,13 @@ public class FoodPlate {
     }
 
     // Creates a body with a velocity based on calculations above.
-    public Body createBody(World world, float unitScale) {
+    Body createBody(World world) {
         if (!isPlateFlying) {
             isPlateFlying = true;
             CircleShape circleShape = new CircleShape();
             circleShape.setRadius(plateRadius);
-            circleShape.setPosition(new Vector2(Util.convertPixelsToMetres(firingPos.x, unitScale),
-                    Util.convertPixelsToMetres(firingPos.y, unitScale)));
+            circleShape.setPosition(new Vector2(Util.convertPixelsToMetres(firingPos.x),
+                    Util.convertPixelsToMetres(firingPos.y)));
 
             BodyDef bd = new BodyDef();
             bd.type = BodyDef.BodyType.DynamicBody;
@@ -130,7 +130,7 @@ public class FoodPlate {
     }
 
     // if plate has almost stopped -> mark it for removal.
-    public void checkIfBodyStopped() {
+    void checkIfBodyStopped() {
         if (isPlateFlying) {
             float currentSpeed = body.getLinearVelocity().len();
             recentSpeed = 0.1f * currentSpeed + 0.9f * recentSpeed;
@@ -142,7 +142,7 @@ public class FoodPlate {
     }
 
     // removes the plate body so game can continue
-    public void destroyBody(World world, GameScreen gameScreen) {
+    void destroyBody(World world, GameScreen gameScreen) {
         if (removeBody) {
             world.destroyBody(body);
             removeBody = false;

@@ -31,10 +31,11 @@ public class GameScreen extends ScreenAdapter {
 
     private final boolean DEBUG_PHYSICS = true;
 
+    private final float unitScale = Util.getUnitScale();
     // Initial values, work in progress. Pixels -> meters.
-    private final float unitScale = 1 / 100f;
     private final float GAME_WIDTH = 928 * unitScale;
     private final float GAME_HEIGHT = 544 * unitScale;
+
     private final Vector2 gravity = new Vector2(0, -9.8f);
 
     // levels class will contain variables and constants for different levels.
@@ -53,7 +54,6 @@ public class GameScreen extends ScreenAdapter {
 
     // put this in FoodPlate too if possible
     private boolean canThrow;
-
     /**
      * Screens use show() instead of create()
      *
@@ -81,7 +81,7 @@ public class GameScreen extends ScreenAdapter {
 
         contactProcessing();
         inputProcessing();
-        foodPlate = new FoodPlate(unitScale);
+        foodPlate = new FoodPlate();
 
         touchPos = new Vector3();
 
@@ -199,20 +199,20 @@ public class GameScreen extends ScreenAdapter {
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
-            shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.anchor.x - 5, unitScale),
-                    Util.convertPixelsToMetres(foodPlate.anchor.y - 5, unitScale),
-                    Util.convertPixelsToMetres(10, unitScale),
-                    Util.convertPixelsToMetres(10, unitScale));
+            shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.anchor.x - 5),
+                    Util.convertPixelsToMetres(foodPlate.anchor.y - 5),
+                    Util.convertPixelsToMetres(10),
+                    Util.convertPixelsToMetres(10));
 
-            shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.firingPos.x - 5, unitScale),
-                    Util.convertPixelsToMetres(foodPlate.firingPos.y - 5, unitScale),
-                    Util.convertPixelsToMetres(10, unitScale),
-                    Util.convertPixelsToMetres(10, unitScale));
+            shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.firingPos.x - 5),
+                    Util.convertPixelsToMetres(foodPlate.firingPos.y - 5),
+                    Util.convertPixelsToMetres(10),
+                    Util.convertPixelsToMetres(10));
 
-            shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x, unitScale),
-                    Util.convertPixelsToMetres(foodPlate.anchor.y, unitScale),
-                    Util.convertPixelsToMetres(foodPlate.firingPos.x, unitScale),
-                    Util.convertPixelsToMetres(foodPlate.firingPos.y, unitScale));
+            shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x),
+                    Util.convertPixelsToMetres(foodPlate.anchor.y),
+                    Util.convertPixelsToMetres(foodPlate.firingPos.x),
+                    Util.convertPixelsToMetres(foodPlate.firingPos.y));
 
             shapeRenderer.end();
         }
@@ -235,13 +235,13 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    public void cameraReset() {
+    void cameraReset() {
         camera.position.x = 0 + (camera.viewportWidth / 2);
     }
 
     private void handleCameraPanning(Vector3 tmp, Vector3 lastTouch, int screenX) {
-        float posX = Util.convertMetresToPixels(touchPos.x, unitScale);
-        float posY = Util.convertMetresToPixels(touchPos.y, unitScale);
+        float posX = Util.convertMetresToPixels(touchPos.x);
+        float posY = Util.convertMetresToPixels(touchPos.y);
         if (!foodPlate.isPlateFlying) {
             if (!firingBounds.contains(posX, posY) && !canThrow) {
                 tmp.set(screenX, 0, 0);
@@ -256,8 +256,8 @@ public class GameScreen extends ScreenAdapter {
     private void enableThrowing() {
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos);
-        float posX = Util.convertMetresToPixels(touchPos.x, unitScale);
-        float posY = Util.convertMetresToPixels(touchPos.y, unitScale);
+        float posX = Util.convertMetresToPixels(touchPos.x);
+        float posY = Util.convertMetresToPixels(touchPos.y);
 
         if (Gdx.input.justTouched()) {
             if (firingBounds.contains(posX, posY)) {
@@ -286,7 +286,7 @@ public class GameScreen extends ScreenAdapter {
 
     private void handleThrowing() {
         if (canThrow && !foodPlate.isPlateFlying) {
-            foodPlate.body = foodPlate.createBody(world, unitScale);
+            foodPlate.body = foodPlate.createBody(world);
 
             // This just resets the firing position back to the anchor.
             foodPlate.firingPos.set(foodPlate.anchor.cpy());

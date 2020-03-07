@@ -11,9 +11,13 @@ import com.badlogic.gdx.physics.box2d.World;
  * of KingsFeast class.
  */
 public class Util {
-
+    private static final float unitScale = 1 / 100f;
     private static double accumulator = 0;
     private static float TIME_STEP = 1 / 60f;
+
+    public static float getUnitScale() {
+        return unitScale;
+    }
 
     // Jussi's method for world stepping
     public static void worldStep(World world, float deltaTime) {
@@ -43,11 +47,11 @@ public class Util {
         return mapWidth * tilePixelWidth;
     }
 
-    public static float convertPixelsToMetres(float pixels, float unitScale) {
+    public static float convertPixelsToMetres(float pixels) {
         return pixels * unitScale;
     }
 
-    public static float convertMetresToPixels(float metres, float unitScale) {
+    public static float convertMetresToPixels(float metres) {
         return metres / unitScale;
     }
 }

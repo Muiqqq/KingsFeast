@@ -21,7 +21,6 @@ public class MainMenuScreen extends ScreenAdapter {
     private final Game game;
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
-
     // Placeholder values
     private final float BUTTON_WIDTH = 128f;
     private final float BUTTON_HEIGHT = 96f;
@@ -31,7 +30,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private Texture playPressedTexture;
 
     // Constructor here takes the game object so we can swap to a different screen from this one.
-    public MainMenuScreen(Game game) {
+    MainMenuScreen(Game game) {
         this.game = game;
     }
 
