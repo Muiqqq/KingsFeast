@@ -1,11 +1,13 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * TODO: DOCUMENTATION!
@@ -37,14 +39,17 @@ class FoodPlate {
     private float distance;
     private float angle;
 
+    private Array<Texture> foodTextures;
+
     Body body;
     boolean isPlateFlying = false;
     boolean removeBody = false;
     boolean allPlatesThrown = false;
 
-    FoodPlate(Vector2 anchor) {
+    FoodPlate(Vector2 anchor, Array<Texture> foodTextures) {
         // anchor pos will come from the slings position once that's implemented.
         this.anchor = anchor;
+        this.foodTextures = foodTextures;
 
         System.out.println(this.anchor);
 

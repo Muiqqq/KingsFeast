@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * All main gameplay stuff happens in this screen.
@@ -49,6 +51,8 @@ public class GameScreen extends ScreenAdapter {
     private FoodPlate foodPlate;
     private Vector3 touchPos;
     private Rectangle throwBounds;
+
+    private Array<Texture> visitorTextures;
 
     // put this in FoodPlate too if possible
     private boolean canThrow;
@@ -84,8 +88,8 @@ public class GameScreen extends ScreenAdapter {
 
         contactProcessing();
         inputProcessing();
-        foodPlate = new FoodPlate(levelData.getSlingAnchorPos());
-
+        foodPlate = new FoodPlate(levelData.getSlingAnchorPos(), levelData.getFoodTextures());
+        visitorTextures = levelData.getVisitorTextures();
         touchPos = new Vector3();
 
         // bounds should be set to something representing the object being flung from the sling

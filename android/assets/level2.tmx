@@ -12,6 +12,6 @@
   <object id="4" x="0" y="0" width="1504" height="32"/>
  </objectgroup>
  <objectgroup id="4" name="goal">
-  <object id="8" x="669.54" y="505.413" width="128" height="32"/>
+  <object id="8" x="608" y="480" width="128" height="32"/>
  </objectgroup>
 </map>

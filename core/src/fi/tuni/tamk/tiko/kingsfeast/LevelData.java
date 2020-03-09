@@ -25,6 +25,8 @@ class LevelData {
 
     LevelData() {
         // Don't know how to utilize this yet.
+        foodTextures = new Array<>();
+        visitorTextures = new Array<>();
     }
 
     void setTiledMap(String mapPath) {
@@ -58,5 +60,21 @@ class LevelData {
 
     Rectangle getTHROW_BOUNDS() {
         return THROW_BOUNDS;
+    }
+
+    void setFoodTextures(Array<Texture> foodTextures) {
+        this.foodTextures = foodTextures;
+    }
+
+    void setVisitorTextures(Array<Texture> visitorTextures) {
+        this.visitorTextures = visitorTextures;
+    }
+
+    Array<Texture> getFoodTextures() {
+        return foodTextures;
+    }
+
+    Array<Texture> getVisitorTextures() {
+        return visitorTextures;
     }
 }
