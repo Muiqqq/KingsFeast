@@ -52,8 +52,6 @@ public class GameScreen extends ScreenAdapter {
     private Vector3 touchPos;
     private Rectangle throwBounds;
 
-    private Array<Texture> visitorTextures;
-
     // put this in FoodPlate too if possible
     private boolean canThrow;
     private boolean wasTouchDragged = false;
@@ -81,15 +79,14 @@ public class GameScreen extends ScreenAdapter {
         shapeRenderer = new ShapeRenderer();
 
         BodyBuilder.transformObjectsToBodies(tiledMap, world,
-                "collision", "walls", unitScale);
+                "collision", "walls");
 
         BodyBuilder.transformObjectsToBodies(tiledMap, world,
-                "goal", "goal", unitScale);
+                "goal", "goal");
 
         contactProcessing();
         inputProcessing();
         foodPlate = new FoodPlate(levelData.getSlingAnchorPos(), levelData.getFoodTextures());
-        visitorTextures = levelData.getVisitorTextures();
         touchPos = new Vector3();
 
         // bounds should be set to something representing the object being flung from the sling

@@ -34,12 +34,11 @@ class BodyBuilder {
      *              from where the objects are taken from.
      * @param userData Userdata to be saved in the bodies currently being created. Used to identify
      *                 bodies from different object layers from one another.
-     * @param scale Used to change pixels to meters. Box2d needs meters.
      */
     static void transformObjectsToBodies(TiledMap tiledMap, World world,
-                                                String layer, String userData, float scale) {
+                                                String layer, String userData) {
 
-        unitScale = scale;
+        unitScale = Util.getUnitScale();
         MapObjects mapObjects = tiledMap.getLayers().get(layer).getObjects();
 
         Array<RectangleMapObject> rectangleObjects = mapObjects.getByType(RectangleMapObject.class);

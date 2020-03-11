@@ -11,6 +11,10 @@ public class KingsFeast extends Game {
     //  -texture drawing
     //  -loading screen is necessary with assetManager so make that
     //  -so many things
+
+    // remember to give an instance of 'this' to all new screens, if anything
+    // from this class or parent class is to be used in that screen.
+
     // contains every level's leveldata.
     // also keeping track of current level. used to iterate levels array.
     private final AssetManager assetManager = new AssetManager();
@@ -23,7 +27,7 @@ public class KingsFeast extends Game {
         levelBuilder = new LevelBuilder(this);
         levels = levelBuilder.buildLevels();
         currentLevel = 0;
-        setScreen(new MainMenuScreen(this));
+        setScreen(new LoadingScreen(this));
     }
 
     AssetManager getAssetManager() {
@@ -32,6 +36,10 @@ public class KingsFeast extends Game {
 
     Array<LevelData> getLevels() {
         return levels;
+    }
+
+    LevelBuilder getLevelBuilder() {
+        return levelBuilder;
     }
 
     int getCurrentLevel() {

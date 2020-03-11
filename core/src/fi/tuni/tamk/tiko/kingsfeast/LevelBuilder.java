@@ -2,6 +2,7 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Logger;
 
 /**
  * Create new levels here.
@@ -18,28 +19,17 @@ import com.badlogic.gdx.utils.Array;
  *  - How tho?
  */
 class LevelBuilder {
-    private KingsFeast kingsFeast;
+    private final KingsFeast kingsFeast;
     private Array<Texture> allTextures;
     private Array<Texture> foodTextures;
     private Array<Texture> visitorTextures;
 
     LevelBuilder(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
-        loadAssets();
     }
 
     // TODO: FIX THIS ALEKSI!!!
-    private void loadAssets() {
-        kingsFeast.getAssetManager().load("redfood.png", Texture.class);
-        kingsFeast.getAssetManager().load("bluefood.png", Texture.class);
-        kingsFeast.getAssetManager().load("greenfood.png", Texture.class);
-        kingsFeast.getAssetManager().load("redgoal.png", Texture.class);
-        kingsFeast.getAssetManager().load("bluegoal.png", Texture.class);
-        kingsFeast.getAssetManager().load("greengoal.png", Texture.class);
-
-        // don't forget this after loading
-        kingsFeast.getAssetManager().finishLoading();
-
+    void createTextureArrays() {
         allTextures = new Array<>();
         foodTextures = new Array<>();
         visitorTextures = new Array<>();
