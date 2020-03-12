@@ -20,36 +20,9 @@ import com.badlogic.gdx.utils.Logger;
  */
 class LevelBuilder {
     private final KingsFeast kingsFeast;
-    private Array<Texture> allTextures;
-    private Array<Texture> foodTextures;
-    private Array<Texture> visitorTextures;
 
     LevelBuilder(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
-    }
-
-    // TODO: FIX THIS ALEKSI!!!
-    void createTextureArrays() {
-        allTextures = new Array<>();
-        foodTextures = new Array<>();
-        visitorTextures = new Array<>();
-
-        // this badboy slaps them in alphabetical order automatically! keep in mind.
-        allTextures = kingsFeast.getAssetManager().getAll(Texture.class, allTextures);
-        System.out.println("amount of loaded textures: " + allTextures.size);
-
-        // filenames are important -> a naming convention should be set up
-        for (int i = 0; i < allTextures.size; i++) {
-            if (allTextures.get(i).toString().contains("food")) {
-                foodTextures.add(allTextures.get(i));
-            }
-            if (allTextures.get(i).toString().contains("goal")) {
-                visitorTextures.add(allTextures.get(i));
-            }
-        }
-
-        System.out.println(foodTextures.get(0));
-        System.out.println(visitorTextures.get(0));
     }
 
     Array<LevelData> buildLevels() {
@@ -60,30 +33,21 @@ class LevelBuilder {
         return levels;
     }
 
+    // thiese could be simplified, but in case there's actually going to be more info to
+    // be saved in LevelData, keep these as is.
     private LevelData level1() {
-        LevelData level = new LevelData();
-        level.setTiledMap("level1.tmx");
-        level.setSlingAnchorPos();
+        LevelData level = new LevelData("level1.tmx");
         return level;
     }
 
     private LevelData level2() {
-        LevelData level = new LevelData();
-        level.setTiledMap("level2.tmx");
-        level.setSlingAnchorPos();
+        LevelData level = new LevelData("level2.tmx");
         return level;
     }
 
     private LevelData level3() {
-        LevelData level = new LevelData();
-        level.setTiledMap("level3.tmx");
-        level.setSlingAnchorPos();
+        LevelData level = new LevelData("level3.tmx");
         return level;
     }
 
-    /*
-    private void createLevelTextureArrays(Array<Texture> visitorTextures, Array<Texture> foodTextures) {
-
-    }
-     */
 }

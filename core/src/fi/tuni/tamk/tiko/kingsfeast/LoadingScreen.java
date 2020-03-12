@@ -20,7 +20,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class LoadingScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
-    private final LevelBuilder levelBuilder;
+    // private final LevelBuilder levelBuilder;
 
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
@@ -35,7 +35,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     LoadingScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
-        this.levelBuilder = kingsFeast.getLevelBuilder();
+        // this.levelBuilder = kingsFeast.getLevelBuilder();
     }
 
     @Override
@@ -51,7 +51,6 @@ public class LoadingScreen extends ScreenAdapter {
         viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         loadAssets();
-        levelBuilder.createTextureArrays();
     }
 
     @Override
@@ -73,6 +72,7 @@ public class LoadingScreen extends ScreenAdapter {
         progress = kingsFeast.getAssetManager().getProgress();
     }
 
+    // All of this just draws the progress bar.
     private void draw() {
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -81,9 +81,9 @@ public class LoadingScreen extends ScreenAdapter {
                 (GAME_WIDTH - PROGRESS_BAR_WIDTH) / 2, (GAME_HEIGHT - PROGRESS_BAR_HEIGHT) / 2,
                 progress * PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
         shapeRenderer.end();
-        System.out.println(GAME_WIDTH - PROGRESS_BAR_WIDTH / 2);
     }
 
+    // All the assets should be loaded here.
     private void loadAssets() {
         kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
         kingsFeast.getAssetManager().load("redfood.png", Texture.class);

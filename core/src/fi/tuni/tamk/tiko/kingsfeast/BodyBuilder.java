@@ -36,7 +36,7 @@ class BodyBuilder {
      *                 bodies from different object layers from one another.
      */
     static void transformObjectsToBodies(TiledMap tiledMap, World world,
-                                                String layer, String userData) {
+                                                String layer, String userData, boolean isSensor) {
 
         unitScale = Util.getUnitScale();
         MapObjects mapObjects = tiledMap.getLayers().get(layer).getObjects();
@@ -45,11 +45,19 @@ class BodyBuilder {
         Array<PolygonMapObject> polygonObjects = mapObjects.getByType(PolygonMapObject.class);
 
         for (RectangleMapObject rectangleObject : rectangleObjects) {
-            createStaticBody(world, getRectangleShape(rectangleObject), userData);
+            createStaticBody(world,
+                    getRectangleShape(rectangleObject),
+                    createRectangleBodyDef(rectangleObject),
+                    userData,
+                    isSensor);
         }
 
         for (PolygonMapObject polygonObject : polygonObjects) {
-            createStaticBody(world, getPolygonShape(polygonObject), userData);
+            createStaticBody(world,
+                    getPolygonShape(polygonObject),
+                    createPolygonBodyDef(polygonObject),
+                    userData,
+                    isSensor);
         }
     }
 
@@ -62,13 +70,27 @@ class BodyBuilder {
     private static PolygonShape getRectangleShape(RectangleMapObject rectangleObject) {
         Rectangle r = rectangleObject.getRectangle();
         PolygonShape rectangle = new PolygonShape();
+        rectangle.setAsBox((r.width * 0.5f) * unitScale,
+                (r.height * 0.5f) * unitScale);
+
+        return rectangle;
+    }
+
+    /**
+     * Creates a bodyDef for rectangleObjects. It's important that the location is set for the
+     * body and not it's fixture/shape.
+     * @param rectangleObject Tiled Map mapObject from which to get all the necessary data from.
+     * @return BodyDef for a rectangular StaticBody.
+     */
+    private static BodyDef createRectangleBodyDef(RectangleMapObject rectangleObject) {
+        Rectangle r = rectangleObject.getRectangle();
         Vector2 center = new Vector2((r.x + r.width * 0.5f) * unitScale,
                 (r.y + r.height * 0.5f) * unitScale);
 
-        rectangle.setAsBox((r.width * 0.5f) * unitScale,
-                (r.height * 0.5f) * unitScale, center, 0.0f);
-
-        return rectangle;
+        BodyDef bd = new BodyDef();
+        bd.type = BodyDef.BodyType.StaticBody;
+        bd.position.set(center);
+        return bd;
     }
 
     /**
@@ -91,6 +113,22 @@ class BodyBuilder {
     }
 
     /**
+     * Currently redundant, exists for the sake of consistency.
+     * Should be made to store the location like rectangular polygons do in the
+     * createRectangleBodyDef() method. Not necessary for functionality, will be changed
+     * later if there's time for it.
+     *
+     * @param polygonObject Does nothing
+     * @return Empty BodyDef of the type StaticBody.
+     */
+    private static BodyDef createPolygonBodyDef(PolygonMapObject polygonObject) {
+        BodyDef bd = new BodyDef();
+        bd.type = BodyDef.BodyType.StaticBody;
+
+        return bd;
+    }
+
+    /**
      * Creates a body based on a shape created in one of the get methods in this class.
      *
      * @param world World is used to create the body.
@@ -98,12 +136,14 @@ class BodyBuilder {
      *              for the body that is being created.
      * @param userData Used to identify objects from different object layers from one another.
      */
-    private static void createStaticBody(World world, Shape shape, String userData) {
-        BodyDef bd = new BodyDef();
-        bd.type = BodyDef.BodyType.StaticBody;
+    private static void createStaticBody(World world, Shape shape, BodyDef bd,
+                                         String userData, boolean isSensor) {
+
         Body body = world.createBody(bd);
         body.setUserData(userData);
-        body.createFixture(shape, 0.0f);
+        body.createFixture(shape, 1.0f);
+
+        body.getFixtureList().get(0).setSensor(isSensor);
 
         shape.dispose();
     }

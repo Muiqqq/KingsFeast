@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.World;
 class Util {
     private static final float unitScale = 1 / 100f;
     private static double accumulator = 0;
-    private static float TIME_STEP = 1 / 60f;
+    private static final float TIME_STEP = 1 / 60f;
 
     static float getUnitScale() {
         return unitScale;

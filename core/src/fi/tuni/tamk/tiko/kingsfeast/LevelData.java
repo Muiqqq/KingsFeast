@@ -1,6 +1,7 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Rectangle;
@@ -20,16 +21,17 @@ class LevelData {
     private float LEVEL_WIDTH;
     private Vector2 slingAnchorPos;
     private Rectangle THROW_BOUNDS;
-    private Array<Texture> foodTextures;
-    private Array<Texture> visitorTextures;
+    private int VISITOR_COUNT;
 
-    LevelData() {
-        // Don't know how to utilize this yet.
-        foodTextures = new Array<>();
-        visitorTextures = new Array<>();
+    LevelData(String tiledMapPath) {
+        setTiledMap(tiledMapPath);
+        setSlingAnchorPos();
+        setVisitorCount();
     }
 
-    void setTiledMap(String mapPath) {
+    // Sets the tiled map and the levels width for a level.
+    // Levels width is needed for handling camera limits.
+    private void setTiledMap(String mapPath) {
         tiledMap = new TmxMapLoader().load(mapPath);
         LEVEL_WIDTH = Util.getLevelWidth(tiledMap) * unitScale;
     }
@@ -42,16 +44,17 @@ class LevelData {
         return LEVEL_WIDTH;
     }
 
-    // This thing needs to be taken from the tiledMap somehow.
-    void setSlingAnchorPos() {
-        slingAnchorPos = new Vector2(Util.convertMetresToPixels(1.28f),
-                Util.convertMetresToPixels(1.28f));
+    // This thing needs to be taken from the tiledMap somehow if it's not going to be
+    // the same for every level.
+    private void setSlingAnchorPos() {
+        slingAnchorPos = new Vector2(Util.convertMetresToPixels(1.60f),
+                Util.convertMetresToPixels(1.60f));
 
         // remember to change these to match whatever the bounds are eventually gonna be.
         // currently this is a bad way to do it but oh well.
-        THROW_BOUNDS = new Rectangle(slingAnchorPos.x - 128f,
-                slingAnchorPos.y - 128f,
-                128f, 128f);
+        THROW_BOUNDS = new Rectangle(slingAnchorPos.x - 160f,
+                slingAnchorPos.y - 160f,
+                160f, 160f);
     }
 
     Vector2 getSlingAnchorPos() {
@@ -62,19 +65,15 @@ class LevelData {
         return THROW_BOUNDS;
     }
 
-    void setFoodTextures(Array<Texture> foodTextures) {
-        this.foodTextures = foodTextures;
+    // Gets the amount of goal objects and sets VISITOR_COUNT to match that.
+    // VISITOR_COUNT is used to track players progress in a level.
+    private void setVisitorCount() {
+        MapObjects mapObjects = tiledMap.getLayers().get("goal").getObjects();
+        Array<RectangleMapObject> visitorObjects = mapObjects.getByType(RectangleMapObject.class);
+        VISITOR_COUNT = visitorObjects.size;
     }
 
-    void setVisitorTextures(Array<Texture> visitorTextures) {
-        this.visitorTextures = visitorTextures;
-    }
-
-    Array<Texture> getFoodTextures() {
-        return foodTextures;
-    }
-
-    Array<Texture> getVisitorTextures() {
-        return visitorTextures;
+    int getVisitorCount() {
+        return VISITOR_COUNT;
     }
 }

@@ -1,6 +1,7 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -14,23 +15,20 @@ import com.badlogic.gdx.utils.Array;
  *
  * Has to be refactored based on other additions to code.
  *
- * Restitution and friction can be set with body.getFixture().setRestitution()
- * / body.getFixture().setFriction() in createBody(). Values for those are currently default.
- *
- * Anchor's position is currently set in a dumb, slow to modify way. Look at its
- * initialization to change its position. Will eventually be based on wherever the royal
- * sling is in a given level.
- *
  * Texture etc. could be stored here, as well as everything else a food plate could need.
  * Documentation is work in progress.
  */
 class FoodPlate {
-    private final float MAX_STRENGTH = 15f;
-    private final float MAX_DISTANCE = 100f;
+    private final KingsFeast kingsFeast;
+
+    private final float MAX_STRENGTH = 2f;
+    private final float MAX_DISTANCE = 128f;
     private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
     private final float LOWER_ANGLE = MathUtils.PI / 2f;
     private final float plateRadius = 0.10f;
-    private final float plateDensity = 2.0f;
+    private final float plateDensity = 5.0f;
+    private final float restitution = 0.6f;
+    private final float friction = 1.0f;
 
     private float recentSpeed;
 
@@ -39,21 +37,20 @@ class FoodPlate {
     private float distance;
     private float angle;
 
-    private Array<Texture> foodTextures;
+    private Texture foodTexture;
 
-    Body body;
+    private Body body;
     boolean isPlateFlying = false;
     boolean removeBody = false;
-    boolean allPlatesThrown = false;
 
-    FoodPlate(Vector2 anchor, Array<Texture> foodTextures) {
+    FoodPlate(LevelData levelData, KingsFeast kingsFeast) {
         // anchor pos will come from the slings position once that's implemented.
-        this.anchor = anchor;
-        this.foodTextures = foodTextures;
+        this.kingsFeast = kingsFeast;
+        anchor = levelData.getSlingAnchorPos();
 
-        System.out.println(this.anchor);
+        randomizeTexture();
 
-        firingPos = this.anchor.cpy();
+        firingPos = anchor.cpy();
     }
 
     // Gets the angle between two points
@@ -73,7 +70,7 @@ class FoodPlate {
     }
 
     // Calculates angle and distance of the throw
-    void calculateAngleAndDistance(float screenX, float screenY, float unitScale) {
+    void calculateAngleAndDistance(float screenX, float screenY) {
         firingPos.set(Util.convertMetresToPixels(screenX),
                 Util.convertMetresToPixels(screenY));
         distance = distanceBetweenTwoPoints();
@@ -107,12 +104,15 @@ class FoodPlate {
             Body body = world.createBody(bd);
             body.setUserData("foodPlate");
             body.createFixture(circleShape, plateDensity);
-            body.getFixtureList().get(0).setFriction(0.1f);
+            body.getFixtureList().get(0).setFriction(friction);
+            body.getFixtureList().get(0).setRestitution(restitution);
+            body.getFixtureList().get(0).setDensity(plateDensity);
             circleShape.dispose();
 
             float velocityX = Math.abs( (MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f)));
             float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
-            body.setLinearVelocity(velocityX, velocityY);
+            body.applyLinearImpulse(new Vector2(velocityX, velocityY),
+                    body.getWorldCenter(), true);
 
             // This slows the velocity by the specified amount every time step. Value we should use
             // has to be tested through trial and error.
@@ -139,7 +139,7 @@ class FoodPlate {
         if (isPlateFlying) {
             float currentSpeed = body.getLinearVelocity().len();
             recentSpeed = 0.1f * currentSpeed + 0.9f * recentSpeed;
-            if (recentSpeed < 0.075f) {
+            if (recentSpeed < 0.2f) {
                 removeBody = true;
                 isPlateFlying = false;
             }
@@ -151,10 +151,72 @@ class FoodPlate {
         if (removeBody) {
             world.destroyBody(body);
             removeBody = false;
+            randomizeTexture();
             gameScreen.cameraReset();
+        }
+    }
 
-            // TEMPORARY!!
-            allPlatesThrown = true;
+    float getPlateRadius() {
+        return plateRadius;
+    }
+
+    void setBody(Body body) {
+        this.body = body;
+    }
+
+    Body getBody() {
+        return body;
+    }
+
+    // Sets a random texture for the foodplate. Adds a bit of visual flavor.
+    // Refactor depending on how texture files / atlas is being handled.
+    private void randomizeTexture() {
+        Array<Texture> foodTextures = new Array<>();
+        foodTextures.add(kingsFeast.getAssetManager().get("redfood.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("bluefood.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("greenfood.png", Texture.class));
+
+        foodTexture = foodTextures.get(MathUtils.random(0, foodTextures.size - 1));
+    }
+
+    Texture getFoodTexture() {
+        return foodTexture;
+    }
+
+    // TODO: add rotation for flying food
+    //  - fine tune size etc, make sure textures don't float on top of or sink
+    //  - into platforms/floors etc.
+    void draw(SpriteBatch batch, World world) {
+        Array<Body> bodies = new Array<>();
+        world.getBodies(bodies);
+
+        // If a 'visitor' got their food already, draws the food texture at their spot.
+        // The texture of the foodplate which collided with a visitor's spot gets saved
+        // to the userData of said spot (goal).
+        for (Body body : bodies) {
+            if (body.getUserData() instanceof Texture) {
+                batch.draw((Texture) body.getUserData(),
+                        body.getWorldCenter().x - plateRadius,
+                        body.getWorldCenter().y - plateRadius,
+                        plateRadius * 2,
+                        plateRadius * 2);
+            }
+        }
+
+        // If a plate is thrown, draws the texture on the flying physics body,
+        // otherwise draws it where the firing position is -> follows touch
+        if(isPlateFlying) {
+            batch.draw(foodTexture,
+                   body.getWorldCenter().x - plateRadius,
+                    body.getWorldCenter().y - plateRadius,
+                    plateRadius * 2,
+                    plateRadius * 2);
+        } else {
+            batch.draw(foodTexture,
+                    Util.convertPixelsToMetres(firingPos.x) - plateRadius,
+                    Util.convertPixelsToMetres(firingPos.y) - plateRadius,
+                    plateRadius * 2,
+                    plateRadius * 2);
         }
     }
 }

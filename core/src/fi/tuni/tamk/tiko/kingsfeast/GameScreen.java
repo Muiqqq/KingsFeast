@@ -7,12 +7,15 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -52,10 +55,14 @@ public class GameScreen extends ScreenAdapter {
     private Vector3 touchPos;
     private Rectangle throwBounds;
 
-    // put this in FoodPlate too if possible
+    // note to self: put this in FoodPlate too if possible
     private boolean canThrow;
-    private boolean wasTouchDragged = false;
 
+    private boolean wasTouchDragged;
+
+    private int VISITORS_SERVED;
+
+    // KingsFeast object gets stored to access its and its parent's methods.
     GameScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
     }
@@ -79,20 +86,22 @@ public class GameScreen extends ScreenAdapter {
         shapeRenderer = new ShapeRenderer();
 
         BodyBuilder.transformObjectsToBodies(tiledMap, world,
-                "collision", "walls");
+                "collision", "walls", false);
 
         BodyBuilder.transformObjectsToBodies(tiledMap, world,
-                "goal", "goal");
+                "goal", "goal", true);
 
         contactProcessing();
         inputProcessing();
-        foodPlate = new FoodPlate(levelData.getSlingAnchorPos(), levelData.getFoodTextures());
+        foodPlate = new FoodPlate(levelData, kingsFeast);
         touchPos = new Vector3();
 
         // bounds should be set to something representing the object being flung from the sling
         // eventually.
         throwBounds = levelData.getTHROW_BOUNDS();
         canThrow = false;
+        wasTouchDragged = false;
+        VISITORS_SERVED = 0;
     }
 
     @Override
@@ -104,6 +113,7 @@ public class GameScreen extends ScreenAdapter {
         tiledMapRenderer.render();
 
         batch.begin();
+        foodPlate.draw(batch, world);
         batch.end();
 
         drawDebug();
@@ -133,6 +143,8 @@ public class GameScreen extends ScreenAdapter {
         camera.update();
     }
 
+    // Input processing happens here. Actual processing should happen in case specific methods.
+    // Check them for additional documentation
     private void inputProcessing() {
         Gdx.input.setInputProcessor(new InputAdapter() {
 
@@ -155,29 +167,20 @@ public class GameScreen extends ScreenAdapter {
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-                // Currently the physics object gets created when the user lets go of
-                // mouse button, or stops touching the screen. Could be done differently.
                 handleThrowing();
                 return true;
             }
         });
     }
 
+    // Contact processing happens here. Actual processing should happen in case specific methods.
+    // Check them for additional documentation.
     private void contactProcessing() {
         world.setContactListener(new ContactListener() {
 
             @Override
             public void beginContact(Contact contact) {
-                String userDataA = (String) contact.getFixtureA().getBody().getUserData();
-                String userDataB = (String) contact.getFixtureB().getBody().getUserData();
-
-                // if foodplate collided with goal -> destroy it's body
-                if (userDataA.equals("foodPlate") && userDataB.equals("goal") ||
-                        userDataB.equals("foodPlate") && userDataA.equals("goal")) {
-
-                    foodPlate.removeBody = true;
-                    foodPlate.isPlateFlying = false;
-                }
+                handleCollisionWithGoal(contact);
             }
 
             @Override
@@ -197,6 +200,7 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
+    // Draws debugging stuff
     private void drawDebug() {
         if (DEBUG_PHYSICS) {
             box2DDebugRenderer.render(world, camera.combined);
@@ -234,12 +238,16 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+
+    // Makes the camera follow the foodplate when one is flying.
     private void snapCameraToBody() {
         if (foodPlate.isPlateFlying) {
-            camera.position.x = foodPlate.body.getWorldCenter().x;
+            camera.position.x = foodPlate.getBody().getWorldCenter().x;
         }
     }
 
+    // Resets camera's position back to default
+    // This gets called, f. ex., when a foodplate is destroyed or hits a goal.
     void cameraReset() {
         camera.position.x = 0 + (camera.viewportWidth / 2);
     }
@@ -284,16 +292,17 @@ public class GameScreen extends ScreenAdapter {
 
             // calculates throw based on the dragging.
             foodPlate.calculateAngleAndDistance(screenCoordinates.x,
-                    screenCoordinates.y,
-                    unitScale);
+                    screenCoordinates.y);
 
             wasTouchDragged = true;
         }
     }
 
+    // Currently the physics object gets created when the user lets go of
+    // mouse button, or stops touching the screen. Could be done differently.
     private void handleThrowing() {
         if (canThrow && !foodPlate.isPlateFlying && wasTouchDragged) {
-            foodPlate.body = foodPlate.createBody(world);
+            foodPlate.setBody(foodPlate.createBody(world));
 
             // This just resets the firing position back to the anchor.
             foodPlate.firingPos.set(foodPlate.anchor.cpy());
@@ -302,10 +311,40 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    // Handles the collision between a foodplate and a goal.
+    // Foodplate which hit a goal gets removed, it's texture is set to be drawn at that goal
+    // and level progression (VISITORS_SERVED) is incremented.
+    // Also makes sure that you cannot progress by hitting the same goal again, by changing
+    // the userdata to something different.
+    private void handleCollisionWithGoal(Contact contact) {
+        Object userDataA = contact.getFixtureA().getBody().getUserData();
+        Object userDataB = contact.getFixtureB().getBody().getUserData();
+
+        // if foodplate collided with goal -> destroy it's body
+        if (userDataA.equals("foodPlate") && userDataB.equals("goal") ||
+                userDataB.equals("foodPlate") && userDataA.equals("goal")) {
+
+            foodPlate.removeBody = true;
+            foodPlate.isPlateFlying = false;
+
+            VISITORS_SERVED++;
+
+            // Foodplate's texture gets saved to the userdata of that goal spot, so that
+            // texture can be drawn there. Serves as a visual cue to the player to indicate
+            // that that specific spot has been hit already.
+            if (userDataA.equals("goal")) {
+                contact.getFixtureA().getBody().setUserData(foodPlate.getFoodTexture());
+            }
+            if (userDataB.equals("goal")) {
+                contact.getFixtureB().getBody().setUserData(foodPlate.getFoodTexture());
+            }
+        }
+    }
+
     // swaps the level to the next one if current one is finished (all objects have been thrown)
-    // currently just loops back to beginning.
+    // currently just loops back to the first level after all levels have been completed.
     private void swapLevel() {
-        if (foodPlate.allPlatesThrown) {
+        if (VISITORS_SERVED == levelData.getVisitorCount()) {
             if (kingsFeast.getCurrentLevel() < kingsFeast.getLevels().size - 1) {
                 kingsFeast.incrementCurrentLevel();
                 kingsFeast.setScreen(new GameScreen(kingsFeast));

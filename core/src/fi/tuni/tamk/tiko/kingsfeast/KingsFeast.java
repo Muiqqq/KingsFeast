@@ -7,9 +7,12 @@ import com.badlogic.gdx.utils.Array;
 public class KingsFeast extends Game {
     // TODO: Add documentation everywhere.
     //  -add dispose() when necessary
-    //  -make levels last longer than one throw -> implement placeholder textures and stuff?
-    //  -texture drawing
-    //  -loading screen is necessary with assetManager so make that
+    //  -texture drawing -> done for now. Refactor when needed.
+    //  -loading screen is necessary with assetManager so make that -> done for now.
+    //  -make sure all assets are loaded with assetManager and not by hand!
+    //  -primitive UI stuff so we have that for testing version
+    //  -create as many level concepts using almost no game mechanics as possible
+    //  -flesh out said levels
     //  -so many things
 
     // remember to give an instance of 'this' to all new screens, if anything
