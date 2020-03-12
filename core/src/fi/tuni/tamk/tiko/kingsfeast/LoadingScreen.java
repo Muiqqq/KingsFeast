@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -20,7 +21,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class LoadingScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
-    // private final LevelBuilder levelBuilder;
+    private final LevelBuilder levelBuilder;
 
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
@@ -33,9 +34,9 @@ public class LoadingScreen extends ScreenAdapter {
 
     private float progress;
 
-    LoadingScreen(KingsFeast kingsFeast) {
+    LoadingScreen(KingsFeast kingsFeast, LevelBuilder levelBuilder) {
         this.kingsFeast = kingsFeast;
-        // this.levelBuilder = kingsFeast.getLevelBuilder();
+        this.levelBuilder = levelBuilder;
     }
 
     @Override
@@ -51,6 +52,7 @@ public class LoadingScreen extends ScreenAdapter {
         viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         loadAssets();
+        kingsFeast.setLevels(levelBuilder.buildLevels());
     }
 
     @Override
@@ -86,6 +88,10 @@ public class LoadingScreen extends ScreenAdapter {
     // All the assets should be loaded here.
     private void loadAssets() {
         kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
+        kingsFeast.getAssetManager().load("level1.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("level2.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("level3.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("level4.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("redfood.png", Texture.class);
         kingsFeast.getAssetManager().load("bluefood.png", Texture.class);
         kingsFeast.getAssetManager().load("greenfood.png", Texture.class);

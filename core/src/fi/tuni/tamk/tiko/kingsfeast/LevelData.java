@@ -23,17 +23,11 @@ class LevelData {
     private Rectangle THROW_BOUNDS;
     private int VISITOR_COUNT;
 
-    LevelData(String tiledMapPath) {
-        setTiledMap(tiledMapPath);
+    LevelData(TiledMap tiledMap) {
+        this.tiledMap = tiledMap;
+        LEVEL_WIDTH = Util.getLevelWidth(tiledMap) * unitScale;
         setSlingAnchorPos();
         setVisitorCount();
-    }
-
-    // Sets the tiled map and the levels width for a level.
-    // Levels width is needed for handling camera limits.
-    private void setTiledMap(String mapPath) {
-        tiledMap = new TmxMapLoader().load(mapPath);
-        LEVEL_WIDTH = Util.getLevelWidth(tiledMap) * unitScale;
     }
 
     TiledMap getTiledMap() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="48" height="17" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="16">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="48" height="17" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="53">
  <layer id="1" name="Tile Layer 1" width="48" height="17">
   <data encoding="base64" compression="zlib">
    eAHt0AENAAAAwqD3T20ON4hAYcCAAQMGDBgwYMCAgY+BAQzAAAE=
@@ -10,11 +10,32 @@
   <object id="2" x="32" y="512" width="1504" height="32"/>
   <object id="3" x="1504" y="1.18366" width="32" height="510.816"/>
   <object id="4" x="0" y="0" width="1504" height="32"/>
+  <object id="21" x="256" y="160" width="192" height="32"/>
+  <object id="22" x="448" y="32" width="32" height="160"/>
+  <object id="26" x="672" y="128" width="96" height="32"/>
+  <object id="27" x="960" y="160" width="96" height="32"/>
+  <object id="28" x="1248" y="128" width="96" height="32"/>
+  <object id="29" x="672" y="448" width="32" height="64"/>
+  <object id="30" x="672" y="416" width="160" height="32"/>
+  <object id="31" x="800" y="448" width="32" height="64"/>
+  <object id="35" x="928" y="416" width="32" height="64"/>
+  <object id="36" x="928" y="384" width="160" height="32"/>
+  <object id="37" x="1056" y="416" width="32" height="64"/>
+  <object id="38" x="1184" y="448" width="32" height="64"/>
+  <object id="39" x="1184" y="416" width="160" height="32"/>
+  <object id="40" x="1312" y="448" width="32" height="64"/>
+  <object id="41" x="1184" y="384" width="32" height="32"/>
+  <object id="43" x="1472" y="352" width="32" height="162.667"/>
+  <object id="46" x="1472" y="352">
+   <polygon points="0,0 32,-32 32,0"/>
+  </object>
+  <object id="47" x="864" y="352" width="32" height="160"/>
+  <object id="49" x="896" y="480" width="224" height="32"/>
  </objectgroup>
  <objectgroup id="4" name="goal">
-  <object id="8" x="1344" y="480" width="61.3333" height="32"/>
-  <object id="12" x="608" y="480" width="64" height="32"/>
-  <object id="13" x="864" y="480" width="64" height="32"/>
-  <object id="14" x="1120" y="480" width="65.3333" height="32"/>
+  <object id="8" x="1248" y="384" width="61.3333" height="32"/>
+  <object id="12" x="352" y="128" width="64" height="32"/>
+  <object id="13" x="736" y="384" width="64" height="32"/>
+  <object id="14" x="992" y="352" width="65.3333" height="32"/>
  </objectgroup>
 </map>

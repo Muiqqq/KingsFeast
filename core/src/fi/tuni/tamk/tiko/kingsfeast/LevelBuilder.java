@@ -1,6 +1,7 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 
@@ -30,24 +31,29 @@ class LevelBuilder {
         levels.add(level1());
         levels.add(level2());
         levels.add(level3());
+        levels.add(level4());
         return levels;
     }
 
-    // thiese could be simplified, but in case there's actually going to be more info to
-    // be saved in LevelData, keep these as is.
+    // These can be simplified?
     private LevelData level1() {
-        LevelData level = new LevelData("level1.tmx");
-        return level;
+        return new LevelData(kingsFeast.getAssetManager().get("level1.tmx",
+                TiledMap.class));
     }
 
     private LevelData level2() {
-        LevelData level = new LevelData("level2.tmx");
-        return level;
+        return new LevelData(kingsFeast.getAssetManager().get("level2.tmx",
+                TiledMap.class));
     }
 
     private LevelData level3() {
-        LevelData level = new LevelData("level3.tmx");
-        return level;
+        return new LevelData(kingsFeast.getAssetManager().get("level3.tmx",
+                TiledMap.class));
+    }
+
+    private LevelData level4() {
+        return new LevelData(kingsFeast.getAssetManager().get("level4.tmx",
+                TiledMap.class));
     }
 
 }

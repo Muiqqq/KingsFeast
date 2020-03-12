@@ -2,6 +2,9 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
 
 public class KingsFeast extends Game {
@@ -27,10 +30,10 @@ public class KingsFeast extends Game {
 
     @Override
     public void create () {
+        assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
-        levels = levelBuilder.buildLevels();
         currentLevel = 0;
-        setScreen(new LoadingScreen(this));
+        setScreen(new LoadingScreen(this, levelBuilder));
     }
 
     AssetManager getAssetManager() {
@@ -39,6 +42,10 @@ public class KingsFeast extends Game {
 
     Array<LevelData> getLevels() {
         return levels;
+    }
+
+    void setLevels(Array<LevelData> levels) {
+        this.levels = levels;
     }
 
     LevelBuilder getLevelBuilder() {
