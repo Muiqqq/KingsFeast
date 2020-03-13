@@ -25,8 +25,8 @@ class FoodPlate {
     private final float MAX_DISTANCE = 128f;
     private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
     private final float LOWER_ANGLE = MathUtils.PI / 2f;
-    private final float plateRadius = 0.10f;
-    private final float plateDensity = 5.0f;
+    private final float plateRadius = 0.16f;
+    private final float plateDensity = 2.0f;
     private final float restitution = 0.6f;
     private final float friction = 1.0f;
 

@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class KingsFeast extends Game {
     // TODO: Add documentation everywhere.
-    //  -add dispose() when necessary
+    //  -add dispose() when necessary !!!! IMPORTANT !!!!
     //  -texture drawing -> done for now. Refactor when needed.
     //  -loading screen is necessary with assetManager so make that -> done for now.
     //  -make sure all assets are loaded with assetManager and not by hand!

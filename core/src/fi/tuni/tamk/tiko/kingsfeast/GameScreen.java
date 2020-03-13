@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -38,7 +36,7 @@ public class GameScreen extends ScreenAdapter {
     private final float GAME_WIDTH = 928 * unitScale;
     private final float GAME_HEIGHT = 544 * unitScale;
 
-    private final Vector2 gravity = new Vector2(0, -9.8f);
+    private final Vector2 gravity = new Vector2(0, -8.8f);
 
     private LevelData levelData;
     private SpriteBatch batch;
@@ -49,6 +47,7 @@ public class GameScreen extends ScreenAdapter {
     private Box2DDebugRenderer box2DDebugRenderer;
     private ShapeRenderer shapeRenderer;
     private FoodPlate foodPlate;
+    private HUD hud;
     private Vector3 touchPos;
     private Rectangle throwBounds;
 
@@ -58,6 +57,7 @@ public class GameScreen extends ScreenAdapter {
     private boolean wasTouchDragged;
 
     private int VISITORS_SERVED;
+    private int THROW_AMOUNT;
 
     // KingsFeast object gets stored to access its and its parent's methods.
     GameScreen(KingsFeast kingsFeast) {
@@ -99,6 +99,8 @@ public class GameScreen extends ScreenAdapter {
         canThrow = false;
         wasTouchDragged = false;
         VISITORS_SERVED = 0;
+
+        hud = new HUD(batch, this);
     }
 
     @Override
@@ -116,6 +118,9 @@ public class GameScreen extends ScreenAdapter {
         drawDebug();
         update();
         Util.worldStep(world, delta);
+
+        batch.setProjectionMatrix(hud.getStage().getCamera().combined);
+        hud.getStage().draw();
     }
 
     @Override
@@ -138,6 +143,7 @@ public class GameScreen extends ScreenAdapter {
 
         // all camera methods have to be before camera.update();
         camera.update();
+        hud.update();
     }
 
     // Input processing happens here. Actual processing should happen in case specific methods.
@@ -301,6 +307,8 @@ public class GameScreen extends ScreenAdapter {
         if (canThrow && !foodPlate.isPlateFlying && wasTouchDragged) {
             foodPlate.setBody(foodPlate.createBody(world));
 
+            THROW_AMOUNT++;
+
             // This just resets the firing position back to the anchor.
             foodPlate.firingPos.set(foodPlate.anchor.cpy());
             canThrow = false;
@@ -350,5 +358,25 @@ public class GameScreen extends ScreenAdapter {
                 kingsFeast.setScreen(new GameScreen(kingsFeast));
             }
         }
+    }
+
+    float getGAME_WIDTH() {
+        return GAME_WIDTH;
+    }
+
+    float getGAME_HEIGHT() {
+        return GAME_HEIGHT;
+    }
+
+    int getVISITORS_SERVED() {
+        return VISITORS_SERVED;
+    }
+
+    int getTHROW_AMOUNT() {
+        return THROW_AMOUNT;
+    }
+
+    LevelData getLevelData() {
+        return levelData;
     }
 }
