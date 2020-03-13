@@ -98,6 +98,8 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("redgoal.png", Texture.class);
         kingsFeast.getAssetManager().load("bluegoal.png", Texture.class);
         kingsFeast.getAssetManager().load("greengoal.png", Texture.class);
+        kingsFeast.getAssetManager().load("skipButton-up.png", Texture.class);
+        kingsFeast.getAssetManager().load("skipButton-down.png", Texture.class);
 
         // don't forget this after loading
         kingsFeast.getAssetManager().finishLoading();

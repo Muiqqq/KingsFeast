@@ -156,10 +156,6 @@ class FoodPlate {
         }
     }
 
-    float getPlateRadius() {
-        return plateRadius;
-    }
-
     void setBody(Body body) {
         this.body = body;
     }

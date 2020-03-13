@@ -1,9 +1,8 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Logger;
+
 
 /**
  * Create new levels here.

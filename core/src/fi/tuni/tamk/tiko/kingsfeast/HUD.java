@@ -21,23 +21,23 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  *
  * TODO: DOCUMENTATION
  */
-public class HUD {
-
+class HUD {
     private final GameScreen gameScreen;
 
     private Stage stage;
     private Viewport viewport;
 
+    // Widgets for the HUD
     private Label throwAmountLabel, progressLabel;
     private TextButton skipButton;
 
+    // Used to track the things the HUD shows
     private int visitorsServed, visitorCount, throwAmount;
     private String throwAmountAsString, progressAsString;
 
-    // LOAD WITH ASSETMANAGER!!!!!!
-    Texture skipButtonDown, skipButtonUp;
-
-    HUD(SpriteBatch batch, final GameScreen gameScreen) {
+    // Constructor creates all the widgets for now.
+    // Note to self: clean this up -> separate things to their own methods.
+    HUD(SpriteBatch batch, KingsFeast kingsFeast, final GameScreen gameScreen) {
         this.gameScreen = gameScreen;
         visitorsServed = this.gameScreen.getVISITORS_SERVED();
         visitorCount = this.gameScreen.getLevelData().getVisitorCount();
@@ -58,8 +58,8 @@ public class HUD {
         progressLabel = new Label (progressAsString,
                 new Label.LabelStyle(new BitmapFont(), Color.WHITE));
 
-        skipButtonDown = new Texture("skipButton-down.png");
-        skipButtonUp = new Texture("skipButton-up.png");
+        Texture skipButtonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
+        Texture skipButtonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
         skipButton = new TextButton("Skip", new TextButton.TextButtonStyle(
                 new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
                 new TextureRegionDrawable(new TextureRegion(skipButtonDown)),
@@ -78,6 +78,8 @@ public class HUD {
            }
         });
 
+        // Table stores all the scene2d.ui widgets
+        // Here we add the widgets to the table and then add the table to the stage
         Table table = new Table();
         table.top().left();
         table.setFillParent(true);
@@ -90,7 +92,7 @@ public class HUD {
         stage.addActor(table);
     }
 
-    public void dispose() {
+    void dispose() {
         stage.dispose();
     }
 
@@ -109,6 +111,4 @@ public class HUD {
     Stage getStage() {
         return stage;
     }
-
-
 }

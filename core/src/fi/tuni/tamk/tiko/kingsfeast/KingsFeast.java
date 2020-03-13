@@ -9,11 +9,10 @@ import com.badlogic.gdx.utils.Array;
 
 public class KingsFeast extends Game {
     // TODO: Add documentation everywhere.
-    //  -add dispose() when necessary !!!! IMPORTANT !!!!
+    //  -Check that everything that needs disposing gets disposed when needed!!!
     //  -texture drawing -> done for now. Refactor when needed.
     //  -loading screen is necessary with assetManager so make that -> done for now.
     //  -make sure all assets are loaded with assetManager and not by hand!
-    //  -primitive UI stuff so we have that for testing version
     //  -create as many level concepts using almost no game mechanics as possible
     //  -flesh out said levels
     //  -so many things
@@ -29,11 +28,16 @@ public class KingsFeast extends Game {
     private int currentLevel;
 
     @Override
-    public void create () {
+    public void create() {
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
         currentLevel = 0;
         setScreen(new LoadingScreen(this, levelBuilder));
+    }
+
+    @Override
+    public void dispose() {
+        assetManager.dispose();
     }
 
     AssetManager getAssetManager() {
@@ -46,10 +50,6 @@ public class KingsFeast extends Game {
 
     void setLevels(Array<LevelData> levels) {
         this.levels = levels;
-    }
-
-    LevelBuilder getLevelBuilder() {
-        return levelBuilder;
     }
 
     int getCurrentLevel() {

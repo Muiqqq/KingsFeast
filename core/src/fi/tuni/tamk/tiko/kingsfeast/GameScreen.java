@@ -102,7 +102,7 @@ public class GameScreen extends ScreenAdapter {
         wasTouchDragged = false;
         VISITORS_SERVED = 0;
 
-        hud = new HUD(batch, this);
+        hud = new HUD(batch, kingsFeast,this);
         multiplexer.addProcessor(hud.getStage());
         contactProcessing();
         inputProcessing();
@@ -138,6 +138,8 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         batch.dispose();
+        hud.dispose();
+        shapeRenderer.dispose();
     }
 
     private void update() {
@@ -359,9 +361,11 @@ public class GameScreen extends ScreenAdapter {
         if (VISITORS_SERVED == levelData.getVisitorCount()) {
             if (kingsFeast.getCurrentLevel() < kingsFeast.getLevels().size - 1) {
                 kingsFeast.incrementCurrentLevel();
+                dispose();
                 kingsFeast.setScreen(new GameScreen(kingsFeast));
             } else {
                 kingsFeast.setCurrentLevel(0);
+                dispose();
                 kingsFeast.setScreen(new GameScreen(kingsFeast));
             }
         }
