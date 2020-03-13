@@ -2,6 +2,7 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -46,6 +47,7 @@ public class GameScreen extends ScreenAdapter {
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private ShapeRenderer shapeRenderer;
+    private InputMultiplexer multiplexer;
     private FoodPlate foodPlate;
     private HUD hud;
     private Vector3 touchPos;
@@ -76,6 +78,8 @@ public class GameScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
 
+        multiplexer = new InputMultiplexer();
+
         tiledMap = levelData.getTiledMap();
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap, unitScale);
 
@@ -88,8 +92,6 @@ public class GameScreen extends ScreenAdapter {
         BodyBuilder.transformObjectsToBodies(tiledMap, world,
                 "goal", "goal", true);
 
-        contactProcessing();
-        inputProcessing();
         foodPlate = new FoodPlate(levelData, kingsFeast);
         touchPos = new Vector3();
 
@@ -101,6 +103,11 @@ public class GameScreen extends ScreenAdapter {
         VISITORS_SERVED = 0;
 
         hud = new HUD(batch, this);
+        multiplexer.addProcessor(hud.getStage());
+        contactProcessing();
+        inputProcessing();
+
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
@@ -149,7 +156,7 @@ public class GameScreen extends ScreenAdapter {
     // Input processing happens here. Actual processing should happen in case specific methods.
     // Check them for additional documentation
     private void inputProcessing() {
-        Gdx.input.setInputProcessor(new InputAdapter() {
+        multiplexer.addProcessor(new InputAdapter() {
 
             Vector3 lastTouch = new Vector3();
             Vector3 tmp = new Vector3();
@@ -378,5 +385,9 @@ public class GameScreen extends ScreenAdapter {
 
     LevelData getLevelData() {
         return levelData;
+    }
+
+    FoodPlate getFoodPlate() {
+        return foodPlate;
     }
 }
