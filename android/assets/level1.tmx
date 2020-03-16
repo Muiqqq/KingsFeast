@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="40" height="17" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="49">
+ <tileset firstgid="1" name="visitorplaceholder" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="visitorplaceholder.png" width="32" height="32"/>
+ </tileset>
  <layer id="1" name="Tile Layer 1" width="40" height="17">
   <data encoding="base64" compression="zlib">
-   eAHt0DEBAAAAwqD1T20ND4hAYcCAAQMGDBgwYOBnYAqgAAE=
+   eAFjYBgFoyEwGgKjITC8Q4AR6D0QHgXDIwRG43N4xOOoL6gTAsM1PwAAH4QABw==
   </data>
  </layer>
  <objectgroup id="3" name="collision">
