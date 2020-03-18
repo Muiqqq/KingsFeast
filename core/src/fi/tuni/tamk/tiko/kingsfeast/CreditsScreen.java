@@ -27,6 +27,7 @@ public class CreditsScreen extends ScreenAdapter {
         this.game = game;
     }
 
+    @Override
     public void show() {
         stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -35,10 +36,12 @@ public class CreditsScreen extends ScreenAdapter {
         stage.addActor(createOkButton());
     }
 
+    @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    @Override
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
@@ -61,8 +64,16 @@ public class CreditsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 game.setScreen(new OptionsScreen(game));
+                dispose();
             }
         });
         return ok;
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        backgroundTexture.dispose();
+        okTexture.dispose();
     }
 }

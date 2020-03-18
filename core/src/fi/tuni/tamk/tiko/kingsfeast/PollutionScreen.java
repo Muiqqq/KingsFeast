@@ -15,10 +15,13 @@ public class PollutionScreen extends ScreenAdapter {
     private Texture backgroundTexture;
     private Stage stage;
 
+    // DOCUMENTATION
+
     public PollutionScreen(Game game) {
         this.game = game;
     }
 
+    @Override
     public void show() {
         stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -26,10 +29,12 @@ public class PollutionScreen extends ScreenAdapter {
         stage.addActor(createBackgroundImage());
     }
 
+    @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    @Override
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
@@ -40,5 +45,11 @@ public class PollutionScreen extends ScreenAdapter {
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
+        backgroundTexture.dispose();
     }
 }

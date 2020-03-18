@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -22,9 +24,13 @@ public class OptionsScreen extends ScreenAdapter {
     private static final float GAME_HEIGHT = 480;
     private Texture backgroundTexture;
     private Stage stage;
+    private final float BUTTON_WIDTH = 128f;
+    private final float BUTTON_HEIGHT = 96f;
 
     private Texture okTexture;
     private Texture creditsTexture;
+    private Texture musicOnTexture;
+    private Texture musicOffTexture;
 
     // Sound Fx
     // BG Music
@@ -32,10 +38,13 @@ public class OptionsScreen extends ScreenAdapter {
     // Language
     // Cancel
 
+    // DOCUMENTATION
+
     public OptionsScreen(Game game) {
         this.game = game;
     }
 
+    @Override
     public void show() {
         stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
@@ -43,12 +52,15 @@ public class OptionsScreen extends ScreenAdapter {
         stage.addActor(createBackgroundImage());
         stage.addActor(createCreditsButton());
         stage.addActor(createOkButton());
+        stage.addActor((createMusicButton()));
     }
 
+    @Override
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
     }
 
+    @Override
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
@@ -71,6 +83,7 @@ public class OptionsScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 game.setScreen(new CreditsScreen(game));
+                dispose();
             }
         });
         return credits;
@@ -90,6 +103,38 @@ public class OptionsScreen extends ScreenAdapter {
         });
         return ok;
     }
+
+    private ImageButton createMusicButton() {
+        // two textures are used to give the user some feedback when pressing a button
+        musicOnTexture = new Texture("MusicOnButton.png");
+        musicOffTexture = new Texture("MusicOffButton.png");
+
+        // this line is way too goddamn long
+        final ImageButton musicButton =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(musicOnTexture)),
+                        new TextureRegionDrawable(new TextureRegion(musicOffTexture)));
+
+        musicButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        musicButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2, Align.center);
+
+        // button's functionality
+        musicButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y, int count, int button) {
+               super.clicked(e, x, y);
+            }
+        });
+
+        return musicButton;
+    }
+
+    //TextButton gameOptions = new TextButton(...);
+    //        gameOptions.getStyle().checked = gameOptions.getStyle().down;
+    //        gameOptions.addListener(new ClickListener(){
+    //            @Override
+    //            public void clicked(InputEvent event, float x, float y) {
+    //                (...)
+    //            }
+    //        });
 
     @Override
     public void dispose() {
