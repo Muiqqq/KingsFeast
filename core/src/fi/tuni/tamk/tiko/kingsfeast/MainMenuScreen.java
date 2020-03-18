@@ -29,6 +29,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private Texture backgroundTexture;
     private Texture playUnpressedTexture;
     private Texture playPressedTexture;
+    private Texture settingsTexture;
 
     // Constructor here takes the game object so we can swap to a different screen from this one.
     public MainMenuScreen(Game game) {
@@ -50,6 +51,7 @@ public class MainMenuScreen extends ScreenAdapter {
         // adds a background img and play button to the stage
         stage.addActor(createBackgroundImage());
         stage.addActor(createPlayButton());
+        stage.addActor(createSettingsButton());
     }
 
     // screen flickers when resizing during runtime,
@@ -85,8 +87,8 @@ public class MainMenuScreen extends ScreenAdapter {
 
     private ImageButton createPlayButton() {
         // two textures are used to give the user some feedback when pressing a button
-        playUnpressedTexture = new Texture("unpressedPlayButtonPlaceholder.png");
-        playPressedTexture = new Texture("pressedPlayButtonPlaceholder.png");
+        playUnpressedTexture = new Texture("StartGameButton.png");
+        playPressedTexture = new Texture("StartGameButton.png");
 
         // this line is way too goddamn long
         ImageButton playButton =
@@ -107,5 +109,22 @@ public class MainMenuScreen extends ScreenAdapter {
         });
 
         return playButton;
+    }
+
+    private ImageButton createSettingsButton() {
+        settingsTexture = new Texture("SettingsButton.png");
+        ImageButton settingsButton =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsTexture)));
+        settingsButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        settingsButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 4, Align.center);
+        settingsButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent e, float x, float y, int count, int button) {
+                super.tap(e, x, y, count, button);
+                game.setScreen(new OptionsScreen(game));
+                dispose();
+            }
+        });
+        return settingsButton;
     }
 }

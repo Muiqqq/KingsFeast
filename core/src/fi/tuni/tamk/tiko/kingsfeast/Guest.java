@@ -6,8 +6,6 @@ public class Guest {
     private String name;
     private String title;
     private Sprite visitorSprite;
-    private String[] likes;
-    private String[] dislikes;
     private String[] dialogue;
 
     public String getName() {
