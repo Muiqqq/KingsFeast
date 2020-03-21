@@ -41,7 +41,7 @@ public class PollutionScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("bg.jpg");
+        backgroundTexture = new Texture("riverscreen.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
