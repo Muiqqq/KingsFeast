@@ -19,7 +19,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class OptionsScreen extends ScreenAdapter {
-    private final Game game;
+    private final KingsFeast kingsFeast;
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
     private Texture backgroundTexture;
@@ -40,8 +40,8 @@ public class OptionsScreen extends ScreenAdapter {
 
     // DOCUMENTATION
 
-    public OptionsScreen(Game game) {
-        this.game = game;
+    public OptionsScreen(KingsFeast kingsFeast) {
+        this.kingsFeast = kingsFeast;
     }
 
     @Override
@@ -82,7 +82,7 @@ public class OptionsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new CreditsScreen(game));
+                kingsFeast.setScreen(new CreditsScreen(kingsFeast));
                 dispose();
             }
         });
@@ -98,7 +98,7 @@ public class OptionsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new MainMenuScreen(game));
+                kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
             }
         });
         return ok;

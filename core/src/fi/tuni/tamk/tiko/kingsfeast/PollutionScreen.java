@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class PollutionScreen extends ScreenAdapter {
-    private final Game game;
+    private final KingsFeast kingsFeast;
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
     private Texture backgroundTexture;
@@ -17,8 +17,8 @@ public class PollutionScreen extends ScreenAdapter {
 
     // DOCUMENTATION
 
-    public PollutionScreen(Game game) {
-        this.game = game;
+    public PollutionScreen(KingsFeast kingsFeast) {
+        this.kingsFeast = kingsFeast;
     }
 
     @Override

@@ -16,15 +16,15 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class CreditsScreen extends ScreenAdapter {
 
-    private final Game game;
+    private final KingsFeast kingsFeast;
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
     private Texture backgroundTexture;
     private Stage stage;
     private Texture okTexture;
 
-    public CreditsScreen(Game game) {
-        this.game = game;
+    public CreditsScreen(KingsFeast kingsFeast) {
+        this.kingsFeast = kingsFeast;
     }
 
     @Override
@@ -63,7 +63,7 @@ public class CreditsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                game.setScreen(new OptionsScreen(game));
+                kingsFeast.setScreen(new OptionsScreen(kingsFeast));
                 dispose();
             }
         });
