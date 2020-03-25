@@ -361,10 +361,23 @@ public class GameScreen extends ScreenAdapter {
         if (VISITORS_SERVED == levelData.getVisitorCount()) {
             if (kingsFeast.getCurrentLevel() < kingsFeast.getLevels().size - 1) {
                 kingsFeast.incrementCurrentLevel();
+                kingsFeast.getPrefs().putInteger("throws",
+                        kingsFeast.getPrefs().getInteger("throws") + THROW_AMOUNT);
+                kingsFeast.getPrefs().flush();
+
                 dispose();
                 kingsFeast.setScreen(new GameScreen(kingsFeast));
             } else {
-                kingsFeast.setCurrentLevel(0);
+                kingsFeast.getPrefs().putInteger("throws",
+                        kingsFeast.getPrefs().getInteger("throws") + THROW_AMOUNT);
+                kingsFeast.getPrefs().flush();
+                System.out.println("Total throws: " +
+                        kingsFeast.getPrefs().getInteger("throws"));
+
+                System.out.println("Current pollution: " +
+                        kingsFeast.getPrefs().getInteger("pollution"));
+
+                kingsFeast.clearSavestate();
                 dispose();
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }

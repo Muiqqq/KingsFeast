@@ -1,6 +1,8 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -26,12 +28,15 @@ public class KingsFeast extends Game {
     private LevelBuilder levelBuilder;
     private Array<LevelData> levels;
     private int currentLevel;
+    private Preferences kfprefs;
 
     @Override
     public void create() {
+        kfprefs = getPreferences(kfprefs);
+        initSaveState();
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
-        currentLevel = 0;
+        currentLevel = kfprefs.getInteger("currentLevel");
         setScreen(new LoadingScreen(this, levelBuilder));
     }
 
@@ -61,6 +66,38 @@ public class KingsFeast extends Game {
     }
 
     void incrementCurrentLevel() {
-        currentLevel++;
+        kfprefs.putInteger("currentLevel", currentLevel + 1);
+        kfprefs.flush();
+        currentLevel = kfprefs.getInteger("currentLevel");
+    }
+
+    private Preferences getPreferences(Preferences kfprefs) {
+        if (kfprefs == null) {
+            kfprefs = Gdx.app.getPreferences("kfprefs");
+        }
+        return kfprefs;
+    }
+
+    private void initSaveState() {
+        if (!kfprefs.contains("hasGameBeenSaved")) {
+            kfprefs.putBoolean("hasGameBeenSaved", true);
+            kfprefs.putInteger("throws", 0);
+            kfprefs.putInteger("currentLevel", 0);
+            kfprefs.putInteger("pollution", 50);
+            kfprefs.flush();
+        }
+    }
+
+    void clearSavestate() {
+        kfprefs.remove("hasGameBeenSaved");
+        kfprefs.remove("throws");
+        kfprefs.remove("currentLevel");
+        kfprefs.remove("pollution");
+        kfprefs.flush();
+        initSaveState();
+    }
+
+    Preferences getPrefs() {
+        return kfprefs;
     }
 }
