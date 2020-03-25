@@ -362,11 +362,11 @@ public class GameScreen extends ScreenAdapter {
             if (kingsFeast.getCurrentLevel() < kingsFeast.getLevels().size - 1) {
                 kingsFeast.incrementCurrentLevel();
                 dispose();
-                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
+                kingsFeast.setScreen(new GameScreen(kingsFeast));
             } else {
                 kingsFeast.setCurrentLevel(0);
                 dispose();
-                kingsFeast.setScreen(new GameScreen(kingsFeast));
+                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }
         }
     }

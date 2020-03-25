@@ -31,7 +31,7 @@ public class KingsFeast extends Game {
     public void create() {
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
-        currentLevel = 2;
+        currentLevel = 0;
         setScreen(new LoadingScreen(this, levelBuilder));
     }
 
