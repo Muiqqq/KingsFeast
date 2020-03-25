@@ -2,13 +2,18 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -129,8 +134,40 @@ public class MainMenuScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
-                kingsFeast.clearSavestate();
-                kingsFeast.setCurrentLevel(kingsFeast.getPrefs().getInteger("currentLevel"));
+
+                Dialog dialog = new Dialog("",
+                        new Window.WindowStyle(new BitmapFont(), Color.WHITE, null)) {
+
+                    public void result(Object obj) {
+                        if ((boolean) obj) {
+                            kingsFeast.clearSavestate();
+                            kingsFeast.setCurrentLevel
+                                    (kingsFeast.getPrefs().getInteger("currentLevel"));
+                        }
+                    }
+                };
+
+                Texture buttonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
+                Texture buttonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
+
+                TextButton yesButton = new TextButton("Yes", new TextButton.TextButtonStyle(
+                        new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                        new TextureRegionDrawable(new TextureRegion(buttonDown)),
+                        new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                        new BitmapFont()));
+
+                TextButton noButton = new TextButton("No", new TextButton.TextButtonStyle(
+                        new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                        new TextureRegionDrawable(new TextureRegion(buttonDown)),
+                        new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                        new BitmapFont()));
+
+                dialog.text(new Label("Do you really want to reset save data?",
+                        new Label.LabelStyle(new BitmapFont(), Color.WHITE)));
+                dialog.button(yesButton, true);
+                dialog.button(noButton, false);
+                dialog.show(stage);
+
             }
         });
 
