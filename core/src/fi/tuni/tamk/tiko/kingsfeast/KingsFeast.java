@@ -93,7 +93,6 @@ public class KingsFeast extends Game {
         kfprefs.remove("throws");
         kfprefs.remove("currentLevel");
         kfprefs.remove("pollution");
-        kfprefs.flush();
         initSaveState();
     }
 

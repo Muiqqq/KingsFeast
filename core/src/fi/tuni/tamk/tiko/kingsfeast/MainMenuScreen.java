@@ -22,8 +22,8 @@ public class MainMenuScreen extends ScreenAdapter {
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
     // Placeholder values
-    private final float BUTTON_WIDTH = 128f;
-    private final float BUTTON_HEIGHT = 96f;
+    private final float BUTTON_WIDTH = 115.17f;
+    private final float BUTTON_HEIGHT = 31.84f;
     private Stage stage;
     private Texture backgroundTexture;
     private Texture playUnpressedTexture;
@@ -50,6 +50,7 @@ public class MainMenuScreen extends ScreenAdapter {
         // adds a background img and play button to the stage
         stage.addActor(createBackgroundImage());
         stage.addActor(createPlayButton());
+        stage.addActor(createResetButton());
         stage.addActor(createSettingsButton());
     }
 
@@ -95,7 +96,7 @@ public class MainMenuScreen extends ScreenAdapter {
                         new TextureRegionDrawable(new TextureRegion(playPressedTexture)));
 
         playButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        playButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 3, Align.center);
+        playButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 3 + BUTTON_HEIGHT + 10, Align.center);
 
         // button's functionality
         playButton.addListener(new ActorGestureListener() {
@@ -104,6 +105,32 @@ public class MainMenuScreen extends ScreenAdapter {
                 super.tap(e, x, y, count, button);
                 kingsFeast.setScreen(new GameScreen(kingsFeast));
                 dispose();
+            }
+        });
+
+        return playButton;
+    }
+
+    private ImageButton createResetButton() {
+        // two textures are used to give the user some feedback when pressing a button
+        playUnpressedTexture = new Texture("ResetSaveButtonPlaceholder.png");
+        playPressedTexture = new Texture("ResetSaveButtonPlaceholder.png");
+
+        // this line is way too goddamn long
+        ImageButton playButton =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(playUnpressedTexture)),
+                        new TextureRegionDrawable(new TextureRegion(playPressedTexture)));
+
+        playButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        playButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 3, Align.center);
+
+        // button's functionality
+        playButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent e, float x, float y, int count, int button) {
+                super.tap(e, x, y, count, button);
+                kingsFeast.clearSavestate();
+                kingsFeast.setCurrentLevel(kingsFeast.getPrefs().getInteger("currentLevel"));
             }
         });
 
