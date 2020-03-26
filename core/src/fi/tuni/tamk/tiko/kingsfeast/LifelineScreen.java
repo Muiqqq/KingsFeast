@@ -69,6 +69,7 @@ public class LifelineScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 // DO LIFELINE ACTION
+                kingsFeast.setScreen(new GameScreen(kingsFeast));
             }
         });
         return pigsLifeline;
@@ -83,6 +84,7 @@ public class LifelineScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 // DO LIFELINE ACTION
+                kingsFeast.setScreen(new GameScreen(kingsFeast));
             }
         });
         return compostLifeline;
@@ -97,6 +99,8 @@ public class LifelineScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 // DO LIFELINE ACTION
+                kingsFeast.setScreen(new GameScreen(kingsFeast));
+                dispose();
             }
         });
         return poorLifeline;

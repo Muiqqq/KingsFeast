@@ -69,7 +69,7 @@ public class LoadingScreen extends ScreenAdapter {
 
     private void update() {
         if (kingsFeast.getAssetManager().update()) {
-            kingsFeast.setScreen(new FeedbackScreen(kingsFeast));
+            kingsFeast.setScreen(new OptionsScreen(kingsFeast));
         }
         progress = kingsFeast.getAssetManager().getProgress();
     }

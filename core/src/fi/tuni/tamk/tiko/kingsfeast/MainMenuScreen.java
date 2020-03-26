@@ -78,7 +78,7 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("MainMenuBackgroundPlaceholder.png");
+        backgroundTexture = new Texture("mainmenubackgroundtitle.jpg");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;

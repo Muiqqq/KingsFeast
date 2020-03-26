@@ -31,6 +31,8 @@ public class OptionsScreen extends ScreenAdapter {
     private Texture creditsTexture;
     private Texture musicOnTexture;
     private Texture musicOffTexture;
+    private Texture soundOnTexture;
+    private Texture soundOffTexture;
 
     // Sound Fx
     // BG Music
@@ -52,7 +54,8 @@ public class OptionsScreen extends ScreenAdapter {
         stage.addActor(createBackgroundImage());
         stage.addActor(createCreditsButton());
         stage.addActor(createOkButton());
-        stage.addActor((createMusicButton()));
+        stage.addActor(createMusicButton());
+        stage.addActor(createSoundButton());
     }
 
     @Override
@@ -67,7 +70,7 @@ public class OptionsScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("options.jpg");
+        backgroundTexture = new Texture("riverscreen.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
@@ -76,7 +79,7 @@ public class OptionsScreen extends ScreenAdapter {
     private ImageButton createCreditsButton() {
         creditsTexture = new Texture("credits.png");
         ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsTexture)));
-        credits.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 4, Align.center);
+        credits.setPosition(GAME_WIDTH / 5, (GAME_HEIGHT / 5) - 75);
         credits.setSize(150f, 75f);
         credits.addListener(new ActorGestureListener() {
             @Override
@@ -92,7 +95,7 @@ public class OptionsScreen extends ScreenAdapter {
     private ImageButton createOkButton() {
         okTexture = new Texture("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
-        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 3, Align.center);
+        ok.setPosition(GAME_WIDTH / 5, (GAME_HEIGHT / 5) - 30);
         ok.setSize(150f, 75f);
         ok.addListener(new ActorGestureListener() {
             @Override
@@ -114,17 +117,41 @@ public class OptionsScreen extends ScreenAdapter {
                 new ImageButton(new TextureRegionDrawable(new TextureRegion(musicOnTexture)),
                         new TextureRegionDrawable(new TextureRegion(musicOffTexture)));
 
-        musicButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        musicButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 2, Align.center);
+        musicButton.setSize(150f, 75f);
+        musicButton.setPosition(GAME_WIDTH - 300, GAME_HEIGHT - 150);
 
         // button's functionality
         musicButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y, int count, int button) {
                super.clicked(e, x, y);
+
             }
         });
 
         return musicButton;
+    }
+
+    private ImageButton createSoundButton() {
+        // two textures are used to give the user some feedback when pressing a button
+        soundOnTexture = new Texture("SoundOnButton.png");
+        soundOffTexture = new Texture("SoundOffButton.png");
+
+        // this line is way too goddamn long
+        final ImageButton soundButton =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(soundOnTexture)),
+                        new TextureRegionDrawable(new TextureRegion(soundOffTexture)));
+
+        soundButton.setSize(150f, 75f);
+        soundButton.setPosition(GAME_WIDTH - 300, GAME_HEIGHT - 200);
+
+        // button's functionality
+        soundButton.addListener(new ClickListener() {
+            public void clicked(InputEvent e, float x, float y, int count, int button) {
+                super.clicked(e, x, y);
+            }
+        });
+
+        return soundButton;
     }
 
     //TextButton gameOptions = new TextButton(...);
@@ -142,5 +169,9 @@ public class OptionsScreen extends ScreenAdapter {
         backgroundTexture.dispose();
         creditsTexture.dispose();
         okTexture.dispose();
+        musicOffTexture.dispose();
+        musicOnTexture.dispose();
+        soundOffTexture.dispose();
+        soundOnTexture.dispose();
     }
 }

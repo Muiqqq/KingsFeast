@@ -37,6 +37,8 @@ public class FeedbackScreen extends ScreenAdapter {
     private String throwAmount = "50";
     private String foodWasteAmount = "8";
     private String score = "1200";
+    private String totalThrowAmount = "112";
+    private String riverPollutionLevel = "44/100";
 
 
     public FeedbackScreen(KingsFeast kingsFeast) {
@@ -69,9 +71,11 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.act(delta);
         stage.draw();
         batch.begin();
-        font.draw(batch, "Throw Amount: " + throwAmount, 500, 400);
+        font.draw(batch, "Total throws: " + totalThrowAmount, 500, 440);
+        font.draw(batch, "Throws in This Level: " + throwAmount, 500, 400);
         font.draw(batch, "Food Waste Amount: " + foodWasteAmount, 500, 360);
         font.draw(batch, "Score: " + score, 500, 320);
+        font.draw(batch, "River Pollution Level: " + riverPollutionLevel, 500, 250);
         batch.end();
     }
 
