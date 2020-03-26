@@ -25,6 +25,8 @@ public class FeedbackScreen extends ScreenAdapter {
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
     private Texture backgroundTexture;
+    private Texture kingTexture;
+    private Texture kingSpeech;
     private Stage stage;
     private final float BUTTON_WIDTH = 128f;
     private final float BUTTON_HEIGHT = 96f;
@@ -51,6 +53,8 @@ public class FeedbackScreen extends ScreenAdapter {
         font.setColor(Color.BLACK);
 
         stage.addActor(createBackgroundImage());
+        stage.addActor(createKingImage());
+        stage.addActor(createKingSpeech());
         stage.addActor(createOkButton());
     }
 
@@ -78,16 +82,33 @@ public class FeedbackScreen extends ScreenAdapter {
         return background;
     }
 
+    private Image createKingImage() {
+        kingTexture = new Texture("kingplaceholder.png");
+        Image king = new Image(kingTexture);
+        king.setSize(kingTexture.getWidth() / 3, kingTexture.getHeight() / 3);
+        king.setPosition(140, 140, Align.center);
+        return king;
+    }
+
+    private Image createKingSpeech() {
+        kingSpeech = new Texture("kingspeech.png");
+        Image kingSpeechBubble = new Image(kingSpeech);
+        //kingSpeechBubble.setSize(kingTexture.getWidth() - 50, kingTexture.getHeight() - 50);
+        kingSpeechBubble.setPosition(230, 330, Align.center);
+        return kingSpeechBubble;
+    }
+
     private ImageButton createOkButton() {
         okTexture = new Texture("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
-        ok.setPosition(GAME_WIDTH - 150, GAME_HEIGHT / 3, Align.center);
+        ok.setPosition(GAME_WIDTH - 310, GAME_HEIGHT / 4);
         ok.setSize(150f, 75f);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
+                dispose();
             }
         });
         return ok;
@@ -97,6 +118,9 @@ public class FeedbackScreen extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
         okTexture.dispose();
+        kingTexture.dispose();
+        kingSpeech.dispose();
+        backgroundTexture.dispose();
         batch.dispose();
         font.dispose();
     }
