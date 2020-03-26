@@ -88,7 +88,7 @@ public class KingsFeast extends Game {
         }
     }
 
-    void clearSavestate() {
+    void clearSaveState() {
         kfprefs.remove("hasGameBeenSaved");
         kfprefs.remove("throws");
         kfprefs.remove("currentLevel");

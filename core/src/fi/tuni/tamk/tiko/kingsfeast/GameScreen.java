@@ -377,7 +377,7 @@ public class GameScreen extends ScreenAdapter {
                 System.out.println("Current pollution: " +
                         kingsFeast.getPrefs().getInteger("pollution"));
 
-                kingsFeast.clearSavestate();
+                kingsFeast.clearSaveState();
                 dispose();
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }

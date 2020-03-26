@@ -101,7 +101,9 @@ public class MainMenuScreen extends ScreenAdapter {
                         new TextureRegionDrawable(new TextureRegion(playPressedTexture)));
 
         playButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        playButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 3 + BUTTON_HEIGHT + 10, Align.center);
+        playButton.setPosition(GAME_WIDTH / 2,
+                GAME_HEIGHT / 3 + BUTTON_HEIGHT + 10,
+                Align.center);
 
         // button's functionality
         playButton.addListener(new ActorGestureListener() {
@@ -140,7 +142,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
                     public void result(Object obj) {
                         if ((boolean) obj) {
-                            kingsFeast.clearSavestate();
+                            kingsFeast.clearSaveState();
                             kingsFeast.setCurrentLevel
                                     (kingsFeast.getPrefs().getInteger("currentLevel"));
                         }
