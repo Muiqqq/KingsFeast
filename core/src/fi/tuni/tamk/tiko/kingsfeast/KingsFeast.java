@@ -1,8 +1,11 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
@@ -26,12 +29,16 @@ public class KingsFeast extends Game {
     private LevelBuilder levelBuilder;
     private Array<LevelData> levels;
     private int currentLevel;
+    Music music;
 
     @Override
     public void create() {
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
         currentLevel = 0;
+        music = Gdx.audio.newMusic(Gdx.files.internal("1.mp3"));
+        music.setLooping(true);
+        music.play();
         setScreen(new LoadingScreen(this, levelBuilder));
     }
 

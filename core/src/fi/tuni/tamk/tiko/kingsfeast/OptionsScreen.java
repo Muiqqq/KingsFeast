@@ -2,6 +2,7 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
@@ -26,6 +27,8 @@ public class OptionsScreen extends ScreenAdapter {
     private Stage stage;
     private final float BUTTON_WIDTH = 128f;
     private final float BUTTON_HEIGHT = 96f;
+    private static final String PREFS_NAME = "kfsettings";
+    private static final String PREF_MUSIC_ENABLED = "music.enabled";
 
     private Texture okTexture;
     private Texture creditsTexture;
@@ -33,6 +36,8 @@ public class OptionsScreen extends ScreenAdapter {
     private Texture musicOffTexture;
     private Texture soundOnTexture;
     private Texture soundOffTexture;
+
+    Preferences prefs;
 
     // Sound Fx
     // BG Music
@@ -44,6 +49,9 @@ public class OptionsScreen extends ScreenAdapter {
 
     public OptionsScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
+    }
+    protected Preferences getPrefs() {
+        return Gdx.app.getPreferences(PREFS_NAME);
     }
 
     @Override
@@ -124,7 +132,14 @@ public class OptionsScreen extends ScreenAdapter {
         musicButton.addListener(new ClickListener() {
             public void clicked(InputEvent e, float x, float y, int count, int button) {
                super.clicked(e, x, y);
-
+               if(isMusicEnabled()) {
+                   setMusicEnabled(false);
+                   kingsFeast.music.stop();
+               }
+               if(!isMusicEnabled()) {
+                   setMusicEnabled(true);
+                   kingsFeast.music.play();
+               }
             }
         });
 
@@ -162,6 +177,15 @@ public class OptionsScreen extends ScreenAdapter {
     //                (...)
     //            }
     //        });
+
+    public void setMusicEnabled(boolean musicEnabled) {
+        getPrefs().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
+        getPrefs().flush();
+    }
+
+    public boolean isMusicEnabled() {
+        return getPrefs().getBoolean(PREF_MUSIC_ENABLED, true);
+    }
 
     @Override
     public void dispose() {

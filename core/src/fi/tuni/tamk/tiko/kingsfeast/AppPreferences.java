@@ -11,6 +11,10 @@ public class AppPreferences {
     private static final String PREF_SOUND_VOL = "sound";
     private static final String PREFS_NAME = "kfsettings";
 
+    public AppPreferences() {
+       // prefs = Gdx.app.getPreferences(PREFS_NAME);
+    }
+
     //DOCUMENTATION
 
     protected Preferences getPrefs() {
