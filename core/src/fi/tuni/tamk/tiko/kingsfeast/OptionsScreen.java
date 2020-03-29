@@ -29,19 +29,14 @@ public class OptionsScreen extends ScreenAdapter {
     private Texture soundOnTexture;
     private Texture soundOffTexture;
 
-    // Sound Fx
-    // BG Music
-    // Credits
-    // Language
-    // Cancel
+    // Sound Fx saving initially working
+    // Language to be done
 
     // DOCUMENTATION
 
+    // Constructor receives game object to access it
     public OptionsScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
-    }
-    protected Preferences getPrefs() {
-        return Gdx.app.getPreferences("kfsettings");
     }
 
     @Override
@@ -49,6 +44,7 @@ public class OptionsScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
+        // Add all buttons
         stage.addActor(createBackgroundImage());
         stage.addActor(createCreditsButton());
         stage.addActor(createOkButton());
@@ -170,19 +166,28 @@ public class OptionsScreen extends ScreenAdapter {
         return soundButton;
     }
 
+    // Get preferences file
+    protected Preferences getPrefs() {
+        return Gdx.app.getPreferences("kfsettings");
+    }
+
+    // Set and save music settings
     public void setMusicEnabled(boolean musicEnabled) {
         getPrefs().putBoolean("music.enabled", musicEnabled);
         getPrefs().flush();
     }
 
+    // Method to check if music is set to enabled in the settings file
     public boolean isMusicEnabled() {
         return getPrefs().getBoolean("music.enabled", true);
     }
 
+    // Method to check if sound effects are set to enabled in the settings file
     public boolean isSoundEffectsEnabled() {
         return getPrefs().getBoolean("sound.enabled", true);
     }
 
+    // Set and save sound effect settings
     public void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
         getPrefs().putBoolean("sound.enabled", soundEffectsEnabled);
         getPrefs().flush();

@@ -27,6 +27,8 @@ public class PauseScreen extends ScreenAdapter {
     private Texture settingsButtonTexture;
     private Texture exitButtonTexture;
 
+    // Figure out how to save the GameScreen to be continued where left off
+
     public PauseScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
     }
@@ -36,6 +38,7 @@ public class PauseScreen extends ScreenAdapter {
         stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
+        // Add all buttons to the stage
         stage.addActor(createBackgroundImage());
         stage.addActor(createContinueButton());
         stage.addActor(createMainMenuButton());
@@ -130,5 +133,9 @@ public class PauseScreen extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
         backgroundTexture.dispose();
+        continueBtnTexture.dispose();
+        mainMenuBtnTexture.dispose();
+        settingsButtonTexture.dispose();
+        exitButtonTexture.dispose();
     }
 }
