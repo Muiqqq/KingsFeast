@@ -104,7 +104,7 @@ class HUD {
         table.add(progressLabel).expandX().right().padRight(50).padTop(10);
         table.row();
         table.add(skipButton).expandX().left().padLeft(50).padTop(10);
-        table.add(pauseButton).expandX().left().padLeft(650).padTop(10);
+        table.add(pauseButton).expandX().right().padRight(50).padTop(10);
 
         stage.addActor(table);
     }

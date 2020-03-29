@@ -35,13 +35,23 @@ public class FeedbackScreen extends ScreenAdapter {
     private String throwAmount;
     private String foodWasteAmount;
     private String score = "0";
-    private String totalThrowAmount = "112";
+    private String totalThrowAmount;
     private String riverPollutionLevel;
 
 
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
         this.kingsFeast = kingsFeast;
+
+        // aMuikku lisäsi
+        kingsFeast.getPrefs().putInteger("totalThrows",
+                kingsFeast.getPrefs().getInteger("totalThrows") + throwAmount);
+        kingsFeast.getPrefs().flush();
+
         this.throwAmount = Integer.toString(throwAmount);
+
+        // aMuikku lisäsi
+        totalThrowAmount = Integer.toString(kingsFeast.getPrefs().getInteger("totalThrows"));
+
         foodWasteAmount = Integer.toString(throwAmount - visitorsServed);
         calculateScore(throwAmount, visitorsServed);
     }
@@ -112,8 +122,9 @@ public class FeedbackScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
+                kingsFeast.saveGameOnLevelSwap();
                 dispose();
+                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }
         });
         return ok;

@@ -29,13 +29,16 @@ public class KingsFeast extends Game {
     private LevelBuilder levelBuilder;
     private Array<LevelData> levels;
     private int currentLevel;
+    private Preferences kfprefs;
     Music music;
 
     @Override
     public void create() {
+        kfprefs = getPreferencesFromOS(kfprefs);
+        initSaveState();
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
-        currentLevel = 0;
+        currentLevel = kfprefs.getInteger("currentLevel");
         setMusic();
         setSounds();
         setScreen(new LoadingScreen(this, levelBuilder));
@@ -67,7 +70,40 @@ public class KingsFeast extends Game {
     }
 
     void incrementCurrentLevel() {
-        currentLevel++;
+        kfprefs.putInteger("currentLevel", currentLevel + 1);
+        kfprefs.flush();
+        currentLevel = kfprefs.getInteger("currentLevel");
+    }
+
+    private Preferences getPreferencesFromOS(Preferences prefs) {
+        if (prefs == null) {
+            prefs = Gdx.app.getPreferences("kfsettings");
+        }
+        return prefs;
+    }
+
+    Preferences getPrefs() {
+        return kfprefs;
+    }
+
+    private void initSaveState() {
+        if (!kfprefs.contains("doPrefsExist")) {
+            kfprefs.putBoolean("doPrefsExist", true);
+            kfprefs.putInteger("totalThrows", 0);
+            kfprefs.putInteger("currentLevel", 0);
+            kfprefs.putInteger("pollution", 50);
+            kfprefs.flush();
+        }
+    }
+
+    void clearSaveState() {
+        kfprefs.remove("doPrefsExist");
+        kfprefs.remove("totalThrows");
+        kfprefs.remove("currentLevel");
+        kfprefs.remove("pollution");
+        kfprefs.flush();
+        setCurrentLevel(kfprefs.getInteger("currentLevel"));
+        initSaveState();
     }
 
     void setMusic() {
@@ -84,15 +120,19 @@ public class KingsFeast extends Game {
         }
     }
 
-    protected Preferences getPrefs() {
-        return Gdx.app.getPreferences("kfsettings");
-    }
-
     public boolean isMusicEnabled() {
         return getPrefs().getBoolean("music.enabled", true);
     }
 
     public boolean isSoundEffectsEnabled() {
         return getPrefs().getBoolean("sound.enabled", true);
+    }
+
+    void saveGameOnLevelSwap() {
+        if (getCurrentLevel() < getLevels().size - 1) {
+            incrementCurrentLevel();
+        } else {
+            clearSaveState();
+        }
     }
 }

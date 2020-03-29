@@ -149,7 +149,7 @@ public class GameScreen extends ScreenAdapter {
         foodPlate.checkIfBodyStopped();
         snapCameraToBody();
         handleCameraLimits();
-        swapLevel();
+        swapScreen();
 
         // all camera methods have to be before camera.update();
         camera.update();
@@ -358,17 +358,10 @@ public class GameScreen extends ScreenAdapter {
 
     // swaps the level to the next one if current one is finished (all objects have been thrown)
     // currently just loops back to the first level after all levels have been completed.
-    private void swapLevel() {
+    private void swapScreen() {
         if (VISITORS_SERVED == levelData.getVisitorCount()) {
-            if (kingsFeast.getCurrentLevel() < kingsFeast.getLevels().size - 1) {
-                kingsFeast.incrementCurrentLevel();
-                dispose();
-                kingsFeast.setScreen(new FeedbackScreen(kingsFeast, THROW_AMOUNT, VISITORS_SERVED));
-            } /*else {
-                kingsFeast.setCurrentLevel(0);
-                dispose();
-                kingsFeast.setScreen(new GameScreen(kingsFeast));
-            }*/
+            dispose();
+            kingsFeast.setScreen(new FeedbackScreen(kingsFeast, THROW_AMOUNT, VISITORS_SERVED));
         }
     }
 
