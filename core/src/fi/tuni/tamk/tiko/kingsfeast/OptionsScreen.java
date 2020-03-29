@@ -27,8 +27,6 @@ public class OptionsScreen extends ScreenAdapter {
     private Stage stage;
     private final float BUTTON_WIDTH = 128f;
     private final float BUTTON_HEIGHT = 96f;
-    private static final String PREFS_NAME = "kfsettings";
-    private static final String PREF_MUSIC_ENABLED = "music.enabled";
 
     private Texture okTexture;
     private Texture creditsTexture;
@@ -36,8 +34,6 @@ public class OptionsScreen extends ScreenAdapter {
     private Texture musicOffTexture;
     private Texture soundOnTexture;
     private Texture soundOffTexture;
-
-    Preferences prefs;
 
     // Sound Fx
     // BG Music
@@ -51,7 +47,7 @@ public class OptionsScreen extends ScreenAdapter {
         this.kingsFeast = kingsFeast;
     }
     protected Preferences getPrefs() {
-        return Gdx.app.getPreferences(PREFS_NAME);
+        return Gdx.app.getPreferences("kfsettings");
     }
 
     @Override
@@ -129,17 +125,19 @@ public class OptionsScreen extends ScreenAdapter {
         musicButton.setPosition(GAME_WIDTH - 300, GAME_HEIGHT - 150);
 
         // button's functionality
-        musicButton.addListener(new ClickListener() {
-            public void clicked(InputEvent e, float x, float y, int count, int button) {
-               super.clicked(e, x, y);
-               if(isMusicEnabled()) {
-                   setMusicEnabled(false);
-                   kingsFeast.music.stop();
-               }
-               if(!isMusicEnabled()) {
-                   setMusicEnabled(true);
-                   kingsFeast.music.play();
-               }
+        musicButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                if(isMusicEnabled()) {
+                    System.out.println(isMusicEnabled());
+                    kingsFeast.music.stop();
+                    setMusicEnabled(false);
+                } else if(!isMusicEnabled()) {
+                    System.out.println(isMusicEnabled());
+                    kingsFeast.music.play();
+                    setMusicEnabled(true);
+                }
             }
         });
 
@@ -160,31 +158,40 @@ public class OptionsScreen extends ScreenAdapter {
         soundButton.setPosition(GAME_WIDTH - 300, GAME_HEIGHT - 200);
 
         // button's functionality
-        soundButton.addListener(new ClickListener() {
-            public void clicked(InputEvent e, float x, float y, int count, int button) {
-                super.clicked(e, x, y);
-            }
-        });
+        soundButton.addListener(new ActorGestureListener() {
+                public void tap(InputEvent event, float x, float y, int count, int button) {
+                    super.tap(event, x, y, count, button);
+                    if(isSoundEffectsEnabled()) {
+                        System.out.println(isSoundEffectsEnabled());
+                        //kingsFeast.sound.stop();
+                        setSoundEffectsEnabled(false);
+                    } else if(!isSoundEffectsEnabled()) {
+                        System.out.println(isSoundEffectsEnabled());
+                        //kingsFeast.sound.play();
+                        setSoundEffectsEnabled(true);
+                    }
+                }
+            });
 
         return soundButton;
     }
 
-    //TextButton gameOptions = new TextButton(...);
-    //        gameOptions.getStyle().checked = gameOptions.getStyle().down;
-    //        gameOptions.addListener(new ClickListener(){
-    //            @Override
-    //            public void clicked(InputEvent event, float x, float y) {
-    //                (...)
-    //            }
-    //        });
-
     public void setMusicEnabled(boolean musicEnabled) {
-        getPrefs().putBoolean(PREF_MUSIC_ENABLED, musicEnabled);
+        getPrefs().putBoolean("music.enabled", musicEnabled);
         getPrefs().flush();
     }
 
     public boolean isMusicEnabled() {
-        return getPrefs().getBoolean(PREF_MUSIC_ENABLED, true);
+        return getPrefs().getBoolean("music.enabled", true);
+    }
+
+    public boolean isSoundEffectsEnabled() {
+        return getPrefs().getBoolean("sound.enabled", true);
+    }
+
+    public void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
+        getPrefs().putBoolean("sound.enabled", soundEffectsEnabled);
+        getPrefs().flush();
     }
 
     @Override

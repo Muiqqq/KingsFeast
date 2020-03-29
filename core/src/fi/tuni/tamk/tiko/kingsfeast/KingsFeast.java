@@ -36,9 +36,8 @@ public class KingsFeast extends Game {
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
         currentLevel = 0;
-        music = Gdx.audio.newMusic(Gdx.files.internal("1.mp3"));
-        music.setLooping(true);
-        music.play();
+        setMusic();
+        setSounds();
         setScreen(new LoadingScreen(this, levelBuilder));
     }
 
@@ -69,5 +68,31 @@ public class KingsFeast extends Game {
 
     void incrementCurrentLevel() {
         currentLevel++;
+    }
+
+    void setMusic() {
+        music = Gdx.audio.newMusic(Gdx.files.internal("1.mp3"));
+        music.setLooping(true);
+        if(isMusicEnabled()) {
+            music.play();
+        }
+    }
+
+    void setSounds() {
+        if(isSoundEffectsEnabled()) {
+            // Play sounds
+        }
+    }
+
+    protected Preferences getPrefs() {
+        return Gdx.app.getPreferences("kfsettings");
+    }
+
+    public boolean isMusicEnabled() {
+        return getPrefs().getBoolean("music.enabled", true);
+    }
+
+    public boolean isSoundEffectsEnabled() {
+        return getPrefs().getBoolean("sound.enabled", true);
     }
 }
