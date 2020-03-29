@@ -3,7 +3,6 @@ package fi.tuni.tamk.tiko.kingsfeast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,13 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+
 
 public class FeedbackScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
@@ -32,17 +29,21 @@ public class FeedbackScreen extends ScreenAdapter {
     private final float BUTTON_HEIGHT = 96f;
     private SpriteBatch batch;
     private BitmapFont font;
+    private int visitorsServed;
 
     private Texture okTexture;
-    private String throwAmount = "50";
-    private String foodWasteAmount = "8";
-    private String score = "1200";
+    private String throwAmount;
+    private String foodWasteAmount;
+    private String score = "0";
     private String totalThrowAmount = "112";
-    private String riverPollutionLevel = "44/100";
+    private String riverPollutionLevel;
 
 
-    public FeedbackScreen(KingsFeast kingsFeast) {
+    public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
         this.kingsFeast = kingsFeast;
+        this.throwAmount = Integer.toString(throwAmount);
+        foodWasteAmount = Integer.toString(throwAmount - visitorsServed);
+        calculateScore(throwAmount, visitorsServed);
     }
 
     @Override
@@ -117,6 +118,33 @@ public class FeedbackScreen extends ScreenAdapter {
         });
         return ok;
     }
+
+    void calculateScore(int throwes, int served) {
+        int waste = throwes - served;
+        int scores = 0;
+        if(waste < 5) {
+            scores = 1000;
+        } else if(waste >= 5 && waste <= 10) {
+            scores = 700;
+        } else if(waste > 10 && waste <= 20) {
+            scores = 200;
+        }
+
+        score = Integer.toString(scores);
+
+        setPollution(scores);
+    }
+
+    void setPollution(int scoring) {
+        if (scoring == 200) {
+            riverPollutionLevel = "80/100";
+        } else if (scoring == 700) {
+            riverPollutionLevel = "50/100";
+        } else if (scoring == 1000){
+            riverPollutionLevel = "0/100";
+        }
+    }
+
 
     @Override
     public void dispose() {

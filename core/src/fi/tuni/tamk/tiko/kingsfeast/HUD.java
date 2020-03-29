@@ -30,6 +30,7 @@ class HUD {
     // Widgets for the HUD
     private Label throwAmountLabel, progressLabel;
     private TextButton skipButton;
+    private TextButton pauseButton;
 
     // Used to track the things the HUD shows
     private int visitorsServed, visitorCount, throwAmount;
@@ -37,7 +38,7 @@ class HUD {
 
     // Constructor creates all the widgets for now.
     // Note to self: clean this up -> separate things to their own methods.
-    HUD(SpriteBatch batch, KingsFeast kingsFeast, final GameScreen gameScreen) {
+    HUD(SpriteBatch batch, final KingsFeast kingsFeast, final GameScreen gameScreen) {
         this.gameScreen = gameScreen;
         visitorsServed = this.gameScreen.getVISITORS_SERVED();
         visitorCount = this.gameScreen.getLevelData().getVisitorCount();
@@ -78,6 +79,21 @@ class HUD {
            }
         });
 
+        // Pause Button
+        pauseButton = new TextButton("Pause", new TextButton.TextButtonStyle(
+                new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
+                new TextureRegionDrawable(new TextureRegion(skipButtonDown)),
+                new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
+                new BitmapFont()));
+
+        pauseButton.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent e, float x, float y, int count, int button) {
+                super.tap(e, x, y, count, button);
+                kingsFeast.setScreen(new PauseScreen(kingsFeast));
+            }
+        });
+
         // Table stores all the scene2d.ui widgets
         // Here we add the widgets to the table and then add the table to the stage
         Table table = new Table();
@@ -88,6 +104,7 @@ class HUD {
         table.add(progressLabel).expandX().right().padRight(50).padTop(10);
         table.row();
         table.add(skipButton).expandX().left().padLeft(50).padTop(10);
+        table.add(pauseButton).expandX().left().padLeft(650).padTop(10);
 
         stage.addActor(table);
     }
