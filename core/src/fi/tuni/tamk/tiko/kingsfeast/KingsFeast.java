@@ -11,20 +11,28 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
 
 public class KingsFeast extends Game {
-    // TODO: Add documentation everywhere.
-    //  -Check that everything that needs disposing gets disposed when needed!!!
-    //  -texture drawing -> done for now. Refactor when needed.
-    //  -loading screen is necessary with assetManager so make that -> done for now.
-    //  -make sure all assets are loaded with assetManager and not by hand!
-    //  -create as many level concepts using almost no game mechanics as possible
-    //  -flesh out said levels
-    //  -so many things
+    // TODO: Current issues:
+    //  -Lack of documentation
+    //  -Check that everything that needs disposing gets disposed when needed
+    //  -Graphics for: UI, Game, buttons, HUD, backgrounds
+    //  -All assets need to be changed to be loaded with assetManager
+    //  -Move spriteBatch to KingsFeast so it can be used elsewhere
+    //  -Menu buttons have incorrect size
+    //  -Main menu needs a how to play button which leads to the written tutorial
+    //  -Written tutorial needs to be made
+    //  -Saves need to be made resettable, add a reset save button to main menu
+    //  -OR Change start game to continue game and add a new game button
+    //  -Settings toggle buttons' textures need to stick
+    //  -Settings needs buttons for localization, also that needs to be implemented
+    //  -Pause menu resets the level when unpausing
+    //  -Settings returns only back to main menu, should be able to return to pause menu if
+    //   settings was accessed from there
+    //  -Feedback screen doesn't play well with different screen sizes
+    //  -Buttons might be a bit too small for mobile in general?
 
     // remember to give an instance of 'this' to all new screens, if anything
     // from this class or parent class is to be used in that screen.
 
-    // contains every level's leveldata.
-    // also keeping track of current level. used to iterate levels array.
     private final AssetManager assetManager = new AssetManager();
     private LevelBuilder levelBuilder;
     private Array<LevelData> levels;
