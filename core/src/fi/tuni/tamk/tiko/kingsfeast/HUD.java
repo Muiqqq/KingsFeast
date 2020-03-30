@@ -90,7 +90,7 @@ class HUD {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
-                kingsFeast.setScreen(new PauseScreen(kingsFeast));
+                kingsFeast.setScreen(new PauseScreen(kingsFeast, gameScreen.getThis()));
             }
         });
 

@@ -2,6 +2,7 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class OptionsScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
+    private final Screen previousScreen;
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
     private Texture backgroundTexture;
@@ -35,8 +37,9 @@ public class OptionsScreen extends ScreenAdapter {
     // DOCUMENTATION
 
     // Constructor receives game object to access it
-    public OptionsScreen(KingsFeast kingsFeast) {
+    public OptionsScreen(KingsFeast kingsFeast, Screen screen) {
         this.kingsFeast = kingsFeast;
+        previousScreen = screen;
     }
 
     @Override
@@ -79,7 +82,7 @@ public class OptionsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(new CreditsScreen(kingsFeast));
+                kingsFeast.setScreen(new CreditsScreen(kingsFeast, getThisScreen()));
                 dispose();
             }
         });
@@ -95,7 +98,7 @@ public class OptionsScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
+                kingsFeast.setScreen(previousScreen);
             }
         });
         return ok;
@@ -203,5 +206,9 @@ public class OptionsScreen extends ScreenAdapter {
         musicOnTexture.dispose();
         soundOffTexture.dispose();
         soundOnTexture.dispose();
+    }
+
+    OptionsScreen getThisScreen() {
+        return this;
     }
 }

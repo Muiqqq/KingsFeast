@@ -1,6 +1,7 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class PauseScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
+    private final GameScreen gameScreen;
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
     private Texture backgroundTexture;
@@ -29,8 +31,9 @@ public class PauseScreen extends ScreenAdapter {
 
     // Figure out how to save the GameScreen to be continued where left off
 
-    public PauseScreen(KingsFeast kingsFeast) {
+    public PauseScreen(KingsFeast kingsFeast, GameScreen gameScreen) {
         this.kingsFeast = kingsFeast;
+        this.gameScreen = gameScreen;
     }
 
     @Override
@@ -74,8 +77,8 @@ public class PauseScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(new GameScreen(kingsFeast));
                 dispose();
+                kingsFeast.setScreen(gameScreen);
             }
         });
         return continueButton;
@@ -106,7 +109,7 @@ public class PauseScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(new OptionsScreen(kingsFeast));
+                kingsFeast.setScreen(new OptionsScreen(kingsFeast, getThisScreen()));
                 dispose();
             }
         });
@@ -137,5 +140,9 @@ public class PauseScreen extends ScreenAdapter {
         mainMenuBtnTexture.dispose();
         settingsButtonTexture.dispose();
         exitButtonTexture.dispose();
+    }
+
+    PauseScreen getThisScreen() {
+        return this;
     }
 }

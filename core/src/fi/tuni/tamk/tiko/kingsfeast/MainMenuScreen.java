@@ -119,10 +119,14 @@ public class MainMenuScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
-                kingsFeast.setScreen(new OptionsScreen(kingsFeast));
+                kingsFeast.setScreen(new OptionsScreen(kingsFeast, getThisScreen()));
                 dispose();
             }
         });
         return settingsButton;
+    }
+
+    MainMenuScreen getThisScreen() {
+        return this;
     }
 }

@@ -65,14 +65,6 @@ public class GameScreen extends ScreenAdapter {
     // KingsFeast object gets stored to access its and its parent's methods.
     GameScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
-    }
-    /**
-     * Screens use show() instead of create()
-     *
-     * They are pretty much the same thing.
-     */
-    @Override
-    public void show() {
         levelData = kingsFeast.getLevels().get(kingsFeast.getCurrentLevel());
         batch = new SpriteBatch();
         world = new World(gravity, false);
@@ -104,6 +96,15 @@ public class GameScreen extends ScreenAdapter {
         VISITORS_SERVED = 0;
 
         hud = new HUD(batch, kingsFeast,this);
+
+    }
+    /**
+     * Screens use show() instead of create()
+     *
+     * They are pretty much the same thing.
+     */
+    @Override
+    public void show() {
         multiplexer.addProcessor(hud.getStage());
         contactProcessing();
         inputProcessing();
@@ -387,5 +388,9 @@ public class GameScreen extends ScreenAdapter {
 
     FoodPlate getFoodPlate() {
         return foodPlate;
+    }
+
+    GameScreen getThis() {
+        return this;
     }
 }
