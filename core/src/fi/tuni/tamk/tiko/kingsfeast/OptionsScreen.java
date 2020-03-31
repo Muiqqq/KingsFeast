@@ -112,7 +112,14 @@ public class OptionsScreen extends ScreenAdapter {
         // this line is way too goddamn long
         final ImageButton musicButton =
                 new ImageButton(new TextureRegionDrawable(new TextureRegion(musicOnTexture)),
+                        new TextureRegionDrawable(new TextureRegion(musicOnTexture)),
                         new TextureRegionDrawable(new TextureRegion(musicOffTexture)));
+
+        if(isMusicEnabled()) {
+            musicButton.setChecked(false);
+        } else {
+            musicButton.setChecked(true);
+        }
 
         musicButton.setSize(150f, 75f);
         musicButton.setPosition(GAME_WIDTH - 300, GAME_HEIGHT - 150);
@@ -145,7 +152,14 @@ public class OptionsScreen extends ScreenAdapter {
         // this line is way too goddamn long
         final ImageButton soundButton =
                 new ImageButton(new TextureRegionDrawable(new TextureRegion(soundOnTexture)),
+                        new TextureRegionDrawable(new TextureRegion(soundOnTexture)),
                         new TextureRegionDrawable(new TextureRegion(soundOffTexture)));
+
+        if(isSoundEffectsEnabled()) {
+            soundButton.setChecked(false);
+        } else {
+            soundButton.setChecked(true);
+        }
 
         soundButton.setSize(150f, 75f);
         soundButton.setPosition(GAME_WIDTH - 300, GAME_HEIGHT - 200);
@@ -169,31 +183,33 @@ public class OptionsScreen extends ScreenAdapter {
         return soundButton;
     }
 
+    /* Redundant
     // Get preferences file
     protected Preferences getPrefs() {
         return Gdx.app.getPreferences("kfsettings");
     }
+    */
 
     // Set and save music settings
-    public void setMusicEnabled(boolean musicEnabled) {
-        getPrefs().putBoolean("music.enabled", musicEnabled);
-        getPrefs().flush();
+    private void setMusicEnabled(boolean musicEnabled) {
+        kingsFeast.getPrefs().putBoolean("music.enabled", musicEnabled);
+        kingsFeast.getPrefs().flush();
     }
 
     // Method to check if music is set to enabled in the settings file
-    public boolean isMusicEnabled() {
-        return getPrefs().getBoolean("music.enabled", true);
+    private boolean isMusicEnabled() {
+        return kingsFeast.getPrefs().getBoolean("music.enabled", true);
     }
 
     // Method to check if sound effects are set to enabled in the settings file
-    public boolean isSoundEffectsEnabled() {
-        return getPrefs().getBoolean("sound.enabled", true);
+    private boolean isSoundEffectsEnabled() {
+        return kingsFeast.getPrefs().getBoolean("sound.enabled", true);
     }
 
     // Set and save sound effect settings
-    public void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
-        getPrefs().putBoolean("sound.enabled", soundEffectsEnabled);
-        getPrefs().flush();
+    private void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
+        kingsFeast.getPrefs().putBoolean("sound.enabled", soundEffectsEnabled);
+        kingsFeast.getPrefs().flush();
     }
 
     @Override
