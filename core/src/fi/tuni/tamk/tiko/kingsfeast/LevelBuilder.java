@@ -36,7 +36,7 @@ class LevelBuilder {
 
     // These can be simplified?
     private LevelData level1() {
-        return new LevelData(kingsFeast.getAssetManager().get("level1.tmx",
+        return new LevelData(kingsFeast.getAssetManager().get("map1.tmx",
                 TiledMap.class));
     }
 

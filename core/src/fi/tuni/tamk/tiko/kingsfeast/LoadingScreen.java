@@ -88,6 +88,7 @@ public class LoadingScreen extends ScreenAdapter {
     // All the assets should be loaded here.
     private void loadAssets() {
         kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
+        kingsFeast.getAssetManager().load("map1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level2.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level3.tmx", TiledMap.class);
