@@ -24,9 +24,6 @@ public class KingsFeast extends Game {
     //  -OR Change start game to continue game and add a new game button
     //  -Settings toggle buttons' textures need to stick
     //  -Settings needs buttons for localization, also that needs to be implemented
-    //  -Pause menu resets the level when unpausing
-    //  -Settings returns only back to main menu, should be able to return to pause menu if
-    //   settings was accessed from there
     //  -Feedback screen doesn't play well with different screen sizes
     //  -Buttons might be a bit too small for mobile in general?
 
