@@ -71,13 +71,10 @@ public class MainMenuScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundTexture.dispose();
-        playPressedTexture.dispose();
-        playUnpressedTexture.dispose();
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("mainmenubackgroundtitle.jpg");
+        backgroundTexture = kingsFeast.getAssetManager().get("mainmenubackgroundtitle.jpg");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
@@ -85,8 +82,8 @@ public class MainMenuScreen extends ScreenAdapter {
 
     private ImageButton createPlayButton() {
         // two textures are used to give the user some feedback when pressing a button
-        playUnpressedTexture = new Texture("StartGameButton.png");
-        playPressedTexture = new Texture("StartGameButton.png");
+        playUnpressedTexture = kingsFeast.getAssetManager().get("StartGameButton.png");
+        playPressedTexture = kingsFeast.getAssetManager().get("StartGameButton.png");
 
         // this line is way too goddamn long
         ImageButton playButton =
@@ -110,7 +107,7 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private ImageButton createSettingsButton() {
-        settingsTexture = new Texture("SettingsButton.png");
+        settingsTexture = kingsFeast.getAssetManager().get("SettingsButton.png");
         ImageButton settingsButton =
                 new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsTexture)));
         settingsButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -126,7 +123,7 @@ public class MainMenuScreen extends ScreenAdapter {
         return settingsButton;
     }
 
-    MainMenuScreen getThisScreen() {
+    private MainMenuScreen getThisScreen() {
         return this;
     }
 }

@@ -48,14 +48,14 @@ public class PollutionScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("riverscreen.png");
+        backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
     }
 
     private ImageButton createOkButton() {
-        okTexture = new Texture("OkButton.png");
+        okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setPosition(GAME_WIDTH - 310, GAME_HEIGHT / 4);
         ok.setSize(150f, 75f);
@@ -73,6 +73,5 @@ public class PollutionScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundTexture.dispose();
     }
 }

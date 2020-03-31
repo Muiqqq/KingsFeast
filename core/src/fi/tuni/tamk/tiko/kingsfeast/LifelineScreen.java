@@ -53,14 +53,14 @@ public class LifelineScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("options.jpg");
+        backgroundTexture = kingsFeast.getAssetManager().get("options.jpg");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
     }
 
     private ImageButton createPigsLifeline() {
-        pigsTexture = new Texture("pigsplaceholder.png");
+        pigsTexture = kingsFeast.getAssetManager().get("pigsplaceholder.png");
         ImageButton pigsLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(pigsTexture)));
         pigsLifeline.setPosition(GAME_WIDTH - 200, 450, Align.center);
         pigsLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -75,7 +75,7 @@ public class LifelineScreen extends ScreenAdapter {
     }
 
     private ImageButton createCompostLifeLine() {
-        compostTexture = new Texture("compostplaceholder.png");
+        compostTexture = kingsFeast.getAssetManager().get("compostplaceholder.png");
         ImageButton compostLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(compostTexture)));
         compostLifeline.setPosition(GAME_WIDTH - 200, 300, Align.center);
         compostLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -90,7 +90,7 @@ public class LifelineScreen extends ScreenAdapter {
     }
 
     private ImageButton createPoorLifeLine() {
-        poorTexture = new Texture("poorplaceholder.png");
+        poorTexture = kingsFeast.getAssetManager().get("poorplaceholder.png");
         ImageButton poorLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(poorTexture)));
         poorLifeline.setPosition(GAME_WIDTH - 200, 150, Align.center);
         poorLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -108,8 +108,5 @@ public class LifelineScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        pigsTexture.dispose();
-        compostTexture.dispose();
-        poorTexture.dispose();
     }
 }

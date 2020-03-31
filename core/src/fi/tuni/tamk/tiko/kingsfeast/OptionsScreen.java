@@ -37,7 +37,7 @@ public class OptionsScreen extends ScreenAdapter {
     // DOCUMENTATION
 
     // Constructor receives game object to access it
-    public OptionsScreen(KingsFeast kingsFeast, Screen screen) {
+    OptionsScreen(KingsFeast kingsFeast, Screen screen) {
         this.kingsFeast = kingsFeast;
         previousScreen = screen;
     }
@@ -67,14 +67,14 @@ public class OptionsScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("riverscreen.png");
+        backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
     }
 
     private ImageButton createCreditsButton() {
-        creditsTexture = new Texture("credits.png");
+        creditsTexture = kingsFeast.getAssetManager().get("credits.png");
         ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsTexture)));
         credits.setPosition(GAME_WIDTH / 5, (GAME_HEIGHT / 5) - 75);
         credits.setSize(150f, 75f);
@@ -90,7 +90,7 @@ public class OptionsScreen extends ScreenAdapter {
     }
 
     private ImageButton createOkButton() {
-        okTexture = new Texture("OkButton.png");
+        okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setPosition(GAME_WIDTH / 5, (GAME_HEIGHT / 5) - 30);
         ok.setSize(150f, 75f);
@@ -106,8 +106,8 @@ public class OptionsScreen extends ScreenAdapter {
 
     private ImageButton createMusicButton() {
         // two textures are used to give the user some feedback when pressing a button
-        musicOnTexture = new Texture("MusicOnButton.png");
-        musicOffTexture = new Texture("MusicOffButton.png");
+        musicOnTexture = kingsFeast.getAssetManager().get("MusicOnButton.png");
+        musicOffTexture = kingsFeast.getAssetManager().get("MusicOffButton.png");
 
         // this line is way too goddamn long
         final ImageButton musicButton =
@@ -139,8 +139,8 @@ public class OptionsScreen extends ScreenAdapter {
 
     private ImageButton createSoundButton() {
         // two textures are used to give the user some feedback when pressing a button
-        soundOnTexture = new Texture("SoundOnButton.png");
-        soundOffTexture = new Texture("SoundOffButton.png");
+        soundOnTexture = kingsFeast.getAssetManager().get("SoundOnButton.png");
+        soundOffTexture = kingsFeast.getAssetManager().get("SoundOffButton.png");
 
         // this line is way too goddamn long
         final ImageButton soundButton =
@@ -199,16 +199,9 @@ public class OptionsScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundTexture.dispose();
-        creditsTexture.dispose();
-        okTexture.dispose();
-        musicOffTexture.dispose();
-        musicOnTexture.dispose();
-        soundOffTexture.dispose();
-        soundOnTexture.dispose();
     }
 
-    OptionsScreen getThisScreen() {
+    private OptionsScreen getThisScreen() {
         return this;
     }
 }

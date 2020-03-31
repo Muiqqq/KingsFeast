@@ -44,9 +44,9 @@ public class KingsFeast extends Game {
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
         currentLevel = kfprefs.getInteger("currentLevel");
+        setScreen(new LoadingScreen(this, levelBuilder));
         setMusic();
         setSounds();
-        setScreen(new LoadingScreen(this, levelBuilder));
     }
 
     @Override
@@ -70,11 +70,11 @@ public class KingsFeast extends Game {
         return currentLevel;
     }
 
-    void setCurrentLevel(int x) {
+    private void setCurrentLevel(int x) {
         currentLevel = x;
     }
 
-    void incrementCurrentLevel() {
+    private void incrementCurrentLevel() {
         kfprefs.putInteger("currentLevel", currentLevel + 1);
         kfprefs.flush();
         currentLevel = kfprefs.getInteger("currentLevel");
@@ -101,7 +101,7 @@ public class KingsFeast extends Game {
         }
     }
 
-    void clearSaveState() {
+    private void clearSaveState() {
         kfprefs.remove("doPrefsExist");
         kfprefs.remove("totalThrows");
         kfprefs.remove("currentLevel");
@@ -111,25 +111,25 @@ public class KingsFeast extends Game {
         initSaveState();
     }
 
-    void setMusic() {
-        music = Gdx.audio.newMusic(Gdx.files.internal("1.mp3"));
+    private void setMusic() {
+        music = assetManager.get("1.mp3");
         music.setLooping(true);
         if(isMusicEnabled()) {
             music.play();
         }
     }
 
-    void setSounds() {
+    private void setSounds() {
         if(isSoundEffectsEnabled()) {
             // Play sounds
         }
     }
 
-    public boolean isMusicEnabled() {
+    private boolean isMusicEnabled() {
         return getPrefs().getBoolean("music.enabled", true);
     }
 
-    public boolean isSoundEffectsEnabled() {
+    private boolean isSoundEffectsEnabled() {
         return getPrefs().getBoolean("sound.enabled", true);
     }
 

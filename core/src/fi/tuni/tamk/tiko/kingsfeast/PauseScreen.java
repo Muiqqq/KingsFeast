@@ -62,14 +62,14 @@ public class PauseScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("options.jpg");
+        backgroundTexture = kingsFeast.getAssetManager().get("options.jpg");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
     }
 
     private ImageButton createContinueButton() {
-        continueBtnTexture = new Texture("StartGameButton.png");
+        continueBtnTexture = kingsFeast.getAssetManager().get("StartGameButton.png");
         ImageButton continueButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(continueBtnTexture)));
         continueButton.setPosition(GAME_WIDTH, GAME_HEIGHT, Align.center);
         continueButton.setSize(150f, 75f);
@@ -85,7 +85,7 @@ public class PauseScreen extends ScreenAdapter {
     }
 
     private ImageButton createMainMenuButton() {
-        mainMenuBtnTexture = new Texture("credits.png");
+        mainMenuBtnTexture = kingsFeast.getAssetManager().get("credits.png");
         ImageButton mainMenuButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(mainMenuBtnTexture)));
         mainMenuButton.setPosition(GAME_WIDTH, GAME_HEIGHT -150, Align.center);
         mainMenuButton.setSize(150f, 75f);
@@ -101,7 +101,7 @@ public class PauseScreen extends ScreenAdapter {
     }
 
     private ImageButton createSettingsButton() {
-        settingsButtonTexture = new Texture("SettingsButton.png");
+        settingsButtonTexture = kingsFeast.getAssetManager().get("SettingsButton.png");
         ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonTexture)));
         settingsButton.setPosition(GAME_WIDTH, GAME_HEIGHT -300, Align.center);
         settingsButton.setSize(150f, 75f);
@@ -117,7 +117,7 @@ public class PauseScreen extends ScreenAdapter {
     }
 
     private ImageButton createExitButton() {
-        exitButtonTexture = new Texture("credits.png");
+        exitButtonTexture = kingsFeast.getAssetManager().get("credits.png");
         ImageButton exitButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(exitButtonTexture)));
         exitButton.setPosition(GAME_WIDTH, GAME_HEIGHT -400, Align.center);
         exitButton.setSize(150f, 75f);
@@ -135,14 +135,9 @@ public class PauseScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundTexture.dispose();
-        continueBtnTexture.dispose();
-        mainMenuBtnTexture.dispose();
-        settingsButtonTexture.dispose();
-        exitButtonTexture.dispose();
     }
 
-    PauseScreen getThisScreen() {
+    private PauseScreen getThisScreen() {
         return this;
     }
 }

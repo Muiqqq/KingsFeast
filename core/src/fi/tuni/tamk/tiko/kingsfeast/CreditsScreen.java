@@ -25,7 +25,7 @@ public class CreditsScreen extends ScreenAdapter {
     private Stage stage;
     private Texture okTexture;
 
-    public CreditsScreen(KingsFeast kingsFeast, Screen screen) {
+    CreditsScreen(KingsFeast kingsFeast, Screen screen) {
         this.kingsFeast = kingsFeast;
         previousScreen = screen;
     }
@@ -51,14 +51,14 @@ public class CreditsScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("credits_bg.png");
+        backgroundTexture = kingsFeast.getAssetManager().get("credits_bg.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
     }
 
     private ImageButton createOkButton() {
-        okTexture = new Texture("OkButton.png");
+        okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 4, Align.center);
         ok.setSize(150f, 75f);
@@ -76,11 +76,5 @@ public class CreditsScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        backgroundTexture.dispose();
-        okTexture.dispose();
-    }
-
-    CreditsScreen getThisScreen() {
-        return this;
     }
 }

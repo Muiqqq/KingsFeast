@@ -28,7 +28,6 @@ import com.badlogic.gdx.physics.box2d.World;
 public class GameScreen extends ScreenAdapter {
     // TODO: Add documentation everywhere
     //  -Move throwing related methods to FoodPlate class if possible
-    //  -Contact handling should happen in case specific methods
     private final KingsFeast kingsFeast;
 
     private final boolean DEBUG_PHYSICS = true;
@@ -96,7 +95,6 @@ public class GameScreen extends ScreenAdapter {
         VISITORS_SERVED = 0;
 
         hud = new HUD(batch, kingsFeast,this);
-
     }
     /**
      * Screens use show() instead of create()

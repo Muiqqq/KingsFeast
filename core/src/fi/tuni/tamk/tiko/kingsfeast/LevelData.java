@@ -10,9 +10,6 @@ import com.badlogic.gdx.utils.Array;
 /**
  * All the information that differs from level to level will be held in an object of this
  * class.
- *
- * Amount of food projectiles and visitors etc. will be added here too.
- * This exists so a different screen isn't needed for every single level.
  */
 class LevelData {
     private final float unitScale = Util.getUnitScale();

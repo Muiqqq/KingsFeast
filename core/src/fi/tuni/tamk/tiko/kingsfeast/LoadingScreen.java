@@ -1,6 +1,7 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -95,11 +96,25 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("redfood.png", Texture.class);
         kingsFeast.getAssetManager().load("bluefood.png", Texture.class);
         kingsFeast.getAssetManager().load("greenfood.png", Texture.class);
-        kingsFeast.getAssetManager().load("redgoal.png", Texture.class);
-        kingsFeast.getAssetManager().load("bluegoal.png", Texture.class);
-        kingsFeast.getAssetManager().load("greengoal.png", Texture.class);
         kingsFeast.getAssetManager().load("skipButton-up.png", Texture.class);
         kingsFeast.getAssetManager().load("skipButton-down.png", Texture.class);
+        kingsFeast.getAssetManager().load("mainmenubackgroundtitle.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("StartGameButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("SettingsButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("riverscreen.png", Texture.class);
+        kingsFeast.getAssetManager().load("credits.png", Texture.class);
+        kingsFeast.getAssetManager().load("OkButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("MusicOnButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("MusicOffButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("SoundOnButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("SoundOffButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("credits_bg.png", Texture.class);
+        kingsFeast.getAssetManager().load("options.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("pigsplaceholder.png", Texture.class);
+        kingsFeast.getAssetManager().load("compostplaceholder.png", Texture.class);
+        kingsFeast.getAssetManager().load("poorplaceholder.png", Texture.class);
+
+        kingsFeast.getAssetManager().load("1.mp3", Music.class);
 
         // don't forget this after loading
         kingsFeast.getAssetManager().finishLoading();
