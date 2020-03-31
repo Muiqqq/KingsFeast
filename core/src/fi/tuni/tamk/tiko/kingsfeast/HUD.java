@@ -26,6 +26,8 @@ class HUD {
 
     private Stage stage;
     private Viewport viewport;
+    private BitmapFont bitmapFont;
+    private TextButton.TextButtonStyle textButtonStyle;
 
     // Widgets for the HUD
     private Label throwAmountLabel, progressLabel;
@@ -44,6 +46,16 @@ class HUD {
         visitorCount = this.gameScreen.getLevelData().getVisitorCount();
         throwAmount = this.gameScreen.getTHROW_AMOUNT();
 
+        Texture skipButtonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
+        Texture skipButtonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
+
+        bitmapFont = new BitmapFont();
+        textButtonStyle = new TextButton.TextButtonStyle(
+                new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
+                new TextureRegionDrawable(new TextureRegion(skipButtonDown)),
+                new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
+                bitmapFont);
+
         throwAmountAsString = "Throws: " + throwAmount;
         progressAsString = "Progress: " + visitorsServed + " / " + visitorCount;
 
@@ -53,20 +65,11 @@ class HUD {
 
         stage = new Stage(viewport, batch);
 
-        throwAmountLabel = new Label(throwAmountAsString,
-                new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        Label.LabelStyle labelStyle = new Label.LabelStyle(bitmapFont, Color.WHITE);
+        throwAmountLabel = new Label(throwAmountAsString, labelStyle);
+        progressLabel = new Label (progressAsString, labelStyle);
 
-        progressLabel = new Label (progressAsString,
-                new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-
-        Texture skipButtonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
-        Texture skipButtonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
-        skipButton = new TextButton("Skip", new TextButton.TextButtonStyle(
-                new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
-                new TextureRegionDrawable(new TextureRegion(skipButtonDown)),
-                new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
-                new BitmapFont()));
-
+        skipButton = new TextButton("Skip",  textButtonStyle);
         skipButton.addListener(new ActorGestureListener() {
            @Override
            public void tap(InputEvent e, float x, float y, int count, int button) {
@@ -80,12 +83,7 @@ class HUD {
         });
 
         // Pause Button
-        pauseButton = new TextButton("Pause", new TextButton.TextButtonStyle(
-                new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
-                new TextureRegionDrawable(new TextureRegion(skipButtonDown)),
-                new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
-                new BitmapFont()));
-
+        pauseButton = new TextButton("Pause", textButtonStyle);
         pauseButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
