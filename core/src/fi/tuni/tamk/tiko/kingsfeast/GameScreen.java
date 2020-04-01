@@ -34,8 +34,8 @@ public class GameScreen extends ScreenAdapter {
 
     private final float unitScale = Util.getUnitScale();
     // Initial values, work in progress. Pixels -> meters.
-    private final float GAME_WIDTH = 928 * unitScale;
-    private final float GAME_HEIGHT = 544 * unitScale;
+    private final float GAME_WIDTH = 1920 * unitScale;
+    private final float GAME_HEIGHT = 1080 * unitScale;
 
     private final Vector2 gravity = new Vector2(0, -8.8f);
 

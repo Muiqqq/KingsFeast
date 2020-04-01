@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -113,6 +114,12 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("pigsplaceholder.png", Texture.class);
         kingsFeast.getAssetManager().load("compostplaceholder.png", Texture.class);
         kingsFeast.getAssetManager().load("poorplaceholder.png", Texture.class);
+        kingsFeast.getAssetManager().load("HowToPlayButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("ContinueButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("MainMenuButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("LanguageEnButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("LanguageFiButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("NewGameButton.png", Texture.class);
 
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
 

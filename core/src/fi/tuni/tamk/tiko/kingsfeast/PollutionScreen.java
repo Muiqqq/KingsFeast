@@ -3,8 +3,12 @@ package fi.tuni.tamk.tiko.kingsfeast;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -15,8 +19,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class PollutionScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
-    private static final float GAME_WIDTH = 800;
-    private static final float GAME_HEIGHT = 480;
+    private static final float GAME_WIDTH = 1920;
+    private static final float GAME_HEIGHT = 1080;
+    private final float BUTTON_WIDTH = 300f;
+    private final float BUTTON_HEIGHT = 150f;
+    private final int FONT_SIZE = 48;
+    private SpriteBatch batch;
+    private BitmapFont font;
     private Texture backgroundTexture;
     private Stage stage;
     private Texture okTexture;
@@ -31,9 +40,10 @@ public class PollutionScreen extends ScreenAdapter {
     public void show() {
         stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
-
+        initFonts();
         stage.addActor(createBackgroundImage());
         stage.addActor(createOkButton());
+        batch = new SpriteBatch();
     }
 
     @Override
@@ -45,6 +55,9 @@ public class PollutionScreen extends ScreenAdapter {
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
+        batch.begin();
+        font.draw(batch, "Pollution Level: 50/100", GAME_WIDTH / 4, Gdx.graphics.getHeight() - BUTTON_HEIGHT);
+        batch.end();
     }
 
     private Image createBackgroundImage() {
@@ -57,8 +70,8 @@ public class PollutionScreen extends ScreenAdapter {
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
-        ok.setPosition(GAME_WIDTH - 310, GAME_HEIGHT / 4);
-        ok.setSize(150f, 75f);
+        ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        ok.setPosition(GAME_WIDTH - BUTTON_WIDTH, BUTTON_HEIGHT / 2);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -70,8 +83,22 @@ public class PollutionScreen extends ScreenAdapter {
         return ok;
     }
 
+    private void initFonts() {
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        fontParameter.size = FONT_SIZE;
+        fontParameter.borderWidth = 4;
+        fontParameter.borderColor = Color.BLACK;
+        fontParameter.color = Color.WHITE;
+        font = fontGenerator.generateFont(fontParameter);
+    }
+
     @Override
     public void dispose() {
         stage.dispose();
+        //okTexture.dispose();
+        //backgroundTexture.dispose();
+        font.dispose();
+        batch.dispose();
     }
 }

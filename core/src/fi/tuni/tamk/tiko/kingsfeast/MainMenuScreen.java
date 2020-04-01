@@ -18,16 +18,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
  */
 public class MainMenuScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
-    private static final float GAME_WIDTH = 800;
-    private static final float GAME_HEIGHT = 480;
+    private static final float GAME_WIDTH = 1920;
+    private static final float GAME_HEIGHT = 1080;
     // Placeholder values
-    private final float BUTTON_WIDTH = 128f;
-    private final float BUTTON_HEIGHT = 96f;
+    private final float BUTTON_WIDTH = 300f;
+    private final float BUTTON_HEIGHT = 150f;
     private Stage stage;
     private Texture backgroundTexture;
     private Texture playUnpressedTexture;
     private Texture playPressedTexture;
     private Texture settingsTexture;
+    private Texture newGameTexture;
 
     // Constructor here takes the game object so we can swap to a different screen from this one.
     MainMenuScreen(KingsFeast kingsFeast) {
@@ -48,8 +49,11 @@ public class MainMenuScreen extends ScreenAdapter {
 
         // adds a background img and play button to the stage
         stage.addActor(createBackgroundImage());
-        stage.addActor(createPlayButton());
+        stage.addActor(createContinueButton());
         stage.addActor(createSettingsButton());
+        stage.addActor(createHowToPlayButton());
+        stage.addActor(createNewGameButton());
+        resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     // screen flickers when resizing during runtime,
@@ -80,21 +84,19 @@ public class MainMenuScreen extends ScreenAdapter {
         return background;
     }
 
-    private ImageButton createPlayButton() {
+    private ImageButton createContinueButton() {
         // two textures are used to give the user some feedback when pressing a button
-        playUnpressedTexture = kingsFeast.getAssetManager().get("StartGameButton.png");
-        playPressedTexture = kingsFeast.getAssetManager().get("StartGameButton.png");
+        playUnpressedTexture = kingsFeast.getAssetManager().get("ContinueButton.png");
 
         // this line is way too goddamn long
-        ImageButton playButton =
-                new ImageButton(new TextureRegionDrawable(new TextureRegion(playUnpressedTexture)),
-                        new TextureRegionDrawable(new TextureRegion(playPressedTexture)));
+        ImageButton continueGame =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(playUnpressedTexture)));
 
-        playButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        playButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 3, Align.center);
+        continueGame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        continueGame.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH * 2, GAME_HEIGHT / 8);
 
         // button's functionality
-        playButton.addListener(new ActorGestureListener() {
+        continueGame.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
@@ -103,7 +105,7 @@ public class MainMenuScreen extends ScreenAdapter {
             }
         });
 
-        return playButton;
+        return continueGame;
     }
 
     private ImageButton createSettingsButton() {
@@ -111,7 +113,7 @@ public class MainMenuScreen extends ScreenAdapter {
         ImageButton settingsButton =
                 new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsTexture)));
         settingsButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        settingsButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 4, Align.center);
+        settingsButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 8);
         settingsButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
@@ -122,6 +124,40 @@ public class MainMenuScreen extends ScreenAdapter {
         });
         return settingsButton;
     }
+
+    private ImageButton createHowToPlayButton() {
+        settingsTexture = kingsFeast.getAssetManager().get("HowToPlayButton.png");
+        ImageButton howToPlay =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsTexture)));
+        howToPlay.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        howToPlay.setPosition(GAME_WIDTH / 2 + BUTTON_WIDTH , GAME_HEIGHT / 8);
+        howToPlay.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent e, float x, float y, int count, int button) {
+                super.tap(e, x, y, count, button);
+                kingsFeast.setScreen(new OptionsScreen(kingsFeast, getThisScreen()));
+                dispose();
+            }
+        });
+        return howToPlay;
+    }
+
+    private ImageButton createNewGameButton() {
+            newGameTexture = kingsFeast.getAssetManager().get("NewGameButton.png");
+            ImageButton newGame =
+                    new ImageButton(new TextureRegionDrawable(new TextureRegion(newGameTexture)));
+                    newGame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+                    newGame.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH , GAME_HEIGHT / 8);
+                    newGame.addListener(new ActorGestureListener() {
+                @Override
+                public void tap(InputEvent e, float x, float y, int count, int button) {
+                    super.tap(e, x, y, count, button);
+                    kingsFeast.setScreen(new GameScreen(kingsFeast));
+                    dispose();
+                }
+            });
+            return newGame;
+        }
 
     private MainMenuScreen getThisScreen() {
         return this;

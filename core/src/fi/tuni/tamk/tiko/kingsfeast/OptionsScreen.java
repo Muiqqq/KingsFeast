@@ -12,17 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 public class OptionsScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
     private final Screen previousScreen;
-    private static final float GAME_WIDTH = 800;
-    private static final float GAME_HEIGHT = 480;
+    private static final float GAME_WIDTH = 1280;
+    private static final float GAME_HEIGHT = 720;
     private Texture backgroundTexture;
     private Stage stage;
-    private final float BUTTON_WIDTH = 128f;
-    private final float BUTTON_HEIGHT = 96f;
+    private final float BUTTON_WIDTH = 300f;
+    private final float BUTTON_HEIGHT = 150f;
 
     private Texture okTexture;
     private Texture creditsTexture;
@@ -30,6 +31,8 @@ public class OptionsScreen extends ScreenAdapter {
     private Texture musicOffTexture;
     private Texture soundOnTexture;
     private Texture soundOffTexture;
+    private Texture LanguageEnTexture;
+    private Texture LanguageFiTexture;
 
     // Sound Fx saving initially working
     // Language to be done
@@ -49,10 +52,11 @@ public class OptionsScreen extends ScreenAdapter {
 
         // Add all buttons
         stage.addActor(createBackgroundImage());
-        stage.addActor(createCreditsButton());
+        //stage.addActor(createCreditsButton());
         stage.addActor(createOkButton());
         stage.addActor(createMusicButton());
         stage.addActor(createSoundButton());
+        stage.addActor(createLanguageButton());
     }
 
     @Override
@@ -73,11 +77,12 @@ public class OptionsScreen extends ScreenAdapter {
         return background;
     }
 
+    /* I'd say let's leave this out of the game
     private ImageButton createCreditsButton() {
         creditsTexture = kingsFeast.getAssetManager().get("credits.png");
         ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsTexture)));
         credits.setPosition(GAME_WIDTH / 5, (GAME_HEIGHT / 5) - 75);
-        credits.setSize(150f, 75f);
+        credits.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         credits.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -87,13 +92,13 @@ public class OptionsScreen extends ScreenAdapter {
             }
         });
         return credits;
-    }
+    }*/
 
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
-        ok.setPosition(GAME_WIDTH / 5, (GAME_HEIGHT / 5) - 30);
-        ok.setSize(150f, 75f);
+        ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 4, Align.center);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -121,8 +126,8 @@ public class OptionsScreen extends ScreenAdapter {
             musicButton.setChecked(true);
         }
 
-        musicButton.setSize(150f, 75f);
-        musicButton.setPosition(GAME_WIDTH - 300, GAME_HEIGHT - 150);
+        musicButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        musicButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT, Align.center);
 
         // button's functionality
         musicButton.addListener(new ActorGestureListener() {
@@ -161,8 +166,8 @@ public class OptionsScreen extends ScreenAdapter {
             soundButton.setChecked(true);
         }
 
-        soundButton.setSize(150f, 75f);
-        soundButton.setPosition(GAME_WIDTH - 300, GAME_HEIGHT - 200);
+        soundButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        soundButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 2, Align.center);
 
         // button's functionality
         soundButton.addListener(new ActorGestureListener() {
@@ -181,6 +186,43 @@ public class OptionsScreen extends ScreenAdapter {
             });
 
         return soundButton;
+    }
+
+    private ImageButton createLanguageButton() {
+        // two textures are used to give the user some feedback when pressing a button
+        LanguageEnTexture = kingsFeast.getAssetManager().get("LanguageEnButton.png");
+        LanguageFiTexture = kingsFeast.getAssetManager().get("LanguageFiButton.png");
+
+        // this line is way too goddamn long
+        final ImageButton langButton =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(LanguageEnTexture)),
+                        new TextureRegionDrawable(new TextureRegion(LanguageEnTexture)),
+                        new TextureRegionDrawable(new TextureRegion(LanguageFiTexture)));
+
+        if(isEnglishEnabled()) {
+            langButton.setChecked(false);
+        } else {
+            langButton.setChecked(true);
+        }
+
+        langButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        langButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3, Align.center);
+
+        // button's functionality
+        langButton.addListener(new ActorGestureListener() {
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                if(isEnglishEnabled()) {
+                    //kingsFeast.sound.stop();
+                    setEnglishEnabled(false);
+                } else if(!isEnglishEnabled()) {
+                    //kingsFeast.sound.play();
+                    setEnglishEnabled(true);
+                }
+            }
+        });
+
+        return langButton;
     }
 
     /* Redundant
@@ -210,6 +252,15 @@ public class OptionsScreen extends ScreenAdapter {
     private void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
         kingsFeast.getPrefs().putBoolean("sound.enabled", soundEffectsEnabled);
         kingsFeast.getPrefs().flush();
+    }
+
+    private void setEnglishEnabled(boolean englishEnabled) {
+        kingsFeast.getPrefs().putBoolean("english.enabled", englishEnabled);
+        kingsFeast.getPrefs().flush();
+    }
+
+    private boolean isEnglishEnabled() {
+        return kingsFeast.getPrefs().getBoolean("english.enabled", true);
     }
 
     @Override

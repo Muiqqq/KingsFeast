@@ -12,20 +12,28 @@ import com.badlogic.gdx.utils.Array;
 
 public class KingsFeast extends Game {
     // TODO: Current issues:
+    //  GENERAL PROBLEMS
+    //  -Fix flickering of the screen edges, explore viewports
+    //  CLEAN CODE
     //  -Lack of documentation
     //  -Check that everything that needs disposing gets disposed when needed
-    //  -Graphics for: UI, Game, buttons, HUD, backgrounds
     //  -All assets need to be changed to be loaded with assetManager
     //  -Move spriteBatch to KingsFeast so it can be used elsewhere
-    //  -Menu buttons have incorrect size
-    //  -Main menu needs a how to play button which leads to the written tutorial
+    //  MENUS AND MENU FUNCTIONS
+    //  -Graphics for: UI, Game, buttons, HUD, backgrounds
+    //  -Menu buttons have incorrect size ---> Should be ok
+    //  -Main menu needs a how to play button which leads to the written tutorial ----> Button ok, Tutorial not
     //  -Written tutorial needs to be made
     //  -Saves need to be made resettable, add a reset save button to main menu
-    //  -OR Change start game to continue game and add a new game button
-    //  -Settings toggle buttons' textures need to stick
-    //  -Settings needs buttons for localization, also that needs to be implemented
-    //  -Feedback screen doesn't play well with different screen sizes
-    //  -Buttons might be a bit too small for mobile in general?
+    //  -OR Change start game to continue game and add a new game button ----> Button ok, functionality not
+    //  -Settings toggle buttons' textures need to stick ----> Muikku did it
+    //  -Feedback screen doesn't play well with different screen sizes ----> Should be a bit better now
+    //  -Buttons might be a bit too small for mobile in general? ----> Now resized except the GameScreen buttons
+    //  -Add a container for King's dialogue and use FreetypeFonts to display text
+    //  -Choose a better FreeType Font to resemble the theme more
+    //  LOCALIZATION
+    //  -Change all ImageButtons to TextButtons for localization purposes
+    //  -Implement localisation and make the language button save to prefs
 
     // remember to give an instance of 'this' to all new screens, if anything
     // from this class or parent class is to be used in that screen.

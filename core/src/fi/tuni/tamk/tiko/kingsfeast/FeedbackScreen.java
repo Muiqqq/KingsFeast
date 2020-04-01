@@ -3,33 +3,39 @@ package fi.tuni.tamk.tiko.kingsfeast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 
 public class FeedbackScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
-    private static final float GAME_WIDTH = 800;
-    private static final float GAME_HEIGHT = 480;
+    private static final float GAME_WIDTH = 1920;
+    private static final float GAME_HEIGHT = 1080;
     private Texture backgroundTexture;
     private Texture kingTexture;
     private Texture kingSpeech;
     private Stage stage;
-    private final float BUTTON_WIDTH = 128f;
+    private final float BUTTON_WIDTH = 300f;
     private final float BUTTON_HEIGHT = 96f;
     private SpriteBatch batch;
     private BitmapFont font;
-    private int visitorsServed;
+    private OrthographicCamera camera;
+    private final int FONT_SIZE = 36;
 
     private Texture okTexture;
     private String throwAmount;
@@ -37,10 +43,17 @@ public class FeedbackScreen extends ScreenAdapter {
     private String score = "0";
     private String totalThrowAmount;
     private String riverPollutionLevel;
-
+    private BitmapFont bitmapFont;
+    private Viewport viewport;
+    private Table table;
 
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
         this.kingsFeast = kingsFeast;
+        batch = new SpriteBatch();
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
+        bitmapFont = new BitmapFont();
+        initFonts();
 
         // aMuikku lisäsi
         kingsFeast.getPrefs().putInteger("totalThrows",
@@ -54,16 +67,18 @@ public class FeedbackScreen extends ScreenAdapter {
 
         foodWasteAmount = Integer.toString(throwAmount - visitorsServed);
         calculateScore(throwAmount, visitorsServed);
+
+        viewport = new FitViewport(GAME_WIDTH,
+                GAME_HEIGHT,
+                new OrthographicCamera());
+
+        stage = new Stage(viewport, batch);
     }
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
+       stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
-
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        font.setColor(Color.BLACK);
 
         stage.addActor(createBackgroundImage());
         stage.addActor(createKingImage());
@@ -81,12 +96,13 @@ public class FeedbackScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         stage.act(delta);
         stage.draw();
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "Total throws: " + totalThrowAmount, 500, 440);
-        font.draw(batch, "Throws in This Level: " + throwAmount, 500, 400);
-        font.draw(batch, "Food Waste Amount: " + foodWasteAmount, 500, 360);
-        font.draw(batch, "Score: " + score, 500, 320);
-        font.draw(batch, "River Pollution Level: " + riverPollutionLevel, 500, 250);
+        font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2, GAME_HEIGHT - 100);
+        font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2, GAME_HEIGHT - 200);
+        font.draw(batch, "Score: " + score, GAME_WIDTH / 2, GAME_HEIGHT - 300);
+        font.draw(batch, "Pollution Level: " + riverPollutionLevel, GAME_WIDTH / 2, GAME_HEIGHT - 400);
+        font.draw(batch, "Total Throws: " + totalThrowAmount, GAME_WIDTH / 2, GAME_HEIGHT - 500);
         batch.end();
     }
 
@@ -100,8 +116,8 @@ public class FeedbackScreen extends ScreenAdapter {
     private Image createKingImage() {
         kingTexture = new Texture("kingplaceholder.png");
         Image king = new Image(kingTexture);
-        king.setSize(kingTexture.getWidth() / 3, kingTexture.getHeight() / 3);
-        king.setPosition(140, 140, Align.center);
+        king.setSize(kingTexture.getWidth(), kingTexture.getHeight());
+        king.setPosition(kingTexture.getWidth() / 2, kingTexture.getHeight() / 3);
         return king;
     }
 
@@ -109,15 +125,15 @@ public class FeedbackScreen extends ScreenAdapter {
         kingSpeech = new Texture("kingspeech.png");
         Image kingSpeechBubble = new Image(kingSpeech);
         //kingSpeechBubble.setSize(kingTexture.getWidth() - 50, kingTexture.getHeight() - 50);
-        kingSpeechBubble.setPosition(230, 330, Align.center);
+        kingSpeechBubble.setPosition(GAME_HEIGHT / 2, GAME_HEIGHT - kingSpeech.getHeight(), Align.center);
         return kingSpeechBubble;
     }
 
     private ImageButton createOkButton() {
         okTexture = new Texture("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
-        ok.setPosition(GAME_WIDTH - 310, GAME_HEIGHT / 4);
-        ok.setSize(150f, 75f);
+        ok.setPosition((GAME_WIDTH / 2) + (GAME_WIDTH / 4), GAME_HEIGHT / 6);
+        ok.setSize(300f, 150f);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -156,6 +172,15 @@ public class FeedbackScreen extends ScreenAdapter {
         }
     }
 
+    private void initFonts() {
+        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        fontParameter.size = FONT_SIZE;
+        fontParameter.borderWidth = 4;
+        fontParameter.borderColor = Color.BLACK;
+        fontParameter.color = Color.WHITE;
+        font = fontGenerator.generateFont(fontParameter);
+    }
 
     @Override
     public void dispose() {
