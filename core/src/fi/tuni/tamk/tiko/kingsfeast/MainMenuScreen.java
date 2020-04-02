@@ -11,7 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
  * Quick mockup to test different screens. Will eventually become the actual main menu.
@@ -22,7 +24,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private static final float GAME_HEIGHT = 1080;
     // Placeholder values
     private final float BUTTON_WIDTH = 300f;
-    private final float BUTTON_HEIGHT = 150f;
+    private final float BUTTON_HEIGHT = 83f;
     private Stage stage;
     private Texture backgroundTexture;
     private Texture playUnpressedTexture;
@@ -44,7 +46,7 @@ public class MainMenuScreen extends ScreenAdapter {
         // set stage as the inputProcessor for this screen
         // so the stage can handle it, just gotta remember to
         // add a listener to every button.
-        stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
+        stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         // adds a background img and play button to the stage

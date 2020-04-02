@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
@@ -52,8 +53,7 @@ public class FeedbackScreen extends ScreenAdapter {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
-        bitmapFont = new BitmapFont();
-        initFonts();
+        font = Util.initFont(FONT_SIZE);
 
         // aMuikku lisäsi
         kingsFeast.getPrefs().putInteger("totalThrows",
@@ -77,7 +77,7 @@ public class FeedbackScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-       stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
+        stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         stage.addActor(createBackgroundImage());
@@ -170,16 +170,6 @@ public class FeedbackScreen extends ScreenAdapter {
         } else if (scoring == 1000){
             riverPollutionLevel = "0/100";
         }
-    }
-
-    private void initFonts() {
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
-        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        fontParameter.size = FONT_SIZE;
-        fontParameter.borderWidth = 4;
-        fontParameter.borderColor = Color.BLACK;
-        fontParameter.color = Color.WHITE;
-        font = fontGenerator.generateFont(fontParameter);
     }
 
     @Override
