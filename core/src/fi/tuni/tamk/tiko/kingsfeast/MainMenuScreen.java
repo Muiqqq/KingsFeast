@@ -1,13 +1,20 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -145,21 +152,56 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private ImageButton createNewGameButton() {
-            newGameTexture = kingsFeast.getAssetManager().get("NewGameButton.png");
-            ImageButton newGame =
-                    new ImageButton(new TextureRegionDrawable(new TextureRegion(newGameTexture)));
-                    newGame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-                    newGame.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH , GAME_HEIGHT / 8);
-                    newGame.addListener(new ActorGestureListener() {
-                @Override
-                public void tap(InputEvent e, float x, float y, int count, int button) {
-                    super.tap(e, x, y, count, button);
-                    kingsFeast.setScreen(new GameScreen(kingsFeast));
+        newGameTexture = kingsFeast.getAssetManager().get("NewGameButton.png");
+        ImageButton newGame =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(newGameTexture)));
+        newGame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        newGame.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH, GAME_HEIGHT / 8);
+        newGame.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent e, float x, float y, int count, int button) {
+                super.tap(e, x, y, count, button);
+                createConfirmationDialog();
+            }
+        });
+        return newGame;
+    }
+
+    private void createConfirmationDialog() {
+        Dialog dialog = new Dialog("",
+                new Window.WindowStyle(new BitmapFont(), Color.WHITE, null)) {
+
+            public void result(Object obj) {
+                if ((boolean) obj) {
+                    kingsFeast.clearSaveState();
                     dispose();
+                    kingsFeast.setScreen(new GameScreen(kingsFeast));
                 }
-            });
-            return newGame;
-        }
+            }
+        };
+
+        BitmapFont font = Util.initFont(36);
+        Texture buttonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
+        Texture buttonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
+
+        TextButton yesButton = new TextButton("Yes", new TextButton.TextButtonStyle(
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                new TextureRegionDrawable(new TextureRegion(buttonDown)),
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                font));
+
+        TextButton noButton = new TextButton("No", new TextButton.TextButtonStyle(
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                new TextureRegionDrawable(new TextureRegion(buttonDown)),
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                font));
+
+        dialog.text(new Label("Do you really want to start a new game?",
+                new Label.LabelStyle(font, Color.WHITE)));
+        dialog.button(yesButton, true);
+        dialog.button(noButton, false);
+        dialog.show(stage);
+    }
 
     private MainMenuScreen getThisScreen() {
         return this;

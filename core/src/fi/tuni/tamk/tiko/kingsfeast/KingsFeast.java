@@ -94,7 +94,7 @@ public class KingsFeast extends Game {
         return currentLevel;
     }
 
-    private void setCurrentLevel(int x) {
+    void setCurrentLevel(int x) {
         currentLevel = x;
     }
 
@@ -125,7 +125,7 @@ public class KingsFeast extends Game {
         }
     }
 
-    private void clearSaveState() {
+    void clearSaveState() {
         kfprefs.remove("doPrefsExist");
         kfprefs.remove("totalThrows");
         kfprefs.remove("currentLevel");
