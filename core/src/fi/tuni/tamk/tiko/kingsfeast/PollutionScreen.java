@@ -35,6 +35,7 @@ public class PollutionScreen extends ScreenAdapter {
 
     public PollutionScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
+        batch = kingsFeast.getSpriteBatch();
     }
 
     @Override
@@ -44,7 +45,6 @@ public class PollutionScreen extends ScreenAdapter {
         font = Util.initFont(FONT_SIZE);
         stage.addActor(createBackgroundImage());
         stage.addActor(createOkButton());
-        batch = new SpriteBatch();
     }
 
     @Override
@@ -90,6 +90,5 @@ public class PollutionScreen extends ScreenAdapter {
         //okTexture.dispose();
         //backgroundTexture.dispose();
         font.dispose();
-        batch.dispose();
     }
 }

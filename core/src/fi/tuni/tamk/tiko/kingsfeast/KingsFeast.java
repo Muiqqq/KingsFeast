@@ -6,6 +6,8 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
@@ -20,7 +22,8 @@ public class KingsFeast extends Game {
     //  -Lack of documentation
     //  -Check that everything that needs disposing gets disposed when needed
     //  -All assets need to be changed to be loaded with assetManager
-    //  -Move spriteBatch to KingsFeast so it can be used elsewhere
+    //  -Move spriteBatch to KingsFeast so it can be used elsewhere ----> Should be ok, now only one instance of batch exists,
+    //                                                                      get it with kingsFeast.getSpriteBatch();
     //  MENUS AND MENU FUNCTIONS
     //  -Graphics for: UI, Game, buttons, HUD, backgrounds
     //  -Menu buttons have incorrect size ---> Should be ok.
@@ -45,6 +48,7 @@ public class KingsFeast extends Game {
     // from this class or parent class is to be used in that screen.
 
     private final AssetManager assetManager = new AssetManager();
+    private SpriteBatch batch;
     private LevelBuilder levelBuilder;
     private Array<LevelData> levels;
     private int currentLevel;
@@ -53,6 +57,7 @@ public class KingsFeast extends Game {
 
     @Override
     public void create() {
+        batch = new SpriteBatch();
         kfprefs = getPreferencesFromOS(kfprefs);
         initSaveState();
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
@@ -65,7 +70,12 @@ public class KingsFeast extends Game {
 
     @Override
     public void dispose() {
+        batch.dispose();
         assetManager.dispose();
+    }
+
+    SpriteBatch getSpriteBatch() {
+        return batch;
     }
 
     AssetManager getAssetManager() {
