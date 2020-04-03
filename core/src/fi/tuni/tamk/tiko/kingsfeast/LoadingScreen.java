@@ -90,6 +90,7 @@ public class LoadingScreen extends ScreenAdapter {
     // All the assets should be loaded here.
     private void loadAssets() {
         kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
+        kingsFeast.getAssetManager().load("map1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level2.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level3.tmx", TiledMap.class);
@@ -120,6 +121,7 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("LanguageEnButton.png", Texture.class);
         kingsFeast.getAssetManager().load("LanguageFiButton.png", Texture.class);
         kingsFeast.getAssetManager().load("NewGameButton.png", Texture.class);
+        kingsFeast.getAssetManager().load("fruitSalad.png", Texture.class);
 
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
 

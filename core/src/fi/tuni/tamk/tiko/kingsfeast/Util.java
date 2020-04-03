@@ -50,6 +50,13 @@ class Util {
         return mapWidth * tilePixelWidth;
     }
 
+    static int getLevelHeight(TiledMap tiledMap) {
+        MapProperties properties = tiledMap.getProperties();
+        int mapHeight = properties.get("height", Integer.class);
+        int tilePixelWidth = properties.get("tilewidth", Integer.class);
+        return mapHeight * tilePixelWidth;
+    }
+
     static float convertPixelsToMetres(float pixels) {
         return pixels * unitScale;
     }

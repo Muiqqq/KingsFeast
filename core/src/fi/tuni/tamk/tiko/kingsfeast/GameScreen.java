@@ -34,8 +34,8 @@ public class GameScreen extends ScreenAdapter {
 
     private final float unitScale = Util.getUnitScale();
     // Initial values, work in progress. Pixels -> meters.
-    private final float GAME_WIDTH = 1920 * unitScale;
-    private final float GAME_HEIGHT = 1080 * unitScale;
+    private final float GAME_WIDTH = 1280 * unitScale;
+    private final float GAME_HEIGHT = 736 * unitScale;
 
     private final Vector2 gravity = new Vector2(0, -8.8f);
 
@@ -191,6 +191,7 @@ public class GameScreen extends ScreenAdapter {
 
             @Override
             public void beginContact(Contact contact) {
+                setLinearDampingOnCollision(contact);
                 handleCollisionWithGoal(contact);
             }
 
@@ -244,8 +245,16 @@ public class GameScreen extends ScreenAdapter {
             camera.position.x = 0 + camera.viewportWidth / 2;
         }
 
+        if (camera.position.y - (camera.viewportHeight / 2) <= 0) {
+            camera.position.y = 0 + camera.viewportHeight / 2;
+        }
+
         if (camera.position.x + (camera.viewportWidth / 2) >= levelData.getLEVEL_WIDTH()) {
             camera.position.x = levelData.getLEVEL_WIDTH() - (camera.viewportWidth / 2);
+        }
+
+        if (camera.position.y + (camera.viewportHeight / 2) >= levelData.getLEVEL_HEIGHT()) {
+            camera.position.y = levelData.getLEVEL_HEIGHT() - (camera.viewportHeight / 2);
         }
     }
 
@@ -254,6 +263,7 @@ public class GameScreen extends ScreenAdapter {
     private void snapCameraToBody() {
         if (foodPlate.isPlateFlying) {
             camera.position.x = foodPlate.getBody().getWorldCenter().x;
+            camera.position.y = foodPlate.getBody().getWorldCenter().y;
         }
     }
 
@@ -350,6 +360,22 @@ public class GameScreen extends ScreenAdapter {
             }
             if (userDataB.equals("goal")) {
                 contact.getFixtureB().getBody().setUserData(foodPlate.getFoodTexture());
+            }
+        }
+    }
+
+    private void setLinearDampingOnCollision(Contact contact) {
+        Object userDataA = contact.getFixtureA().getBody().getUserData();
+        Object userDataB = contact.getFixtureB().getBody().getUserData();
+
+        if (userDataA.equals("foodPlate") && userDataB.equals("walls") ||
+                userDataB.equals("foodPlate") && userDataA.equals("walls")) {
+
+            if (userDataA.equals("foodPlate")) {
+                foodPlate.getBody().setLinearDamping(0.66f);
+            }
+            if (userDataB.equals("foodPlate")) {
+                foodPlate.getBody().setLinearDamping(0.66f);
             }
         }
     }

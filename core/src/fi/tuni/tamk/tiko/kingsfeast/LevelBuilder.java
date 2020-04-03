@@ -36,21 +36,26 @@ class LevelBuilder {
 
     // These can be simplified?
     private LevelData level1() {
-        return new LevelData(kingsFeast.getAssetManager().get("level1.tmx",
+        return new LevelData(kingsFeast.getAssetManager().get("map1.tmx",
                 TiledMap.class));
     }
 
     private LevelData level2() {
-        return new LevelData(kingsFeast.getAssetManager().get("level2.tmx",
+        return new LevelData(kingsFeast.getAssetManager().get("level1.tmx",
                 TiledMap.class));
     }
 
     private LevelData level3() {
-        return new LevelData(kingsFeast.getAssetManager().get("level3.tmx",
+        return new LevelData(kingsFeast.getAssetManager().get("level2.tmx",
                 TiledMap.class));
     }
 
     private LevelData level4() {
+        return new LevelData(kingsFeast.getAssetManager().get("level3.tmx",
+                TiledMap.class));
+    }
+
+    private LevelData level5() {
         return new LevelData(kingsFeast.getAssetManager().get("level4.tmx",
                 TiledMap.class));
     }

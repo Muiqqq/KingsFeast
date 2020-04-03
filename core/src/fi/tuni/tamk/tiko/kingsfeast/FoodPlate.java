@@ -21,11 +21,11 @@ import com.badlogic.gdx.utils.Array;
 class FoodPlate {
     private final KingsFeast kingsFeast;
 
-    private final float MAX_STRENGTH = 2f;
-    private final float MAX_DISTANCE = 128f;
+    private final float MAX_STRENGTH = 6f;
+    private final float MAX_DISTANCE = 160f;
     private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
     private final float LOWER_ANGLE = MathUtils.PI / 2f;
-    private final float plateRadius = 0.16f;
+    private final float plateRadius = 0.32f;
     private final float plateDensity = 2.0f;
     private final float restitution = 0.6f;
     private final float friction = 1.0f;
@@ -116,7 +116,7 @@ class FoodPlate {
 
             // This slows the velocity by the specified amount every time step. Value we should use
             // has to be tested through trial and error.
-            body.setLinearDamping(0.33f);
+            //body.setLinearDamping(0.66f);
 
             // used to check if body has stopped moving so it can be cleared.
             recentSpeed = body.getLinearVelocity().len();
@@ -168,9 +168,9 @@ class FoodPlate {
     // Refactor depending on how texture files / atlas is being handled.
     private void randomizeTexture() {
         Array<Texture> foodTextures = new Array<>();
-        foodTextures.add(kingsFeast.getAssetManager().get("redfood.png", Texture.class));
-        foodTextures.add(kingsFeast.getAssetManager().get("bluefood.png", Texture.class));
-        foodTextures.add(kingsFeast.getAssetManager().get("greenfood.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("fruitSalad.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("fruitSalad.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("fruitSalad.png", Texture.class));
 
         foodTexture = foodTextures.get(MathUtils.random(0, foodTextures.size - 1));
     }

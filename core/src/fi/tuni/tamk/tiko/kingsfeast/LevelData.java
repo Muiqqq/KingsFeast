@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -15,6 +16,7 @@ class LevelData {
     private final float unitScale = Util.getUnitScale();
     private TiledMap tiledMap;
     private float LEVEL_WIDTH;
+    private float LEVEL_HEIGHT;
     private Vector2 slingAnchorPos;
     private Rectangle THROW_BOUNDS;
     private int VISITOR_COUNT;
@@ -22,6 +24,7 @@ class LevelData {
     LevelData(TiledMap tiledMap) {
         this.tiledMap = tiledMap;
         LEVEL_WIDTH = Util.getLevelWidth(tiledMap) * unitScale;
+        LEVEL_HEIGHT = Util.getLevelHeight(tiledMap) * unitScale;
         setSlingAnchorPos();
         setVisitorCount();
     }
@@ -34,17 +37,23 @@ class LevelData {
         return LEVEL_WIDTH;
     }
 
+    float getLEVEL_HEIGHT() {
+        return LEVEL_HEIGHT;
+    }
+
     // This thing needs to be taken from the tiledMap somehow if it's not going to be
     // the same for every level.
     private void setSlingAnchorPos() {
-        slingAnchorPos = new Vector2(Util.convertMetresToPixels(1.60f),
-                Util.convertMetresToPixels(1.60f));
+        MapObject mapObject = tiledMap.getLayers().get("anchor").getObjects().get(0);
+        RectangleMapObject rectangleMapObject = (RectangleMapObject) mapObject;
+        slingAnchorPos = new Vector2(rectangleMapObject.getRectangle().getX(),
+                rectangleMapObject.getRectangle().getY());
 
         // remember to change these to match whatever the bounds are eventually gonna be.
         // currently this is a bad way to do it but oh well.
         THROW_BOUNDS = new Rectangle(slingAnchorPos.x - 160f,
                 slingAnchorPos.y - 160f,
-                160f, 160f);
+                180f, 180f);
     }
 
     Vector2 getSlingAnchorPos() {
