@@ -2,11 +2,16 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
@@ -20,12 +25,12 @@ import com.badlogic.gdx.utils.Array;
  */
 class FoodPlate {
     private final KingsFeast kingsFeast;
+    private final LevelData levelData;
 
     private final float MAX_STRENGTH = 6f;
     private final float MAX_DISTANCE = 160f;
     private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
     private final float LOWER_ANGLE = MathUtils.PI / 2f;
-    private final float plateRadius = 0.32f;
     private final float plateDensity = 2.0f;
     private final float restitution = 0.6f;
     private final float friction = 1.0f;
@@ -39,6 +44,7 @@ class FoodPlate {
 
     private Texture foodTexture;
 
+    private PolygonShape polygon;
     private Body body;
     boolean isPlateFlying = false;
     boolean removeBody = false;
@@ -46,7 +52,9 @@ class FoodPlate {
     FoodPlate(LevelData levelData, KingsFeast kingsFeast) {
         // anchor pos will come from the slings position once that's implemented.
         this.kingsFeast = kingsFeast;
+        this.levelData = levelData;
         anchor = levelData.getSlingAnchorPos();
+
 
         randomizeTexture();
 
@@ -94,20 +102,21 @@ class FoodPlate {
     Body createBody(World world) {
         if (!isPlateFlying) {
             isPlateFlying = true;
-            CircleShape circleShape = new CircleShape();
-            circleShape.setRadius(plateRadius);
-            circleShape.setPosition(new Vector2(Util.convertPixelsToMetres(firingPos.x),
-                    Util.convertPixelsToMetres(firingPos.y)));
+
+            // Dollar store version of creating a polygon for the food plate
+            // Yay for cutting corners
+            MapLayer layer = levelData.getTiledMap().getLayers().get("foodplate");
+            PolygonMapObject polyObj = layer.getObjects().getByType(PolygonMapObject.class).get(0);
+            polygon = BodyBuilder.getPolygonShape(polyObj);
 
             BodyDef bd = new BodyDef();
             bd.type = BodyDef.BodyType.DynamicBody;
             Body body = world.createBody(bd);
             body.setUserData("foodPlate");
-            body.createFixture(circleShape, plateDensity);
+            body.createFixture(polygon, plateDensity);
             body.getFixtureList().get(0).setFriction(friction);
             body.getFixtureList().get(0).setRestitution(restitution);
-            body.getFixtureList().get(0).setDensity(plateDensity);
-            circleShape.dispose();
+            polygon.dispose();
 
             float velocityX = Math.abs( (MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f)));
             float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
@@ -185,6 +194,10 @@ class FoodPlate {
     void draw(SpriteBatch batch, World world) {
         Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
+        MapLayer layer = levelData.getTiledMap().getLayers().get("foodplate");
+        PolygonMapObject polyObj = layer.getObjects().getByType(PolygonMapObject.class).get(0);
+        float width = Util.convertPixelsToMetres(polyObj.getPolygon().getBoundingRectangle().getWidth());
+        float height = Util.convertPixelsToMetres(polyObj.getPolygon().getBoundingRectangle().getHeight());
 
         // If a 'visitor' got their food already, draws the food texture at their spot.
         // The texture of the foodplate which collided with a visitor's spot gets saved
@@ -192,10 +205,9 @@ class FoodPlate {
         for (Body body : bodies) {
             if (body.getUserData() instanceof Texture) {
                 batch.draw((Texture) body.getUserData(),
-                        body.getWorldCenter().x - plateRadius,
-                        body.getWorldCenter().y - plateRadius,
-                        plateRadius * 2,
-                        plateRadius * 2);
+                        body.getWorldCenter().x - width / 2,
+                        body.getWorldCenter().y - height / 2,
+                        width, height);
             }
         }
 
@@ -203,16 +215,26 @@ class FoodPlate {
         // otherwise draws it where the firing position is -> follows touch
         if(isPlateFlying) {
             batch.draw(foodTexture,
-                   body.getWorldCenter().x - plateRadius,
-                    body.getWorldCenter().y - plateRadius,
-                    plateRadius * 2,
-                    plateRadius * 2);
+                   body.getWorldCenter().x - width / 2,
+                    body.getWorldCenter().y - height / 2,
+                    width / 2f,
+                    height / 2f,
+                    width,
+                    height,
+                    1.0f,
+                    1.0f,
+                    body.getAngle() * MathUtils.radDeg,
+                    0,
+                    0,
+                    foodTexture.getWidth(),
+                    foodTexture.getHeight(),
+                    false,
+                    false);
         } else {
             batch.draw(foodTexture,
-                    Util.convertPixelsToMetres(firingPos.x) - plateRadius,
-                    Util.convertPixelsToMetres(firingPos.y) - plateRadius,
-                    plateRadius * 2,
-                    plateRadius * 2);
+                    Util.convertPixelsToMetres(firingPos.x) - width / 2,
+                    Util.convertPixelsToMetres(firingPos.y) - height / 2,
+                    width, height);
         }
     }
 }

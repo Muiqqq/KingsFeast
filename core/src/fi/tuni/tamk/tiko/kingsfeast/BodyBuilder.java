@@ -99,7 +99,7 @@ class BodyBuilder {
      * @param polygonObject This gets transformed.
      * @return PolygonShape. Used to create a polygon shaped body later.
      */
-    private static PolygonShape getPolygonShape(PolygonMapObject polygonObject) {
+    static PolygonShape getPolygonShape(PolygonMapObject polygonObject) {
         PolygonShape polygon = new PolygonShape();
         float[] vertices = polygonObject.getPolygon().getTransformedVertices();
         float[] worldVertices = new float[vertices.length];

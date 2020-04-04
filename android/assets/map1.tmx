@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="7" nextobjectid="15">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="22">
  <layer id="1" name="Tile Layer 1" width="60" height="33">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -46,11 +46,16 @@
   <object id="12" x="3081.82" y="751.515" width="112.121" height="236.364"/>
   <object id="13" x="-987.879" y="754.545" width="90.9091" height="230.303"/>
  </objectgroup>
+ <objectgroup id="7" name="foodplate">
+  <object id="21" x="241.75" y="780">
+   <polygon points="0,0 32,32 64,32 96,0 82.25,-8.75 10.25,-9.25"/>
+  </object>
+ </objectgroup>
  <objectgroup id="6" name="anchor">
   <object id="11" x="288" y="800"/>
  </objectgroup>
  <objectgroup id="5" name="goal">
-  <object id="8" x="1438" y="816" width="93" height="22"/>
+  <object id="8" x="1445" y="817" width="93" height="22"/>
   <object id="9" x="1662" y="815" width="93" height="22"/>
  </objectgroup>
 </map>

@@ -30,7 +30,7 @@ public class GameScreen extends ScreenAdapter {
     //  -Move throwing related methods to FoodPlate class if possible
     private final KingsFeast kingsFeast;
 
-    private final boolean DEBUG_PHYSICS = true;
+    private final boolean DEBUG_PHYSICS = false;
 
     private final float unitScale = Util.getUnitScale();
     // Initial values, work in progress. Pixels -> meters.
@@ -271,6 +271,7 @@ public class GameScreen extends ScreenAdapter {
     // This gets called, f. ex., when a foodplate is destroyed or hits a goal.
     void cameraReset() {
         camera.position.x = 0 + (camera.viewportWidth / 2);
+        camera.position.y = 0 + (camera.viewportHeight / 2);
     }
 
     private void handleCameraPanning(Vector3 tmp, Vector3 lastTouch, int screenX) {
