@@ -28,8 +28,8 @@ class LevelBuilder {
     Array<LevelData> buildLevels() {
         Array<LevelData> levels = new Array<>();
         levels.add(level1());
-        levels.add(level2());
-        levels.add(level3());
+        //levels.add(level2());
+        //levels.add(level3());
         //levels.add(level4());
         return levels;
     }

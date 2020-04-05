@@ -126,12 +126,6 @@ class FoodPlate {
             body.applyLinearImpulse(new Vector2(velocityX, velocityY),
                     body.getWorldCenter(), true);
 
-            //body.applyLinearImpulse(new Vector2());
-
-            // This slows the velocity by the specified amount every time step. Value we should use
-            // has to be tested through trial and error.
-            //body.setLinearDamping(0.66f);
-
             // used to check if body has stopped moving so it can be cleared.
             recentSpeed = body.getLinearVelocity().len();
 
