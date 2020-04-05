@@ -27,8 +27,8 @@ class FoodPlate {
     private final KingsFeast kingsFeast;
     private final LevelData levelData;
 
-    private final float MAX_STRENGTH = 6f;
-    private final float MAX_DISTANCE = 160f;
+    private final float MAX_STRENGTH = 5f;
+    private final float MAX_DISTANCE = 200f;
     private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
     private final float LOWER_ANGLE = MathUtils.PI / 2f;
     private final float plateDensity = 2.0f;
@@ -65,9 +65,9 @@ class FoodPlate {
     private float angleBetweenTwoPoints() {
         float angle = MathUtils.atan2(anchor.y - firingPos.y, anchor.x - firingPos.x);
         angle %= 2 * MathUtils.PI;
-        if (angle < 0) {
+        /*if (angle < 0) {
             angle += 2 * MathUtils.PI2;
-        }
+        }*/
         return angle;
     }
 
@@ -87,13 +87,13 @@ class FoodPlate {
         if (distance > MAX_DISTANCE) {
             distance = MAX_DISTANCE;
         }
-        if (angle > LOWER_ANGLE) {
+        /*if (angle > LOWER_ANGLE) {
             if (angle > UPPER_ANGLE) {
                 angle = 0;
             } else {
                 angle = LOWER_ANGLE;
             }
-        }
+        } */
         firingPos.set(anchor.x + (distance * -MathUtils.cos(angle)),
                 anchor.y + (distance * -MathUtils.sin(angle)));
     }
@@ -118,10 +118,15 @@ class FoodPlate {
             body.getFixtureList().get(0).setRestitution(restitution);
             polygon.dispose();
 
-            float velocityX = Math.abs( (MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f)));
-            float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
+            //float velocityX = Math.abs( (MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f)));
+            //float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
+            float velocityX = -(MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f));
+            float velocityY = -(MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f));
+
             body.applyLinearImpulse(new Vector2(velocityX, velocityY),
                     body.getWorldCenter(), true);
+
+            //body.applyLinearImpulse(new Vector2());
 
             // This slows the velocity by the specified amount every time step. Value we should use
             // has to be tested through trial and error.
@@ -196,8 +201,11 @@ class FoodPlate {
         world.getBodies(bodies);
         MapLayer layer = levelData.getTiledMap().getLayers().get("foodplate");
         PolygonMapObject polyObj = layer.getObjects().getByType(PolygonMapObject.class).get(0);
-        float width = Util.convertPixelsToMetres(polyObj.getPolygon().getBoundingRectangle().getWidth());
-        float height = Util.convertPixelsToMetres(polyObj.getPolygon().getBoundingRectangle().getHeight());
+        float width = Util.convertPixelsToMetres
+                (polyObj.getPolygon().getBoundingRectangle().getWidth());
+
+        float height = Util.convertPixelsToMetres
+                (polyObj.getPolygon().getBoundingRectangle().getHeight());
 
         // If a 'visitor' got their food already, draws the food texture at their spot.
         // The texture of the foodplate which collided with a visitor's spot gets saved

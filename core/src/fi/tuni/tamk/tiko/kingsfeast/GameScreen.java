@@ -216,6 +216,7 @@ public class GameScreen extends ScreenAdapter {
     private void drawDebug() {
         if (DEBUG_PHYSICS) {
             box2DDebugRenderer.render(world, camera.combined);
+        }
             // Following code draws the rectangles and the line you see when testing.
             shapeRenderer.setProjectionMatrix(camera.combined);
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -236,7 +237,6 @@ public class GameScreen extends ScreenAdapter {
                     Util.convertPixelsToMetres(foodPlate.firingPos.y));
 
             shapeRenderer.end();
-        }
     }
 
     // put camera stuff in util maybe? might not work

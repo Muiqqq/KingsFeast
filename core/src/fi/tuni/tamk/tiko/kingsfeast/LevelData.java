@@ -51,9 +51,8 @@ class LevelData {
 
         // remember to change these to match whatever the bounds are eventually gonna be.
         // currently this is a bad way to do it but oh well.
-        THROW_BOUNDS = new Rectangle(slingAnchorPos.x - 160f,
-                slingAnchorPos.y - 160f,
-                180f, 180f);
+        THROW_BOUNDS = new Rectangle(slingAnchorPos.x - 80f, slingAnchorPos.y - 80f,
+                160f, 160f);
     }
 
     Vector2 getSlingAnchorPos() {
