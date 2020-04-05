@@ -116,7 +116,7 @@ public class FeedbackScreen extends ScreenAdapter {
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("riverscreen.png");
+        backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
@@ -255,15 +255,6 @@ public class FeedbackScreen extends ScreenAdapter {
         });
         return poorLifeline;
     }
-
-    public void gameLost() {
-        // Draw container with game over text. Show score. Tell about the river.
-    }
-
-    public void gameWon() {
-        // Draw container with game won text. Show score. Tell about the river.
-    }
-
 
     @Override
     public void dispose() {

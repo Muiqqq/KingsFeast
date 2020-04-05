@@ -6,13 +6,9 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class KingsFeast extends Game {
@@ -37,7 +33,7 @@ public class KingsFeast extends Game {
     //  -Settings toggle buttons' textures need to stick ----> Muikku did it
     //  -Feedback screen doesn't play well with different screen sizes ----> Should be a bit better now
     //  -Buttons might be a bit too small for mobile in general? ----> Now resized except the GameScreen buttons
-    //  -Add a container for King's dialogue and use FreetypeFonts to display text
+    //  -Add a container for King's dialogue and use FreetypeFonts to display text ----> Done -Melentjeff
     //  -Choose a better FreeType Font to resemble the theme more
     //  LOCALIZATION
     //  -Change all ImageButtons to TextButtons for localization purposes
@@ -219,7 +215,6 @@ public class KingsFeast extends Game {
         setTotalScore(scores);
         calculatePollution(scores);
         setLevelScore(scores);
-        checkGameEnd();
     }
 
     void setLevelScore(int score) {
@@ -267,20 +262,4 @@ public class KingsFeast extends Game {
         this.levelThrows = Integer.toString(levelThrows);
     }
 
-    private void checkGameEnd() {
-        int pollution = Integer.parseInt(pollutionLevel);
-        if(pollution >= 100) {
-            gameLost();
-        } else if (pollution <= 0) {
-            gameWon();
-        }
-    }
-
-    public void gameLost() {
-
-    }
-
-    public void gameWon() {
-
-    }
 }
