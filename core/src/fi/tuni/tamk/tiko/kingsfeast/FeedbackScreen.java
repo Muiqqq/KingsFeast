@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 
@@ -81,7 +82,7 @@ public class FeedbackScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-       stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
+       stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         stage.addActor(createBackgroundImage());
@@ -108,7 +109,7 @@ public class FeedbackScreen extends ScreenAdapter {
         font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 250, GAME_HEIGHT - 100);
         font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2 + 250, GAME_HEIGHT - 200);
         font.draw(batch, "Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 300);
-        font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 200, GAME_HEIGHT - 400);
+        font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 400);
         font.draw(batch, "Total Throws: " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 500);
         font.draw(batch, "Total Score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 600);
         speechFont.draw(batch, kingDialogue, 50, GAME_HEIGHT - 60);
