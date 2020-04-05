@@ -12,11 +12,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class LifelineScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
-    private static final float GAME_WIDTH = 800;
-    private static final float GAME_HEIGHT = 480;
+    private static final float GAME_WIDTH = 1920;
+    private static final float GAME_HEIGHT = 1080;
     private Texture backgroundTexture;
     private Stage stage;
     private final float BUTTON_WIDTH = 500f;
@@ -32,7 +33,7 @@ public class LifelineScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
+        stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         stage.addActor(createBackgroundImage());
@@ -67,8 +68,8 @@ public class LifelineScreen extends ScreenAdapter {
         pigsLifeline.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                // DO LIFELINE ACTION
-                kingsFeast.setScreen(new GameScreen(kingsFeast));
+                kingsFeast.setPollutionLevel(-2);
+                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }
         });
         return pigsLifeline;
@@ -82,8 +83,8 @@ public class LifelineScreen extends ScreenAdapter {
         compostLifeline.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                // DO LIFELINE ACTION
-                kingsFeast.setScreen(new GameScreen(kingsFeast));
+                kingsFeast.setPollutionLevel(-5);
+                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }
         });
         return compostLifeline;
@@ -97,8 +98,8 @@ public class LifelineScreen extends ScreenAdapter {
         poorLifeline.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                // DO LIFELINE ACTION
-                kingsFeast.setScreen(new GameScreen(kingsFeast));
+                kingsFeast.setPollutionLevel(-8);
+                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
                 dispose();
             }
         });
