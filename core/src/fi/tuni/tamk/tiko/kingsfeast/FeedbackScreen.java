@@ -13,8 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
@@ -34,18 +32,18 @@ public class FeedbackScreen extends ScreenAdapter {
     private final float BUTTON_HEIGHT = 96f;
     private SpriteBatch batch;
     private BitmapFont font;
+    private BitmapFont bitmapFont;
+    private BitmapFont speechFont;
     private OrthographicCamera camera;
     private final int FONT_SIZE = 36;
+    private final int SPEECH_FONT_SIZE = 48;
 
     private Texture okTexture;
     private String throwAmount;
     private String foodWasteAmount;
-    private String score = "0";
-    private String totalThrowAmount;
-    private String riverPollutionLevel;
-    private BitmapFont bitmapFont;
     private Viewport viewport;
-    private Table table;
+
+    private String kingDialogue = "Well done my loyal servant!\nAlmost no foodwaste!";
 
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
         this.kingsFeast = kingsFeast;
@@ -53,6 +51,7 @@ public class FeedbackScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
         bitmapFont = new BitmapFont();
+        speechFont = new BitmapFont();
         initFonts();
 
         // aMuikku lisäsi
@@ -62,11 +61,8 @@ public class FeedbackScreen extends ScreenAdapter {
 
         this.throwAmount = Integer.toString(throwAmount);
 
-        // aMuikku lisäsi
-        totalThrowAmount = Integer.toString(kingsFeast.getPrefs().getInteger("totalThrows"));
-
         foodWasteAmount = Integer.toString(throwAmount - visitorsServed);
-        calculateScore(throwAmount, visitorsServed);
+        kingsFeast.calculateScore(throwAmount, visitorsServed);
 
         viewport = new FitViewport(GAME_WIDTH,
                 GAME_HEIGHT,
@@ -98,16 +94,17 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.draw();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2, GAME_HEIGHT - 100);
-        font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2, GAME_HEIGHT - 200);
-        font.draw(batch, "Score: " + score, GAME_WIDTH / 2, GAME_HEIGHT - 300);
-        font.draw(batch, "Pollution Level: " + riverPollutionLevel, GAME_WIDTH / 2, GAME_HEIGHT - 400);
-        font.draw(batch, "Total Throws: " + totalThrowAmount, GAME_WIDTH / 2, GAME_HEIGHT - 500);
+        font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 200, GAME_HEIGHT - 100);
+        font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2 + 200, GAME_HEIGHT - 200);
+        font.draw(batch, "Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 200, GAME_HEIGHT - 300);
+        font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 200, GAME_HEIGHT - 400);
+        font.draw(batch, "Total Throws: " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 200, GAME_HEIGHT - 500);
+        speechFont.draw(batch, kingDialogue, 50, GAME_HEIGHT - 60);
         batch.end();
     }
 
     private Image createBackgroundImage() {
-        backgroundTexture = new Texture("options.jpg");
+        backgroundTexture = new Texture("riverscreen.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
@@ -124,8 +121,8 @@ public class FeedbackScreen extends ScreenAdapter {
     private Image createKingSpeech() {
         kingSpeech = new Texture("kingspeech.png");
         Image kingSpeechBubble = new Image(kingSpeech);
-        //kingSpeechBubble.setSize(kingTexture.getWidth() - 50, kingTexture.getHeight() - 50);
-        kingSpeechBubble.setPosition(GAME_HEIGHT / 2, GAME_HEIGHT - kingSpeech.getHeight(), Align.center);
+        kingSpeechBubble.setSize(kingSpeech.getWidth() - 50, kingSpeech.getHeight() - 50);
+        kingSpeechBubble.setPosition(GAME_HEIGHT / 2, GAME_HEIGHT - kingSpeech.getHeight() / 2, Align.center);
         return kingSpeechBubble;
     }
 
@@ -146,32 +143,6 @@ public class FeedbackScreen extends ScreenAdapter {
         return ok;
     }
 
-    void calculateScore(int throwes, int served) {
-        int waste = throwes - served;
-        int scores = 0;
-        if(waste < 5) {
-            scores = 1000;
-        } else if(waste >= 5 && waste <= 10) {
-            scores = 700;
-        } else if(waste > 10 && waste <= 20) {
-            scores = 200;
-        }
-
-        score = Integer.toString(scores);
-
-        setPollution(scores);
-    }
-
-    void setPollution(int scoring) {
-        if (scoring == 200) {
-            riverPollutionLevel = "80/100";
-        } else if (scoring == 700) {
-            riverPollutionLevel = "50/100";
-        } else if (scoring == 1000){
-            riverPollutionLevel = "0/100";
-        }
-    }
-
     private void initFonts() {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -180,6 +151,14 @@ public class FeedbackScreen extends ScreenAdapter {
         fontParameter.borderColor = Color.BLACK;
         fontParameter.color = Color.WHITE;
         font = fontGenerator.generateFont(fontParameter);
+
+        FreeTypeFontGenerator speechFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
+        FreeTypeFontGenerator.FreeTypeFontParameter speechFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        speechFontParameter.size = SPEECH_FONT_SIZE;
+        speechFontParameter.borderWidth = 4;
+        speechFontParameter.borderColor = Color.BLACK;
+        speechFontParameter.color = Color.WHITE;
+        speechFont = speechFontGenerator.generateFont(speechFontParameter);
     }
 
     @Override
@@ -191,5 +170,6 @@ public class FeedbackScreen extends ScreenAdapter {
         backgroundTexture.dispose();
         batch.dispose();
         font.dispose();
+        speechFont.dispose();
     }
 }

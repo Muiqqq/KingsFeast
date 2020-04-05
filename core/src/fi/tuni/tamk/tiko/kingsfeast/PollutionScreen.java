@@ -56,7 +56,7 @@ public class PollutionScreen extends ScreenAdapter {
         stage.act(delta);
         stage.draw();
         batch.begin();
-        font.draw(batch, "Pollution Level: 50/100", GAME_WIDTH / 4, Gdx.graphics.getHeight() - BUTTON_HEIGHT);
+        font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 4, Gdx.graphics.getHeight() - BUTTON_HEIGHT);
         batch.end();
     }
 
