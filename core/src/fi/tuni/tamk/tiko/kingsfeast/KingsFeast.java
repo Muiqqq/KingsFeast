@@ -139,7 +139,7 @@ public class KingsFeast extends Game {
         totalThrows = Integer.toString(kfprefs.getInteger("totalThrows", 0));
     }
 
-    private void clearSaveState() {
+    public void clearSaveState() {
         kfprefs.remove("doPrefsExist");
         kfprefs.remove("totalThrows");
         kfprefs.remove("currentLevel");
