@@ -6,10 +6,13 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 
 public class KingsFeast extends Game {
@@ -176,7 +179,8 @@ public class KingsFeast extends Game {
         if (getCurrentLevel() < getLevels().size - 1) {
             incrementCurrentLevel();
         } else {
-            clearSaveState();
+            //clearSaveState();
+            this.currentLevel = 0;
         }
     }
 
@@ -247,13 +251,13 @@ public class KingsFeast extends Game {
 
     void calculatePollution(int scoring) {
         if (scoring == 1000) {
-            setPollutionLevel(-10);
+            setPollutionLevel(-15);
         } else if (scoring == 750) {
-            setPollutionLevel(-5);
+            setPollutionLevel(-8);
         } else if (scoring == 500){
             setPollutionLevel(-2);
         } else if (scoring == 200) {
-            setPollutionLevel(1);
+            setPollutionLevel(5);
         } else if (scoring == -100) {
             setPollutionLevel(10);
         }
@@ -265,12 +269,18 @@ public class KingsFeast extends Game {
 
     private void checkGameEnd() {
         int pollution = Integer.parseInt(pollutionLevel);
-        if(pollution >= 100 || pollution <= 0) {
-            gameEnd = true;
+        if(pollution >= 100) {
+            gameLost();
+        } else if (pollution <= 0) {
+            gameWon();
         }
     }
 
-    public boolean getGameState() {
-        return this.gameEnd;
+    public void gameLost() {
+
+    }
+
+    public void gameWon() {
+
     }
 }

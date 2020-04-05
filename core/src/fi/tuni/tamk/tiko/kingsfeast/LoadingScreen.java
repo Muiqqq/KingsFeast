@@ -123,6 +123,8 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("compostdisabledplaceholder.png", Texture.class);
         kingsFeast.getAssetManager().load("pigsdisabledplaceholder.png", Texture.class);
         kingsFeast.getAssetManager().load("poordisabledplaceholder.png", Texture.class);
+        kingsFeast.getAssetManager().load("kingplaceholder.png", Texture.class);
+        kingsFeast.getAssetManager().load("kingspeech.png", Texture.class);
 
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
 

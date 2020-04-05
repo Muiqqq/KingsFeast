@@ -30,7 +30,7 @@ class LevelBuilder {
         levels.add(level1());
         levels.add(level2());
         levels.add(level3());
-        levels.add(level4());
+        //levels.add(level4());
         return levels;
     }
 

@@ -105,11 +105,12 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.draw();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 200, GAME_HEIGHT - 100);
-        font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2 + 200, GAME_HEIGHT - 200);
-        font.draw(batch, "Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 200, GAME_HEIGHT - 300);
+        font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 250, GAME_HEIGHT - 100);
+        font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2 + 250, GAME_HEIGHT - 200);
+        font.draw(batch, "Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 300);
         font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 200, GAME_HEIGHT - 400);
-        font.draw(batch, "Total Throws: " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 200, GAME_HEIGHT - 500);
+        font.draw(batch, "Total Throws: " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 500);
+        font.draw(batch, "Total Score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 600);
         speechFont.draw(batch, kingDialogue, 50, GAME_HEIGHT - 60);
         batch.end();
     }
@@ -122,7 +123,7 @@ public class FeedbackScreen extends ScreenAdapter {
     }
 
     private Image createKingImage() {
-        kingTexture = new Texture("kingplaceholder.png");
+        kingTexture = kingsFeast.getAssetManager().get("kingplaceholder.png");
         Image king = new Image(kingTexture);
         king.setSize(kingTexture.getWidth(), kingTexture.getHeight());
         king.setPosition(kingTexture.getWidth() / 2, kingTexture.getHeight() / 3);
@@ -130,7 +131,7 @@ public class FeedbackScreen extends ScreenAdapter {
     }
 
     private Image createKingSpeech() {
-        kingSpeech = new Texture("kingspeech.png");
+        kingSpeech = kingsFeast.getAssetManager().get("kingspeech.png");
         Image kingSpeechBubble = new Image(kingSpeech);
         kingSpeechBubble.setSize(kingSpeech.getWidth() - 50, kingSpeech.getHeight() - 50);
         kingSpeechBubble.setPosition(GAME_HEIGHT / 2, GAME_HEIGHT - kingSpeech.getHeight() / 2, Align.center);
@@ -138,7 +139,7 @@ public class FeedbackScreen extends ScreenAdapter {
     }
 
     private ImageButton createOkButton() {
-        okTexture = new Texture("OkButton.png");
+        okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setPosition((GAME_WIDTH / 2) + (GAME_WIDTH / 4), GAME_HEIGHT / 6);
         ok.setSize(300f, 150f);
@@ -154,7 +155,8 @@ public class FeedbackScreen extends ScreenAdapter {
         return ok;
     }
 
-    private ImageButton createLifelinesButton() {
+    // Perhaps not needed
+    /*private ImageButton createLifelinesButton() {
         okTexture = new Texture("LifelinesButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 6);
@@ -169,7 +171,7 @@ public class FeedbackScreen extends ScreenAdapter {
             }
         });
         return ok;
-    }
+    }*/
 
     private void initFonts() {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
@@ -190,8 +192,8 @@ public class FeedbackScreen extends ScreenAdapter {
     }
 
     private ImageButton createPigsLifeline() {
-        int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
-        if(totalScore > 1000) {
+        int totalScore = Integer.parseInt(kingsFeast.getTotalScore());
+        if(totalScore >= 1000) {
             pigsTexture = kingsFeast.getAssetManager().get("pigsplaceholder.png");
         } else {
             pigsTexture = kingsFeast.getAssetManager().get("pigsdisabledplaceholder.png");
@@ -203,7 +205,7 @@ public class FeedbackScreen extends ScreenAdapter {
         pigsLifeline.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                kingsFeast.setPollutionLevel(-2);
+                kingsFeast.setPollutionLevel(-5);
                 kingsFeast.setTotalScore(-1000);
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }
@@ -213,7 +215,7 @@ public class FeedbackScreen extends ScreenAdapter {
 
     private ImageButton createCompostLifeLine() {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
-        if(totalScore > 2000) {
+        if(totalScore >= 2000) {
             compostTexture = kingsFeast.getAssetManager().get("compostplaceholder.png");
         } else {
             compostTexture = kingsFeast.getAssetManager().get("compostdisabledplaceholder.png");
@@ -224,7 +226,7 @@ public class FeedbackScreen extends ScreenAdapter {
         compostLifeline.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                kingsFeast.setPollutionLevel(-5);
+                kingsFeast.setPollutionLevel(-10);
                 kingsFeast.setTotalScore(-2000);
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }
@@ -234,7 +236,7 @@ public class FeedbackScreen extends ScreenAdapter {
 
     private ImageButton createPoorLifeLine() {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
-        if(totalScore > 3000) {
+        if(totalScore >= 3000) {
             poorTexture = kingsFeast.getAssetManager().get("poorplaceholder.png");
         } else {
             poorTexture = kingsFeast.getAssetManager().get("poordisabledplaceholder.png");
@@ -245,7 +247,7 @@ public class FeedbackScreen extends ScreenAdapter {
         poorLifeline.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
-                kingsFeast.setPollutionLevel(-8);
+                kingsFeast.setPollutionLevel(-15);
                 kingsFeast.setTotalScore(-2500);
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
                 dispose();
@@ -266,10 +268,6 @@ public class FeedbackScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        okTexture.dispose();
-        kingTexture.dispose();
-        kingSpeech.dispose();
-        backgroundTexture.dispose();
         batch.dispose();
         font.dispose();
         speechFont.dispose();
