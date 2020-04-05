@@ -1,11 +1,14 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeType;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -28,6 +31,7 @@ class HUD {
     private Viewport viewport;
     private BitmapFont bitmapFont;
     private TextButton.TextButtonStyle textButtonStyle;
+    private int FONT_SIZE;
 
     // Widgets for the HUD
     private Label throwAmountLabel, progressLabel;
@@ -48,8 +52,8 @@ class HUD {
 
         Texture skipButtonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
         Texture skipButtonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
-
-        bitmapFont = new BitmapFont();
+        FONT_SIZE = 28;
+        bitmapFont = Util.initFont(FONT_SIZE);
         textButtonStyle = new TextButton.TextButtonStyle(
                 new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
                 new TextureRegionDrawable(new TextureRegion(skipButtonDown)),

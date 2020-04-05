@@ -6,6 +6,8 @@ import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
@@ -13,19 +15,27 @@ import com.badlogic.gdx.utils.Array;
 public class KingsFeast extends Game {
     // TODO: Current issues:
     //  GENERAL PROBLEMS
-    //  -Fix flickering of the screen edges, explore viewports
+    //  -Fix flickering of the screen edges, explore viewports ----> Changed all UI viewports to StretchViewport,
+    //                                                                  needs further testing but seems to work.
+    //                                                                  Some graphics might look stretched on some screen sizes ~Muikku
     //  CLEAN CODE
     //  -Lack of documentation
     //  -Check that everything that needs disposing gets disposed when needed
     //  -All assets need to be changed to be loaded with assetManager
-    //  -Move spriteBatch to KingsFeast so it can be used elsewhere
+    //  -Move spriteBatch to KingsFeast so it can be used elsewhere ----> Should be ok, now only one instance of batch exists,
+    //                                                                      get it with kingsFeast.getSpriteBatch();
     //  MENUS AND MENU FUNCTIONS
     //  -Graphics for: UI, Game, buttons, HUD, backgrounds
+    //  -Menu buttons have incorrect size ---> Should be ok
     //  -Main menu needs a how to play button which leads to the written tutorial ----> Button ok, Tutorial not
     //  -Written tutorial needs to be made
-    //  -Add functionality to Continue Button in Main Menu Screen
+    //  -Saves need to be made resettable, add a reset save button to main menu
+    //  -OR Change start game to continue game and add a new game button ----> Button ok, functionality not
+    //  -Settings toggle buttons' textures need to stick ----> Muikku did it
+    //  -Feedback screen doesn't play well with different screen sizes ----> Should be a bit better now
     //  -Buttons might be a bit too small for mobile in general? ----> Now resized except the GameScreen buttons
-    //  -Choose a better FreeType Font to resemble the theme more ----> Some fonts cause crashes on mobile
+    //  -Add a container for King's dialogue and use FreetypeFonts to display text
+    //  -Choose a better FreeType Font to resemble the theme more
     //  LOCALIZATION
     //  -Change all ImageButtons to TextButtons for localization purposes
     //  -Implement localisation and make the language button save to prefs
@@ -34,6 +44,7 @@ public class KingsFeast extends Game {
     // from this class or parent class is to be used in that screen.
 
     private final AssetManager assetManager = new AssetManager();
+    private SpriteBatch batch;
     private LevelBuilder levelBuilder;
     private Array<LevelData> levels;
     private int currentLevel;
@@ -51,6 +62,7 @@ public class KingsFeast extends Game {
 
     @Override
     public void create() {
+        batch = new SpriteBatch();
         kfprefs = getPreferencesFromOS(kfprefs);
         initSaveState();
         initVariables();
@@ -64,7 +76,12 @@ public class KingsFeast extends Game {
 
     @Override
     public void dispose() {
+        batch.dispose();
         assetManager.dispose();
+    }
+
+    SpriteBatch getSpriteBatch() {
+        return batch;
     }
 
     AssetManager getAssetManager() {
@@ -83,7 +100,7 @@ public class KingsFeast extends Game {
         return currentLevel;
     }
 
-    private void setCurrentLevel(int x) {
+    void setCurrentLevel(int x) {
         currentLevel = x;
     }
 

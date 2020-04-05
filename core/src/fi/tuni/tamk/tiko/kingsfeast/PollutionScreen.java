@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class PollutionScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
@@ -34,16 +35,16 @@ public class PollutionScreen extends ScreenAdapter {
 
     public PollutionScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
+        batch = kingsFeast.getSpriteBatch();
     }
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
+        stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
-        initFonts();
+        font = Util.initFont(FONT_SIZE);
         stage.addActor(createBackgroundImage());
         stage.addActor(createOkButton());
-        batch = new SpriteBatch();
     }
 
     @Override
@@ -83,22 +84,11 @@ public class PollutionScreen extends ScreenAdapter {
         return ok;
     }
 
-    private void initFonts() {
-        FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
-        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        fontParameter.size = FONT_SIZE;
-        fontParameter.borderWidth = 4;
-        fontParameter.borderColor = Color.BLACK;
-        fontParameter.color = Color.WHITE;
-        font = fontGenerator.generateFont(fontParameter);
-    }
-
     @Override
     public void dispose() {
         stage.dispose();
         //okTexture.dispose();
         //backgroundTexture.dispose();
         font.dispose();
-        batch.dispose();
     }
 }

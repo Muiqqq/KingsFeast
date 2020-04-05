@@ -6,12 +6,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
  * Quick mockup to test different screens. Will eventually become the actual main menu.
@@ -22,7 +28,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private static final float GAME_HEIGHT = 1080;
     // Placeholder values
     private final float BUTTON_WIDTH = 300f;
-    private final float BUTTON_HEIGHT = 150f;
+    private final float BUTTON_HEIGHT = 83f;
     private Stage stage;
     private Texture backgroundTexture;
     private Texture playUnpressedTexture;
@@ -44,7 +50,7 @@ public class MainMenuScreen extends ScreenAdapter {
         // set stage as the inputProcessor for this screen
         // so the stage can handle it, just gotta remember to
         // add a listener to every button.
-        stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
+        stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         // adds a background img and play button to the stage
@@ -143,22 +149,56 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private ImageButton createNewGameButton() {
-            newGameTexture = kingsFeast.getAssetManager().get("NewGameButton.png");
-            ImageButton newGame =
-                    new ImageButton(new TextureRegionDrawable(new TextureRegion(newGameTexture)));
-                    newGame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-                    newGame.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH , GAME_HEIGHT / 8);
-                    newGame.addListener(new ActorGestureListener() {
-                @Override
-                public void tap(InputEvent e, float x, float y, int count, int button) {
-                    super.tap(e, x, y, count, button);
-                    kingsFeast.setScreen(new GameScreen(kingsFeast));
-                    kingsFeast.initSaveState();
+        newGameTexture = kingsFeast.getAssetManager().get("NewGameButton.png");
+        ImageButton newGame =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(newGameTexture)));
+        newGame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        newGame.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH, GAME_HEIGHT / 8);
+        newGame.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent e, float x, float y, int count, int button) {
+                super.tap(e, x, y, count, button);
+                createConfirmationDialog();
+            }
+        });
+        return newGame;
+    }
+
+    private void createConfirmationDialog() {
+        Dialog dialog = new Dialog("",
+                new Window.WindowStyle(new BitmapFont(), Color.WHITE, null)) {
+
+            public void result(Object obj) {
+                if ((boolean) obj) {
+                    kingsFeast.clearSaveState();
                     dispose();
+                    kingsFeast.setScreen(new GameScreen(kingsFeast));
                 }
-            });
-            return newGame;
-        }
+            }
+        };
+
+        BitmapFont font = Util.initFont(36);
+        Texture buttonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
+        Texture buttonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
+
+        TextButton yesButton = new TextButton("Yes", new TextButton.TextButtonStyle(
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                new TextureRegionDrawable(new TextureRegion(buttonDown)),
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                font));
+
+        TextButton noButton = new TextButton("No", new TextButton.TextButtonStyle(
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                new TextureRegionDrawable(new TextureRegion(buttonDown)),
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                font));
+
+        dialog.text(new Label("Do you really want to start a new game?",
+                new Label.LabelStyle(font, Color.WHITE)));
+        dialog.button(yesButton, true);
+        dialog.button(noButton, false);
+        dialog.show(stage);
+    }
 
     private MainMenuScreen getThisScreen() {
         return this;

@@ -65,7 +65,7 @@ public class GameScreen extends ScreenAdapter {
     GameScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         levelData = kingsFeast.getLevels().get(kingsFeast.getCurrentLevel());
-        batch = new SpriteBatch();
+        batch = kingsFeast.getSpriteBatch();
         world = new World(gravity, false);
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
@@ -137,7 +137,6 @@ public class GameScreen extends ScreenAdapter {
 
     @Override
     public void dispose() {
-        batch.dispose();
         hud.dispose();
         shapeRenderer.dispose();
     }
