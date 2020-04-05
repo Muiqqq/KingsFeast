@@ -28,8 +28,8 @@ public class FeedbackScreen extends ScreenAdapter {
     private Texture kingTexture;
     private Texture kingSpeech;
     private Stage stage;
-    private final float BUTTON_WIDTH = 300f;
-    private final float BUTTON_HEIGHT = 96f;
+    private final float BUTTON_WIDTH = 500f;
+    private final float BUTTON_HEIGHT = 120f;
     private SpriteBatch batch;
     private BitmapFont font;
     private BitmapFont bitmapFont;
@@ -42,6 +42,14 @@ public class FeedbackScreen extends ScreenAdapter {
     private String throwAmount;
     private String foodWasteAmount;
     private Viewport viewport;
+
+    private Texture pigsTexture;
+    private Texture compostTexture;
+    private Texture poorTexture;
+
+    private Texture pigsDisabledTexture;
+    private Texture compostDisabledTexture;
+    private Texture poorDisabledTexture;
 
     private String kingDialogue = "Well done my loyal servant!\nAlmost no foodwaste!";
 
@@ -80,6 +88,9 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.addActor(createKingImage());
         stage.addActor(createKingSpeech());
         stage.addActor(createOkButton());
+        stage.addActor(createPigsLifeline());
+        stage.addActor(createCompostLifeLine());
+        stage.addActor(createPoorLifeLine());
     }
 
     @Override
@@ -143,6 +154,23 @@ public class FeedbackScreen extends ScreenAdapter {
         return ok;
     }
 
+    private ImageButton createLifelinesButton() {
+        okTexture = new Texture("LifelinesButton.png");
+        ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
+        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 6);
+        ok.setSize(300f, 150f);
+        ok.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                super.tap(event, x, y, count, button);
+                kingsFeast.saveGameOnLevelSwap();
+                dispose();
+                kingsFeast.setScreen(new LifelineScreen(kingsFeast));
+            }
+        });
+        return ok;
+    }
+
     private void initFonts() {
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -160,6 +188,80 @@ public class FeedbackScreen extends ScreenAdapter {
         speechFontParameter.color = Color.WHITE;
         speechFont = speechFontGenerator.generateFont(speechFontParameter);
     }
+
+    private ImageButton createPigsLifeline() {
+        int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
+        if(totalScore > 1000) {
+            pigsTexture = kingsFeast.getAssetManager().get("pigsplaceholder.png");
+        } else {
+            pigsTexture = kingsFeast.getAssetManager().get("pigsdisabledplaceholder.png");
+        }
+
+        ImageButton pigsLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(pigsTexture)));
+        pigsLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, 400);
+        pigsLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        pigsLifeline.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                kingsFeast.setPollutionLevel(-2);
+                kingsFeast.setTotalScore(-1000);
+                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
+            }
+        });
+        return pigsLifeline;
+    }
+
+    private ImageButton createCompostLifeLine() {
+        int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
+        if(totalScore > 2000) {
+            compostTexture = kingsFeast.getAssetManager().get("compostplaceholder.png");
+        } else {
+            compostTexture = kingsFeast.getAssetManager().get("compostdisabledplaceholder.png");
+        }
+        ImageButton compostLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(compostTexture)));
+        compostLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, 250);
+        compostLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        compostLifeline.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                kingsFeast.setPollutionLevel(-5);
+                kingsFeast.setTotalScore(-2000);
+                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
+            }
+        });
+        return compostLifeline;
+    }
+
+    private ImageButton createPoorLifeLine() {
+        int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
+        if(totalScore > 3000) {
+            poorTexture = kingsFeast.getAssetManager().get("poorplaceholder.png");
+        } else {
+            poorTexture = kingsFeast.getAssetManager().get("poordisabledplaceholder.png");
+        }
+        ImageButton poorLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(poorTexture)));
+        poorLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, 100);
+        poorLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        poorLifeline.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent event, float x, float y, int count, int button) {
+                kingsFeast.setPollutionLevel(-8);
+                kingsFeast.setTotalScore(-2500);
+                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
+                dispose();
+            }
+        });
+        return poorLifeline;
+    }
+
+    public void gameLost() {
+        // Draw container with game over text. Show score. Tell about the river.
+    }
+
+    public void gameWon() {
+        // Draw container with game won text. Show score. Tell about the river.
+    }
+
 
     @Override
     public void dispose() {

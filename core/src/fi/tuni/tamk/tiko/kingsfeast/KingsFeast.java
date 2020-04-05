@@ -58,6 +58,7 @@ public class KingsFeast extends Game {
     private String levelThrows;
     private String totalScore;
     private String levelScore;
+    private boolean gameEnd;
 
 
     @Override
@@ -192,12 +193,17 @@ public class KingsFeast extends Game {
     void calculateScore(int throwes, int served) {
         int waste = throwes - served;
         int scores = 0;
-        if(waste < 5) {
+
+        if(waste == 0) {
             scores = 1000;
-        } else if(waste >= 5 && waste <= 10) {
+        } else if (waste == 1) {
+            scores = 750;
+        } else if(waste > 1 && waste <= 3) {
             scores = 500;
-        } else if(waste > 10 && waste <= 20) {
-            scores = 100;
+        } else if(waste >= 4 && waste <= 6) {
+            scores = 200;
+        } else if(waste > 6) {
+            scores = -100;
         }
         updateStats(throwes, scores);
 
@@ -209,6 +215,7 @@ public class KingsFeast extends Game {
         setTotalScore(scores);
         calculatePollution(scores);
         setLevelScore(scores);
+        checkGameEnd();
     }
 
     void setLevelScore(int score) {
@@ -240,11 +247,15 @@ public class KingsFeast extends Game {
 
     void calculatePollution(int scoring) {
         if (scoring == 1000) {
-            setPollutionLevel(10);
-        } else if (scoring == 500) {
-            setPollutionLevel(5);
-        } else if (scoring == 100){
             setPollutionLevel(-10);
+        } else if (scoring == 750) {
+            setPollutionLevel(-5);
+        } else if (scoring == 500){
+            setPollutionLevel(-2);
+        } else if (scoring == 200) {
+            setPollutionLevel(1);
+        } else if (scoring == -100) {
+            setPollutionLevel(10);
         }
     }
 
@@ -252,21 +263,14 @@ public class KingsFeast extends Game {
         this.levelThrows = Integer.toString(levelThrows);
     }
 
-    void checkGameEnd() {
+    private void checkGameEnd() {
         int pollution = Integer.parseInt(pollutionLevel);
-        if(pollution >= 100) {
-            gameLost();
-        } else if (pollution <= 0) {
-            gameWon();
+        if(pollution >= 100 || pollution <= 0) {
+            gameEnd = true;
         }
     }
 
-    public void gameLost() {
-
+    public boolean getGameState() {
+        return this.gameEnd;
     }
-
-     public void gameWon() {
-
-    }
-
 }
