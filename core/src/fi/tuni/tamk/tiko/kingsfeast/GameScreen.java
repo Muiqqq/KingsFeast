@@ -373,10 +373,10 @@ public class GameScreen extends ScreenAdapter {
                 userDataB.equals("foodPlate") && userDataA.equals("walls")) {
 
             if (userDataA.equals("foodPlate")) {
-                foodPlate.getBody().setLinearDamping(0.66f);
+                foodPlate.getBody().setLinearDamping(0.43f);
             }
             if (userDataB.equals("foodPlate")) {
-                foodPlate.getBody().setLinearDamping(0.66f);
+                foodPlate.getBody().setLinearDamping(0.43f);
             }
         }
     }
