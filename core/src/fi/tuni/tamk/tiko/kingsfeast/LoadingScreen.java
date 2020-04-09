@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import sun.applet.Main;
+
 
 /**
  * TODO: DOCUMENTATION!

@@ -66,9 +66,9 @@ public class PollutionScreen extends ScreenAdapter {
         batch.begin();
         font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 4, GAME_HEIGHT - BUTTON_HEIGHT * 2);
         if(gameWon) {
-            font.draw(batch, "You have saved the river! You\n have succeeded in teaching the king\nbetter ways to deal with food waste!\n\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 40, GAME_HEIGHT / 2 + 100);
+            font.draw(batch, "You have saved the river! You\n have succeeded in teaching the king\nbetter ways to deal with food waste!\n\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5, GAME_HEIGHT / 2 + 100);
         } else if (gameLost) {
-            font.draw(batch, "Game over!\n\n The river pollution level\n has reached critical point!\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 40, GAME_HEIGHT / 2 + 100);
+            font.draw(batch, "Game over!\n\n The river pollution level\n has reached critical point!\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5, GAME_HEIGHT / 2 + 100);
         }
         batch.end();
     }
@@ -106,6 +106,8 @@ public class PollutionScreen extends ScreenAdapter {
         if(pollution >= 100) {
             gameLost();
         } else if (pollution <= 0) {
+            gameWon();
+        } else {
             gameWon();
         }
     }
