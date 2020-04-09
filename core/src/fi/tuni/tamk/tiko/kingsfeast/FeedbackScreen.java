@@ -39,6 +39,8 @@ public class FeedbackScreen extends ScreenAdapter {
     private final int FONT_SIZE = 36;
     private final int SPEECH_FONT_SIZE = 48;
 
+    private static float SCORE_DELAY = 0.025f;
+
     private Texture okTexture;
     private String throwAmount;
     private String foodWasteAmount;
@@ -47,6 +49,12 @@ public class FeedbackScreen extends ScreenAdapter {
     private Texture pigsTexture;
     private Texture compostTexture;
     private Texture poorTexture;
+
+    private int time;
+    private int levelScoreCounter;
+    private int totalScoreCounter;
+    private int pollutionCounter;
+    private boolean toTotalScore;
 
     private Texture pigsDisabledTexture;
     private Texture compostDisabledTexture;
@@ -62,6 +70,10 @@ public class FeedbackScreen extends ScreenAdapter {
         bitmapFont = new BitmapFont();
         speechFont = new BitmapFont();
         initFonts();
+        levelScoreCounter = 0;
+        totalScoreCounter = Integer.parseInt(kingsFeast.getTotalScore());
+        pollutionCounter = Integer.parseInt(kingsFeast.getPollutionLevel());
+        toTotalScore = false;
 
         // aMuikku lisäsi
         kingsFeast.getPrefs().putInteger("totalThrows",
@@ -105,13 +117,27 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.act(delta);
         stage.draw();
         batch.setProjectionMatrix(camera.combined);
+
         batch.begin();
         font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 250, GAME_HEIGHT - 100);
         font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2 + 250, GAME_HEIGHT - 200);
-        font.draw(batch, "Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 300);
+        font.draw(batch, "Level Score: " + levelScoreCounter, GAME_WIDTH / 2 + 250, GAME_HEIGHT - 300);
+            if (this.levelScoreCounter < Integer.parseInt(this.kingsFeast.getLevelScore())) {
+                this.levelScoreCounter += 10;
+            } else {
+                toTotalScore = true;
+            }
         font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 400);
+            if (this.pollutionCounter < this.kingsFeast.getOldPollution()) {
+                this.pollutionCounter += 1;
+            } else if (this.pollutionCounter > this.kingsFeast.getOldPollution()) {
+                this.pollutionCounter -= 1;
+            }
         font.draw(batch, "Total Throws: " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 500);
-        font.draw(batch, "Total Score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 2 + 250, GAME_HEIGHT - 600);
+        font.draw(batch, "Total Score: " + totalScoreCounter, GAME_WIDTH / 2 + 250, GAME_HEIGHT - 600);
+        if (toTotalScore && this.totalScoreCounter < Integer.parseInt(this.kingsFeast.getTotalScore())) {
+            this.totalScoreCounter += 10;
+        }
         speechFont.draw(batch, kingDialogue, 50, GAME_HEIGHT - 60);
         batch.end();
     }
@@ -208,7 +234,7 @@ public class FeedbackScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 kingsFeast.setPollutionLevel(-5);
                 kingsFeast.setTotalScore(-1000);
-                kingsFeast.setScreen(new PollutionScreen(kingsFeast));
+                //kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }
         });
         return pigsLifeline;

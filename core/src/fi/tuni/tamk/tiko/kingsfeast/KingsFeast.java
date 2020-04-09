@@ -58,6 +58,7 @@ public class KingsFeast extends Game {
     private String totalScore;
     private String levelScore;
     private boolean gameEnd;
+    private int oldPollution;
 
 
     @Override
@@ -245,6 +246,7 @@ public class KingsFeast extends Game {
     }
 
     void calculatePollution(int scoring) {
+        oldPollution = Integer.parseInt(getPollutionLevel());
         if (scoring == 1000) {
             setPollutionLevel(-15);
         } else if (scoring == 750) {
@@ -256,6 +258,10 @@ public class KingsFeast extends Game {
         } else if (scoring == -100) {
             setPollutionLevel(10);
         }
+    }
+
+    public int getOldPollution() {
+        return this.oldPollution;
     }
 
     void setLevelThrows(int levelThrows) {
