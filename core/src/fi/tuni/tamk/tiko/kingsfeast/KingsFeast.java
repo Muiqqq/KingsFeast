@@ -31,7 +31,6 @@ public class KingsFeast extends Game {
     //  -Verify that continue button works as intended
     //  -Buttons might be a bit too small for mobile in general? ----> Now resized except the GameScreen buttons
     //  -Choose a better FreeType Font to resemble the theme more
-    //  -END GAME SCREEN NOT WORKING CORRECTLY
     //  LOCALIZATION
     //  -Implement localisation and make the language button save to prefs
 
