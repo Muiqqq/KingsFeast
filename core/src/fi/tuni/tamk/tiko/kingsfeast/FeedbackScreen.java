@@ -186,8 +186,8 @@ public class FeedbackScreen extends ScreenAdapter {
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
-        ok.setPosition((GAME_WIDTH / 2) + (GAME_WIDTH / 4) - 80, GAME_HEIGHT / 6 - 50);
-        ok.setSize(300f, 150f);
+        ok.setPosition((GAME_WIDTH / 2) + (GAME_WIDTH / 4) - 160, GAME_HEIGHT / 6 - 50);
+        ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {

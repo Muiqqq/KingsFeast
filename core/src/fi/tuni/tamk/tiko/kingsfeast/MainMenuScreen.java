@@ -29,8 +29,8 @@ public class MainMenuScreen extends ScreenAdapter {
     private static final float GAME_WIDTH = 1920;
     private static final float GAME_HEIGHT = 1080;
     // Placeholder values
-    private final float BUTTON_WIDTH = 300f;
-    private final float BUTTON_HEIGHT = 83f;
+    private final float BUTTON_WIDTH = 400f;
+    private final float BUTTON_HEIGHT = 90f;
     private Stage stage;
     private Texture backgroundTexture;
     private Texture playUnpressedTexture;

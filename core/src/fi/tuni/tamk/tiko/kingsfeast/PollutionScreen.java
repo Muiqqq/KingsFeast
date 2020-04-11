@@ -24,8 +24,8 @@ public class PollutionScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
     private static final float GAME_WIDTH = 1920;
     private static final float GAME_HEIGHT = 1080;
-    private final float BUTTON_WIDTH = 300f;
-    private final float BUTTON_HEIGHT = 150f;
+    private final float BUTTON_WIDTH = 500f;
+    private final float BUTTON_HEIGHT = 120f;
     private final int FONT_SIZE = 48;
     private SpriteBatch batch;
     private BitmapFont font;
@@ -75,7 +75,7 @@ public class PollutionScreen extends ScreenAdapter {
         } else if (gameLost) {
             font.draw(batch, "Game over!\n\n\n The river pollution level\n has reached critical point!\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
         } else {
-            font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 4, GAME_HEIGHT - BUTTON_HEIGHT * 2);
+            font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 3 - 20, GAME_HEIGHT - BUTTON_HEIGHT * 2);
         }
         batch.end();
     }

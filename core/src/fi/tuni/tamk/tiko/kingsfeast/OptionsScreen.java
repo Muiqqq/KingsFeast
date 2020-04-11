@@ -23,8 +23,8 @@ public class OptionsScreen extends ScreenAdapter {
     private static final float GAME_HEIGHT = 720;
     private Texture backgroundTexture;
     private Stage stage;
-    private final float BUTTON_WIDTH = 300f;
-    private final float BUTTON_HEIGHT = 150f;
+    private final float BUTTON_WIDTH = 500f;
+    private final float BUTTON_HEIGHT = 120f;
 
     private Texture okTexture;
     private Texture creditsTexture;

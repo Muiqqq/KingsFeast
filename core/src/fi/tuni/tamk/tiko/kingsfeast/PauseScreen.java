@@ -25,7 +25,7 @@ public class PauseScreen extends ScreenAdapter {
     private static final float GAME_HEIGHT = 1080;
     private Texture backgroundTexture;
     private Stage stage;
-    private final float BUTTON_WIDTH = 300f;
+    private final float BUTTON_WIDTH = 550f;
     private final float BUTTON_HEIGHT = 150f;
 
     private Texture continueBtnTexture;
@@ -33,9 +33,6 @@ public class PauseScreen extends ScreenAdapter {
     private Texture settingsButtonTexture;
     private Texture exitButtonTexture;
 
-    private TextButton continueGame, mainMenu, settings;
-    private TextButton.TextButtonStyle textButtonStyle;
-    private BitmapFont font;
 
     public PauseScreen(KingsFeast kingsFeast, GameScreen gameScreen) {
         this.kingsFeast = kingsFeast;
@@ -53,26 +50,6 @@ public class PauseScreen extends ScreenAdapter {
        // stage.addActor(createMainMenuButton());
         stage.addActor(createSettingsButton());
         //stage.addActor(createExitButton());
-
-
-        /*Table table = new Table();
-        table.setFillParent(true);
-        table.center().center();
-        font = new BitmapFont();
-        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        continueGame = new TextButton("CONTINUE", textButtonStyle);
-        mainMenu = new TextButton("MAIN MENU", textButtonStyle);
-        settings = new TextButton("SETTINGS", textButtonStyle);
-
-
-        table.add(continueGame);
-        table.row();
-        table.add(mainMenu);
-        table.row();
-        table.add(settings);
-        table.row();
-        stage.addActor(table);*/
 
     }
 
@@ -98,7 +75,7 @@ public class PauseScreen extends ScreenAdapter {
         continueBtnTexture = kingsFeast.getAssetManager().get("ContinueButton.png");
         ImageButton continueButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(continueBtnTexture)));
         continueButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        continueButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3);
+        continueButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3 - 50);
         continueButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -114,7 +91,7 @@ public class PauseScreen extends ScreenAdapter {
         mainMenuBtnTexture = kingsFeast.getAssetManager().get("MainMenuButton.png");
         ImageButton mainMenuButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(mainMenuBtnTexture)));
         mainMenuButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        mainMenuButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 4);
+        mainMenuButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5);
         mainMenuButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -130,7 +107,7 @@ public class PauseScreen extends ScreenAdapter {
         settingsButtonTexture = kingsFeast.getAssetManager().get("SettingsButton.png");
         ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonTexture)));
         settingsButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        settingsButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 4);
+        settingsButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5);
         settingsButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
