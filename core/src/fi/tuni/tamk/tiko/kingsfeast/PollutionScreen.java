@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -23,9 +24,9 @@ public class PollutionScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
     private static final float GAME_WIDTH = 1920;
     private static final float GAME_HEIGHT = 1080;
-    private final float BUTTON_WIDTH = 300f;
-    private final float BUTTON_HEIGHT = 150f;
-    private final int FONT_SIZE = 36;
+    private final float BUTTON_WIDTH = 500f;
+    private final float BUTTON_HEIGHT = 120f;
+    private final int FONT_SIZE = 48;
     private SpriteBatch batch;
     private BitmapFont font;
     private Texture backgroundTexture;
@@ -34,12 +35,15 @@ public class PollutionScreen extends ScreenAdapter {
     private Texture kingSpeech;
     private boolean gameWon;
     private boolean gameLost;
+    private OrthographicCamera camera;
 
     // DOCUMENTATION
 
     public PollutionScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         batch = kingsFeast.getSpriteBatch();
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
         gameWon = false;
         gameLost = false;
     }
@@ -63,12 +67,15 @@ public class PollutionScreen extends ScreenAdapter {
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
-        font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 4, GAME_HEIGHT - BUTTON_HEIGHT * 2);
         if(gameWon) {
-            font.draw(batch, "You have saved the river! You\n have succeeded in teaching the king\nbetter ways to deal with food waste!\n\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 40, GAME_HEIGHT / 2 + 100);
+            font.draw(batch, "You have saved the river!", GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
+            font.draw(batch, "You have succeeded in teaching\n the king better ways to deal\n with food waste!\n\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 100);
         } else if (gameLost) {
-            font.draw(batch, "Game over!\n\n The river pollution level\n has reached critical point!\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 40, GAME_HEIGHT / 2 + 100);
+            font.draw(batch, "Game over!\n\n\n The river pollution level\n has reached critical point!\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
+        } else {
+            font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 3 - 20, GAME_HEIGHT - BUTTON_HEIGHT * 2);
         }
         batch.end();
     }
@@ -84,7 +91,7 @@ public class PollutionScreen extends ScreenAdapter {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        ok.setPosition(GAME_WIDTH - BUTTON_WIDTH * 2, BUTTON_HEIGHT / 2);
+        ok.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, BUTTON_HEIGHT - 50);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -112,19 +119,21 @@ public class PollutionScreen extends ScreenAdapter {
 
     private void gameLost() {
         stage.addActor(createKingSpeech());
+        stage.addActor(createOkButton());
         gameLost = true;
     }
 
     private void gameWon() {
         stage.addActor(createKingSpeech());
+        stage.addActor(createOkButton());
         gameWon = true;
     }
 
     private Image createKingSpeech() {
-        kingSpeech = kingsFeast.getAssetManager().get("kingspeech.png");
+        kingSpeech = kingsFeast.getAssetManager().get("tekstitaustahorizontal.png");
         Image kingSpeechBubble = new Image(kingSpeech);
-        kingSpeechBubble.setSize(kingSpeech.getWidth(), kingSpeech.getHeight());
-        kingSpeechBubble.setPosition(GAME_WIDTH / 2 - kingSpeech.getWidth() / 2, GAME_HEIGHT / 2 - kingSpeech.getHeight() / 2);
+        kingSpeechBubble.setSize(kingSpeech.getWidth() - 90, kingSpeech.getHeight() - 90);
+        kingSpeechBubble.setPosition(GAME_WIDTH / 2 - kingSpeech.getWidth() / 2 + 50, GAME_HEIGHT / 2 - kingSpeech.getHeight() / 2 + 50);
         return kingSpeechBubble;
     }
 
