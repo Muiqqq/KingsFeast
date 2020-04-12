@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -61,6 +62,8 @@ public class FeedbackScreen extends ScreenAdapter {
     private int pollutionCounter;
     private boolean toTotalScore;
 
+    private String foodWaste;
+
     private Texture pigsDisabledTexture;
     private Texture compostDisabledTexture;
     private Texture poorDisabledTexture;
@@ -83,6 +86,8 @@ public class FeedbackScreen extends ScreenAdapter {
         isPigsUsed = false;
         isCompostUsed = false;
         isPoorUsed = false;
+        I18NBundle bundle = kingsFeast.langManager.getCurrentBundle();
+        foodWaste = bundle.get("foodWaste");
 
         // aMuikku lisäsi
         kingsFeast.getPrefs().putInteger("totalThrows",
@@ -132,7 +137,7 @@ public class FeedbackScreen extends ScreenAdapter {
 
         batch.begin();
         font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 200);
-        font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
+        font.draw(batch, foodWaste + ": " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
         font.draw(batch, "Level Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 400);
         font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 500);
             drawPollutionEffect();

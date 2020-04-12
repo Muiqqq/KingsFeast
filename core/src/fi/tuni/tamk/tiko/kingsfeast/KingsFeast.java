@@ -57,6 +57,8 @@ public class KingsFeast extends Game {
     private String levelScore;
     private int oldPollution;
 
+    public LanguageManager langManager;
+
 
     @Override
     public void create() {
@@ -64,13 +66,11 @@ public class KingsFeast extends Game {
         kfprefs = getPreferencesFromOS(kfprefs);
         initSaveState();
         initVariables();
+        initLanguages();
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
         currentLevel = kfprefs.getInteger("currentLevel");
         setScreen(new LoadingScreen(this, levelBuilder));
-        /*FileHandle baseFileHandle = Gdx.files.internal("i18n/MyBundle");
-        Locale locale = new Locale("en", "US");
-        I18NBundle myBundle = I18NBundle.createBundle(baseFileHandle, locale);*/
         setMusic();
         setSounds();
     }
@@ -148,6 +148,24 @@ public class KingsFeast extends Game {
         kfprefs.flush();
         setCurrentLevel(kfprefs.getInteger("currentLevel"));
         initSaveState();
+    }
+
+    // Why the fuck this doesn't work
+    public void initLanguages() {
+        langManager = new LanguageManager();
+
+        FileHandle englishFileHandle = Gdx.files.internal("i18n/strings_en_US");
+        FileHandle finnishFileHandle = Gdx.files.internal("i18n/strings_fi_FI");
+
+        langManager.loadLanguage("English", englishFileHandle, Locale.US);
+        langManager.loadLanguage("Finnish", finnishFileHandle, new Locale("fi", "FI"));
+
+        if(isEnglishEnabled()) {
+            langManager.setCurrentLanguage("English");
+        } else {
+            langManager.setCurrentLanguage("Finnish");
+        }
+
     }
 
     private void setMusic() {
@@ -266,6 +284,10 @@ public class KingsFeast extends Game {
 
     void setLevelThrows(int levelThrows) {
         this.levelThrows = Integer.toString(levelThrows);
+    }
+
+    private boolean isEnglishEnabled() {
+        return getPrefs().getBoolean("english.enabled", true);
     }
 
 }
