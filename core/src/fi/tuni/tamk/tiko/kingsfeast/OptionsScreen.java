@@ -27,7 +27,6 @@ public class OptionsScreen extends ScreenAdapter {
     private final float BUTTON_HEIGHT = 120f;
 
     private Texture okTexture;
-    private Texture creditsTexture;
     private Texture musicOnTexture;
     private Texture musicOffTexture;
     private Texture soundOnTexture;
@@ -53,7 +52,6 @@ public class OptionsScreen extends ScreenAdapter {
 
         // Add all buttons
         stage.addActor(createBackgroundImage());
-        //stage.addActor(createCreditsButton());
         stage.addActor(createOkButton());
         stage.addActor(createMusicButton());
         stage.addActor(createSoundButton());
@@ -78,28 +76,11 @@ public class OptionsScreen extends ScreenAdapter {
         return background;
     }
 
-    /* I'd say let's leave this out of the game
-    private ImageButton createCreditsButton() {
-        creditsTexture = kingsFeast.getAssetManager().get("credits.png");
-        ImageButton credits = new ImageButton(new TextureRegionDrawable(new TextureRegion(creditsTexture)));
-        credits.setPosition(GAME_WIDTH / 5, (GAME_HEIGHT / 5) - 75);
-        credits.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        credits.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(new CreditsScreen(kingsFeast, getThisScreen()));
-                dispose();
-            }
-        });
-        return credits;
-    }*/
-
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 4, Align.center);
+        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5, Align.center);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -112,8 +93,14 @@ public class OptionsScreen extends ScreenAdapter {
 
     private ImageButton createMusicButton() {
         // two textures are used to give the user some feedback when pressing a button
-        musicOnTexture = kingsFeast.getAssetManager().get("MusicOnButton.png");
-        musicOffTexture = kingsFeast.getAssetManager().get("MusicOffButton.png");
+        if(isEnglishEnabled()) {
+            musicOnTexture = kingsFeast.getAssetManager().get("MusicOnButton.png");
+            musicOffTexture = kingsFeast.getAssetManager().get("MusicOffButton.png");
+        } else {
+            musicOnTexture = kingsFeast.getAssetManager().get("musiikkipaalla.png");
+            musicOffTexture = kingsFeast.getAssetManager().get("musiikkipois.png");
+        }
+
 
         // this line is way too goddamn long
         final ImageButton musicButton =
@@ -128,7 +115,7 @@ public class OptionsScreen extends ScreenAdapter {
         }
 
         musicButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        musicButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT, Align.center);
+        musicButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 2, Align.center);
 
         // button's functionality
         musicButton.addListener(new ActorGestureListener() {
@@ -152,8 +139,14 @@ public class OptionsScreen extends ScreenAdapter {
 
     private ImageButton createSoundButton() {
         // two textures are used to give the user some feedback when pressing a button
-        soundOnTexture = kingsFeast.getAssetManager().get("SoundOnButton.png");
-        soundOffTexture = kingsFeast.getAssetManager().get("SoundOffButton.png");
+        if(isEnglishEnabled()) {
+            soundOnTexture = kingsFeast.getAssetManager().get("SoundOnButton.png");
+            soundOffTexture = kingsFeast.getAssetManager().get("SoundOffButton.png");
+        } else {
+            soundOnTexture = kingsFeast.getAssetManager().get("aanetpaalla.png");
+            soundOffTexture = kingsFeast.getAssetManager().get("aanetpois.png");
+        }
+
 
         // this line is way too goddamn long
         final ImageButton soundButton =
@@ -168,7 +161,7 @@ public class OptionsScreen extends ScreenAdapter {
         }
 
         soundButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        soundButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 2, Align.center);
+        soundButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3, Align.center);
 
         // button's functionality
         soundButton.addListener(new ActorGestureListener() {
@@ -191,8 +184,13 @@ public class OptionsScreen extends ScreenAdapter {
 
     private ImageButton createLanguageButton() {
         // two textures are used to give the user some feedback when pressing a button
-        LanguageEnTexture = kingsFeast.getAssetManager().get("LanguageEnButton.png");
-        LanguageFiTexture = kingsFeast.getAssetManager().get("LanguageFiButton.png");
+        if(isEnglishEnabled()) {
+            LanguageEnTexture = kingsFeast.getAssetManager().get("LanguageEnButton.png");
+            LanguageFiTexture = kingsFeast.getAssetManager().get("LanguageFiButton.png");
+        } else {
+            LanguageEnTexture = kingsFeast.getAssetManager().get("kielienglanti.png");
+            LanguageFiTexture = kingsFeast.getAssetManager().get("kielisuomi.png");
+        }
 
         // this line is way too goddamn long
         final ImageButton langButton =
@@ -207,7 +205,7 @@ public class OptionsScreen extends ScreenAdapter {
         }
 
         langButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        langButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3, Align.center);
+        langButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 4, Align.center);
 
         // button's functionality
         langButton.addListener(new ActorGestureListener() {

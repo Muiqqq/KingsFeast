@@ -89,8 +89,12 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private ImageButton createContinueButton() {
-        // two textures are used to give the user some feedback when pressing a button
-        playUnpressedTexture = kingsFeast.getAssetManager().get("ContinueButton.png");
+        if(isEnglishEnabled()) {
+            playUnpressedTexture = kingsFeast.getAssetManager().get("ContinueButton.png");
+        } else {
+            playUnpressedTexture = kingsFeast.getAssetManager().get("jatkapelia.png");
+        }
+
 
         // this line is way too goddamn long
         ImageButton continueGame =
@@ -113,7 +117,11 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private ImageButton createSettingsButton() {
-        settingsTexture = kingsFeast.getAssetManager().get("SettingsButton.png");
+        if(isEnglishEnabled()) {
+            settingsTexture = kingsFeast.getAssetManager().get("SettingsButton.png");
+        } else {
+            settingsTexture = kingsFeast.getAssetManager().get("asetukset.png");
+        }
         ImageButton settingsButton =
                 new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsTexture)));
         settingsButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -130,7 +138,11 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private ImageButton createHowToPlayButton() {
-        settingsTexture = kingsFeast.getAssetManager().get("HowToPlayButton.png");
+        if(isEnglishEnabled()) {
+            settingsTexture = kingsFeast.getAssetManager().get("HowToPlayButton.png");
+        } else {
+            settingsTexture = kingsFeast.getAssetManager().get("kuinkapelata.png");
+        }
         ImageButton howToPlay =
                 new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsTexture)));
         howToPlay.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -147,7 +159,12 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private ImageButton createNewGameButton() {
-        newGameTexture = kingsFeast.getAssetManager().get("NewGameButton.png");
+        if(isEnglishEnabled()) {
+            newGameTexture = kingsFeast.getAssetManager().get("NewGameButton.png");
+        } else {
+            newGameTexture = kingsFeast.getAssetManager().get("uusipeli.png");
+        }
+
         ImageButton newGame =
                 new ImageButton(new TextureRegionDrawable(new TextureRegion(newGameTexture)));
         newGame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
@@ -196,6 +213,10 @@ public class MainMenuScreen extends ScreenAdapter {
         dialog.button(yesButton, true);
         dialog.button(noButton, false);
         dialog.show(stage);
+    }
+
+    private boolean isEnglishEnabled() {
+        return kingsFeast.getPrefs().getBoolean("english.enabled", true);
     }
 
     private MainMenuScreen getThisScreen() {

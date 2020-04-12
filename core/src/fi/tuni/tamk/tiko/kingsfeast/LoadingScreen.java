@@ -8,9 +8,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Locale;
 
 import sun.applet.Main;
 
@@ -132,6 +135,17 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("kingspeech.png", Texture.class);
         kingsFeast.getAssetManager().load("tekstitausta.png", Texture.class);
         kingsFeast.getAssetManager().load("tekstitaustahorizontal.png", Texture.class);
+        kingsFeast.getAssetManager().load("aanetpaalla.png", Texture.class);
+        kingsFeast.getAssetManager().load("aanetpois.png", Texture.class);
+        kingsFeast.getAssetManager().load("asetukset.png", Texture.class);
+        kingsFeast.getAssetManager().load("jatkapelia.png", Texture.class);
+        kingsFeast.getAssetManager().load("kielienglanti.png", Texture.class);
+        kingsFeast.getAssetManager().load("kielisuomi.png", Texture.class);
+        kingsFeast.getAssetManager().load("musiikkipaalla.png", Texture.class);
+        kingsFeast.getAssetManager().load("musiikkipois.png", Texture.class);
+        kingsFeast.getAssetManager().load("uusipeli.png", Texture.class);
+        kingsFeast.getAssetManager().load("kuinkapelata.png", Texture.class);
+
 
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
 
