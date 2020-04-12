@@ -134,11 +134,6 @@ public class FeedbackScreen extends ScreenAdapter {
         font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 200);
         font.draw(batch, "Food Waste: " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
         font.draw(batch, "Level Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 400);
-            /*if (this.levelScoreCounter < Integer.parseInt(this.kingsFeast.getLevelScore())) {
-                this.levelScoreCounter += 10;
-            } else {
-                toTotalScore = true;
-            }*/
         font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 500);
             drawPollutionEffect();
         font.draw(batch, "Total Throws: " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 600);
@@ -340,5 +335,7 @@ public class FeedbackScreen extends ScreenAdapter {
         batch.dispose();
         font.dispose();
         speechFont.dispose();
+        negativeFont.dispose();
+        positiveFont.dispose();
     }
 }

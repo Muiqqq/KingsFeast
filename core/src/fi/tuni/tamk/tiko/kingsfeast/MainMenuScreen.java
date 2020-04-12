@@ -16,9 +16,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
@@ -34,7 +31,6 @@ public class MainMenuScreen extends ScreenAdapter {
     private Stage stage;
     private Texture backgroundTexture;
     private Texture playUnpressedTexture;
-    private Texture playPressedTexture;
     private Texture settingsTexture;
     private Texture newGameTexture;
 

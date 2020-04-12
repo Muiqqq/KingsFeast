@@ -47,12 +47,10 @@ public class KingsFeast extends Game {
 
     // Game data
     private String pollutionLevel;
-    private String foodWaste;
     private String totalThrows;
     private String levelThrows;
     private String totalScore;
     private String levelScore;
-    private boolean gameEnd;
     private int oldPollution;
 
 
