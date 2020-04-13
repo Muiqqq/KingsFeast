@@ -64,6 +64,11 @@ public class FeedbackScreen extends ScreenAdapter {
     private String throwAmount;
     private String foodWasteAmount;
     private String foodWaste;
+    private String throwsInLevel;
+    private String levelScore;
+    private String pollutionLevel;
+    private String totalThrows;
+    private String totalScore;
     private String kingDialogue = "Well done my loyal servant!\nAlmost no foodwaste!";
 
     // Game Data
@@ -85,8 +90,13 @@ public class FeedbackScreen extends ScreenAdapter {
 
         // Trying to get localization to work
         Locale locale = new Locale("fi", "FI");
-        I18NBundle myBundle = I18NBundle.createBundle(Gdx.files.internal("MyBundle"), locale);
+        I18NBundle myBundle = I18NBundle.createBundle(Gdx.files.internal("i18n/MyBundle"), locale);
         foodWaste = myBundle.get("foodWaste");
+        throwsInLevel = myBundle.get("throwsInLevel");
+        levelScore = myBundle.get("levelScore");
+        pollutionLevel = myBundle.get("pollutionLevel");
+        totalThrows = myBundle.get("totalThrows");
+        totalScore = myBundle.get("totalScore");
 
         // Initialize game data for showing correct data for player
         levelScoreCounter = 0;
@@ -144,13 +154,13 @@ public class FeedbackScreen extends ScreenAdapter {
         batch.begin();
 
         // Draw all text to screen
-        font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 200);
+        font.draw(batch, throwsInLevel + ": " + throwAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 200);
         font.draw(batch, foodWaste + ": " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
-        font.draw(batch, "Level Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 400);
-        font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 500);
+        font.draw(batch, levelScore + ": " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 400);
+        font.draw(batch, pollutionLevel + ": " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 500);
             drawPollutionEffect();
-        font.draw(batch, "Total Throws: " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 600);
-        font.draw(batch, "Total Score: " + totalScoreCounter, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 700);
+        font.draw(batch, totalThrows + ": " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 600);
+        font.draw(batch, totalScore + ": " + totalScoreCounter, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 700);
         // If statement to increase score on screen to give player tangible feedback on changed data
         if (this.totalScoreCounter < Integer.parseInt(this.kingsFeast.getTotalScore())) {
             this.totalScoreCounter += 10;
