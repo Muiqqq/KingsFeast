@@ -74,8 +74,10 @@ public class LoadingScreen extends ScreenAdapter {
     private void update() {
         if (kingsFeast.getAssetManager().update()) {
             kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
+        } else {
+            progress = kingsFeast.getAssetManager().getProgress();
         }
-        progress = kingsFeast.getAssetManager().getProgress();
+
     }
 
     // All of this just draws the progress bar.
@@ -94,6 +96,11 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
         kingsFeast.getAssetManager().load("map1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map2.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map3.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map4.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map5.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map6.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map7.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level2.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level3.tmx", TiledMap.class);

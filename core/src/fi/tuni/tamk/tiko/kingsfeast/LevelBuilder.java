@@ -29,8 +29,11 @@ class LevelBuilder {
         Array<LevelData> levels = new Array<>();
         levels.add(level1());
         levels.add(level2());
-        //levels.add(level3());
-        //levels.add(level4());
+        levels.add(level3());
+        levels.add(level4());
+        levels.add(level5());
+        levels.add(level6());
+        levels.add(level7());
         return levels;
     }
 
@@ -46,17 +49,27 @@ class LevelBuilder {
     }
 
     private LevelData level3() {
-        return new LevelData(kingsFeast.getAssetManager().get("level2.tmx",
+        return new LevelData(kingsFeast.getAssetManager().get("map3.tmx",
                 TiledMap.class));
     }
 
     private LevelData level4() {
-        return new LevelData(kingsFeast.getAssetManager().get("level3.tmx",
+        return new LevelData(kingsFeast.getAssetManager().get("map4.tmx",
                 TiledMap.class));
     }
 
     private LevelData level5() {
-        return new LevelData(kingsFeast.getAssetManager().get("level4.tmx",
+        return new LevelData(kingsFeast.getAssetManager().get("map5.tmx",
+                TiledMap.class));
+    }
+
+    private LevelData level6() {
+        return new LevelData(kingsFeast.getAssetManager().get("map6.tmx",
+                TiledMap.class));
+    }
+
+    private LevelData level7() {
+        return new LevelData(kingsFeast.getAssetManager().get("map7.tmx",
                 TiledMap.class));
     }
 
