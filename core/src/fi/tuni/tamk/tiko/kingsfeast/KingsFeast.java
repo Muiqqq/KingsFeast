@@ -67,7 +67,7 @@ public class KingsFeast extends Game {
         kfprefs = getPreferencesFromOS(kfprefs);
         initSaveState();
         initVariables();
-        //initLanguages();
+        initLanguages();
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         levelBuilder = new LevelBuilder(this);
         currentLevel = kfprefs.getInteger("currentLevel");
@@ -107,20 +107,19 @@ public class KingsFeast extends Game {
         initSaveState();
     }
 
-    // Why the fuck this doesn't work
     public void initLanguages() {
         langManager = new LanguageManager();
 
-        FileHandle englishFileHandle = Gdx.files.internal("i18n/strings_en_US");
-        FileHandle finnishFileHandle = Gdx.files.internal("i18n/strings_fi_FI");
+        FileHandle englishFileHandle = Gdx.files.internal("i18n/MyBundle_en");
+        FileHandle finnishFileHandle = Gdx.files.internal("i18n/MyBundle_fi");
 
-        langManager.loadLanguage("English", englishFileHandle, Locale.US);
-        langManager.loadLanguage("Finnish", finnishFileHandle, new Locale("fi", "FI"));
+        langManager.loadLanguage("english", englishFileHandle, Locale.US);
+        langManager.loadLanguage("finnish", finnishFileHandle, new Locale("fi", "FI"));
 
         if(isEnglishEnabled()) {
-            langManager.setCurrentLanguage("English");
+            langManager.setCurrentLanguage("english");
         } else {
-            langManager.setCurrentLanguage("Finnish");
+            langManager.setCurrentLanguage("finnish");
         }
 
     }

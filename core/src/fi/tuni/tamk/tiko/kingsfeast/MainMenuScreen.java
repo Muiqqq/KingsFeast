@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 // Using Stage2D
@@ -34,6 +35,8 @@ public class MainMenuScreen extends ScreenAdapter {
     private Texture playUnpressedTexture;
     private Texture settingsTexture;
     private Texture newGameTexture;
+
+    I18NBundle myBundle;
 
     // Constructor here takes the game object so we can swap to a different screen from this one.
     MainMenuScreen(KingsFeast kingsFeast) {
@@ -59,6 +62,8 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.addActor(createHowToPlayButton());
         stage.addActor(createNewGameButton());
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        // Get and set the language to be used in the level
+        myBundle = kingsFeast.langManager.getCurrentBundle();
     }
 
     @Override
@@ -214,20 +219,20 @@ public class MainMenuScreen extends ScreenAdapter {
         Texture buttonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
 
         // Create textbuttons
-        TextButton yesButton = new TextButton("Yes", new TextButton.TextButtonStyle(
+        TextButton yesButton = new TextButton(myBundle.get("dialogYes"), new TextButton.TextButtonStyle(
                 new TextureRegionDrawable(new TextureRegion(buttonUp)),
                 new TextureRegionDrawable(new TextureRegion(buttonDown)),
                 new TextureRegionDrawable(new TextureRegion(buttonUp)),
                 font));
 
-        TextButton noButton = new TextButton("No", new TextButton.TextButtonStyle(
+        TextButton noButton = new TextButton(myBundle.get("dialogNo"), new TextButton.TextButtonStyle(
                 new TextureRegionDrawable(new TextureRegion(buttonUp)),
                 new TextureRegionDrawable(new TextureRegion(buttonDown)),
                 new TextureRegionDrawable(new TextureRegion(buttonUp)),
                 font));
 
         // Create dialog text and set what values dialog buttons will return
-        dialog.text(new Label("Do you really want to start a new game?",
+        dialog.text(new Label(myBundle.get("dialogConfirm"),
                 new Label.LabelStyle(font, Color.WHITE)));
         dialog.button(yesButton, true);
         dialog.button(noButton, false);

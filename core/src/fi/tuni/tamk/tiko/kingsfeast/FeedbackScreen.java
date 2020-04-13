@@ -69,7 +69,7 @@ public class FeedbackScreen extends ScreenAdapter {
     private String pollutionLevel;
     private String totalThrows;
     private String totalScore;
-    private String kingDialogue = "Well done my loyal servant!\nAlmost no foodwaste!";
+    private String kingDialogue;
 
     // Game Data
     private boolean isPigsUsed;
@@ -88,15 +88,15 @@ public class FeedbackScreen extends ScreenAdapter {
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
         initFonts();
 
-        // Trying to get localization to work
-        Locale locale = new Locale("fi", "FI");
-        I18NBundle myBundle = I18NBundle.createBundle(Gdx.files.internal("i18n/MyBundle"), locale);
+        // Get and set the language to be used in the level
+        I18NBundle myBundle = kingsFeast.langManager.getCurrentBundle();
         foodWaste = myBundle.get("foodWaste");
         throwsInLevel = myBundle.get("throwsInLevel");
         levelScore = myBundle.get("levelScore");
         pollutionLevel = myBundle.get("pollutionLevel");
         totalThrows = myBundle.get("totalThrows");
         totalScore = myBundle.get("totalScore");
+        kingDialogue = myBundle.get("kingDialoguePlaceholder");
 
         // Initialize game data for showing correct data for player
         levelScoreCounter = 0;

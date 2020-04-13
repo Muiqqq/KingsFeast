@@ -81,7 +81,12 @@ public class PauseScreen extends ScreenAdapter {
 
     // Returns continue imagebutton
     private ImageButton createContinueButton() {
-        continueBtnTexture = kingsFeast.getAssetManager().get("ContinueButton.png");
+        // Checks what language is enabled and loads texture accordingly
+        if(kingsFeast.isEnglishEnabled()) {
+            continueBtnTexture = kingsFeast.getAssetManager().get("ContinueButton.png");
+        } else {
+            continueBtnTexture = kingsFeast.getAssetManager().get("jatkapelia.png");
+        }
         ImageButton continueButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(continueBtnTexture)));
         continueButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         continueButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3 - 50);
@@ -115,7 +120,12 @@ public class PauseScreen extends ScreenAdapter {
 
     // Returns settings imagebutton
     private ImageButton createSettingsButton() {
-        settingsButtonTexture = kingsFeast.getAssetManager().get("SettingsButton.png");
+        // Checks what language is enabled and loads texture accordingly
+        if(kingsFeast.isEnglishEnabled()) {
+            settingsButtonTexture = kingsFeast.getAssetManager().get("SettingsButton.png");
+        } else {
+            settingsButtonTexture = kingsFeast.getAssetManager().get("asetukset.png");
+        }
         ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonTexture)));
         settingsButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         settingsButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5);

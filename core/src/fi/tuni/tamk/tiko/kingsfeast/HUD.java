@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -32,6 +33,7 @@ class HUD {
     private BitmapFont bitmapFont;
     private TextButton.TextButtonStyle textButtonStyle;
     private int FONT_SIZE;
+    I18NBundle myBundle;
 
     // Widgets for the HUD
     private Label throwAmountLabel, progressLabel;
@@ -50,6 +52,9 @@ class HUD {
         visitorCount = this.gameScreen.getLevelData().getVisitorCount();
         throwAmount = this.gameScreen.getTHROW_AMOUNT();
 
+        // Get and set the language to be used in the level
+        myBundle = kingsFeast.langManager.getCurrentBundle();
+
         Texture skipButtonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
         Texture skipButtonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
         FONT_SIZE = 28;
@@ -60,8 +65,8 @@ class HUD {
                 new TextureRegionDrawable(new TextureRegion(skipButtonUp)),
                 bitmapFont);
 
-        throwAmountAsString = "Throws: " + throwAmount;
-        progressAsString = "Progress: " + visitorsServed + " / " + visitorCount;
+        throwAmountAsString = myBundle.get("throwes")+ ": " + throwAmount;
+        progressAsString = myBundle.get("progress")+ ": " + visitorsServed + " / " + visitorCount;
 
         viewport = new FitViewport(Util.convertMetresToPixels(gameScreen.getGAME_WIDTH()),
                 Util.convertMetresToPixels(gameScreen.getGAME_HEIGHT()),
@@ -73,7 +78,7 @@ class HUD {
         throwAmountLabel = new Label(throwAmountAsString, labelStyle);
         progressLabel = new Label (progressAsString, labelStyle);
 
-        skipButton = new TextButton("Skip",  textButtonStyle);
+        skipButton = new TextButton(myBundle.get("skip"),  textButtonStyle);
         skipButton.addListener(new ActorGestureListener() {
            @Override
            public void tap(InputEvent e, float x, float y, int count, int button) {
@@ -120,8 +125,8 @@ class HUD {
         visitorsServed = this.gameScreen.getVISITORS_SERVED();
         throwAmount = this.gameScreen.getTHROW_AMOUNT();
 
-        throwAmountAsString = "Throws: " + throwAmount;
-        progressAsString = "Progress: " + visitorsServed + " / " + visitorCount;
+        throwAmountAsString = myBundle.get("throwes")+ ": " + throwAmount;
+        progressAsString = myBundle.get("progress")+ ": " + visitorsServed + " / " + visitorCount;
 
         progressLabel.setText(progressAsString);
         throwAmountLabel.setText(throwAmountAsString);
