@@ -105,9 +105,6 @@ public class FeedbackScreen extends ScreenAdapter {
         isPigsUsed = false;
         isCompostUsed = false;
         isPoorUsed = false;
-        kingsFeast.getPrefs().putInteger("totalThrows",
-                kingsFeast.getPrefs().getInteger("totalThrows") + throwAmount);
-        kingsFeast.getPrefs().flush();
 
         this.throwAmount = Integer.toString(throwAmount);
 
@@ -218,6 +215,9 @@ public class FeedbackScreen extends ScreenAdapter {
                 super.tap(event, x, y, count, button);
                 // Save game on level swap
                 kingsFeast.saveGameOnLevelSwap();
+                kingsFeast.getPrefs().putInteger("totalThrows",
+                        Integer.parseInt(kingsFeast.getPrefs().getInteger("totalThrows") + throwAmount));
+                kingsFeast.getPrefs().flush();
                 dispose();
                 // Load pollution screen
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
