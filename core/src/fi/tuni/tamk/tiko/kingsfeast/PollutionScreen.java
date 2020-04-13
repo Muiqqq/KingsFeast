@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 // Using Stage2D
@@ -35,6 +36,8 @@ public class PollutionScreen extends ScreenAdapter {
     private Texture backgroundTexture;
     private BitmapFont font;
 
+    I18NBundle myBundle;
+
     // Game logic stuff
     private boolean gameWon;
     private boolean gameLost;
@@ -45,6 +48,9 @@ public class PollutionScreen extends ScreenAdapter {
         batch = kingsFeast.getSpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
+
+        // Get and set the language to be used in the level
+        myBundle = kingsFeast.langManager.getCurrentBundle();
 
         // Initialize booleans to false to enable checking game end
         gameWon = false;
@@ -79,12 +85,12 @@ public class PollutionScreen extends ScreenAdapter {
 
         // Depending on game state draw text on the screen
         if(gameWon) {
-            font.draw(batch, "You have saved the river!", GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
-            font.draw(batch, "You have succeeded in teaching\n the king better ways to deal\n with food waste!\n\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 100);
+            font.draw(batch, myBundle.get("gameWonRiver"), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
+            font.draw(batch, myBundle.get("gameWon")+ ": " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 100);
         } else if (gameLost) {
-            font.draw(batch, "Game over!\n\n\n The river pollution level\n has reached critical point!\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
+            font.draw(batch, myBundle.get("gameLost")+ ": " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
         } else {
-            font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 3 - 20, GAME_HEIGHT - BUTTON_HEIGHT * 2);
+            font.draw(batch, myBundle.get("pollutionLevel")+ ": " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 3 - 20, GAME_HEIGHT - BUTTON_HEIGHT * 2);
         }
         batch.end();
     }
@@ -148,7 +154,7 @@ public class PollutionScreen extends ScreenAdapter {
     private Image createGameEndBg() {
         kingSpeech = kingsFeast.getAssetManager().get("tekstitaustahorizontal.png");
         Image gameEndBg = new Image(kingSpeech);
-        gameEndBg.setSize(kingSpeech.getWidth() - 90, kingSpeech.getHeight() - 90);
+        gameEndBg.setSize(kingSpeech.getWidth(), kingSpeech.getHeight() - 50);
         gameEndBg.setPosition(GAME_WIDTH / 2 - kingSpeech.getWidth() / 2 + 50, GAME_HEIGHT / 2 - kingSpeech.getHeight() / 2 + 50);
         return gameEndBg;
     }
