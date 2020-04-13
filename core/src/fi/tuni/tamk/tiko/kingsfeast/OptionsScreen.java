@@ -20,8 +20,8 @@ public class OptionsScreen extends ScreenAdapter {
 
     // Screen stuff
     private final Screen previousScreen;
-    private static final float GAME_WIDTH = 1280;
-    private static final float GAME_HEIGHT = 720;
+    private static final float GAME_WIDTH = 1920;
+    private static final float GAME_HEIGHT = 1080;
     private final float BUTTON_WIDTH = 500f;
     private final float BUTTON_HEIGHT = 120f;
     private Stage stage;
@@ -35,6 +35,7 @@ public class OptionsScreen extends ScreenAdapter {
     private Texture LanguageEnTexture;
     private Texture LanguageFiTexture;
     private Texture backgroundTexture;
+    private Texture scrollBg;
 
     // Constructor receives game object to access it
     OptionsScreen(KingsFeast kingsFeast, Screen screen) {
@@ -49,6 +50,7 @@ public class OptionsScreen extends ScreenAdapter {
 
         // Add all buttons
         stage.addActor(createBackgroundImage());
+        stage.addActor(createScroll());
         stage.addActor(createOkButton());
         stage.addActor(createMusicButton());
         stage.addActor(createSoundButton());
@@ -74,12 +76,21 @@ public class OptionsScreen extends ScreenAdapter {
         return background;
     }
 
+    // Return image of a scroll
+    private Image createScroll() {
+        scrollBg = kingsFeast.getAssetManager().get("tekstitausta.png");
+        Image scroll = new Image(scrollBg);
+        scroll.setSize(scrollBg.getWidth() - 250, scrollBg.getHeight() - 250);
+        scroll.setPosition(GAME_WIDTH / 2 - scroll.getWidth() / 2, GAME_HEIGHT / 2 - scroll.getHeight() / 2);
+        return scroll;
+    }
+
     // Returns ok imagebutton
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5, Align.center);
+        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5 - 150, Align.center);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -115,7 +126,7 @@ public class OptionsScreen extends ScreenAdapter {
         }
 
         musicButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        musicButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 2, Align.center);
+        musicButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 2 - 100, Align.center);
 
         // Button's functionality
         musicButton.addListener(new ActorGestureListener() {
@@ -159,7 +170,7 @@ public class OptionsScreen extends ScreenAdapter {
         }
 
         soundButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        soundButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3, Align.center);
+        soundButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3 - 100, Align.center);
 
         // Button's functionality
         soundButton.addListener(new ActorGestureListener() {
@@ -202,7 +213,7 @@ public class OptionsScreen extends ScreenAdapter {
         }
 
         langButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        langButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 4, Align.center);
+        langButton.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 4 - 100, Align.center);
 
         // Button's functionality
         langButton.addListener(new ActorGestureListener() {

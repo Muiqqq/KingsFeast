@@ -77,7 +77,7 @@ public class PollutionScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
 
-        // Depending on game state text is drew on the screen
+        // Depending on game state draw text on the screen
         if(gameWon) {
             font.draw(batch, "You have saved the river!", GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
             font.draw(batch, "You have succeeded in teaching\n the king better ways to deal\n with food waste!\n\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 100);

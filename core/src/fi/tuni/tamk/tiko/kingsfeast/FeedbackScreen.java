@@ -2,6 +2,7 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,6 +22,8 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.Locale;
 
 
 public class FeedbackScreen extends ScreenAdapter {
@@ -84,6 +87,12 @@ public class FeedbackScreen extends ScreenAdapter {
         /*I18NBundle bundle = kingsFeast.langManager.getCurrentBundle();
         foodWaste = bundle.get("foodWaste");*/
 
+        FileHandle baseFileHandle = Gdx.files.internal("i18n/strings_fi_FI");
+        Locale locale = new Locale("fi", "FI");
+        I18NBundle myBundle = I18NBundle.createBundle(baseFileHandle, locale);
+
+        foodWaste = myBundle.get(foodWaste);
+
         // Initialize game data for showing correct data for player
         levelScoreCounter = 0;
         totalScoreCounter = Integer.parseInt(kingsFeast.getTotalScore());
@@ -141,7 +150,7 @@ public class FeedbackScreen extends ScreenAdapter {
 
         // Draw all text to screen
         font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 200);
-        font.draw(batch, "Food Waste: " + ": " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
+        font.draw(batch, foodWaste + ": " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
         font.draw(batch, "Level Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 400);
         font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 500);
             drawPollutionEffect();

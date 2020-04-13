@@ -28,6 +28,7 @@ public class PauseScreen extends ScreenAdapter {
     private Texture settingsButtonTexture;
     private Texture exitButtonTexture;
     private Texture backgroundTexture;
+    private Texture scrollBg;
 
 
     public PauseScreen(KingsFeast kingsFeast, GameScreen gameScreen) {
@@ -42,6 +43,7 @@ public class PauseScreen extends ScreenAdapter {
 
         // Add all buttons to the stage
         stage.addActor(createBackgroundImage());
+        stage.addActor(createScroll());
         stage.addActor(createContinueButton());
        // stage.addActor(createMainMenuButton());
         stage.addActor(createSettingsButton());
@@ -60,6 +62,7 @@ public class PauseScreen extends ScreenAdapter {
         stage.draw();
     }
 
+    // Returns background image
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
@@ -67,6 +70,16 @@ public class PauseScreen extends ScreenAdapter {
         return background;
     }
 
+    // Return image of a scroll
+    private Image createScroll() {
+        scrollBg = kingsFeast.getAssetManager().get("tekstitausta.png");
+        Image scroll = new Image(scrollBg);
+        scroll.setSize(scrollBg.getWidth() - 250, scrollBg.getHeight() - 250);
+        scroll.setPosition(GAME_WIDTH / 2 - scroll.getWidth() / 2, GAME_HEIGHT / 2 - scroll.getHeight() / 2);
+        return scroll;
+    }
+
+    // Returns continue imagebutton
     private ImageButton createContinueButton() {
         continueBtnTexture = kingsFeast.getAssetManager().get("ContinueButton.png");
         ImageButton continueButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(continueBtnTexture)));
@@ -83,6 +96,7 @@ public class PauseScreen extends ScreenAdapter {
         return continueButton;
     }
 
+    // Returns main menu imagebutton
     private ImageButton createMainMenuButton() {
         mainMenuBtnTexture = kingsFeast.getAssetManager().get("MainMenuButton.png");
         ImageButton mainMenuButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(mainMenuBtnTexture)));
@@ -99,6 +113,7 @@ public class PauseScreen extends ScreenAdapter {
         return mainMenuButton;
     }
 
+    // Returns settings imagebutton
     private ImageButton createSettingsButton() {
         settingsButtonTexture = kingsFeast.getAssetManager().get("SettingsButton.png");
         ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonTexture)));
@@ -115,6 +130,7 @@ public class PauseScreen extends ScreenAdapter {
         return settingsButton;
     }
 
+    // Returns exit game imagebutton
     private ImageButton createExitButton() {
         exitButtonTexture = kingsFeast.getAssetManager().get("credits.png");
         ImageButton exitButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(exitButtonTexture)));
