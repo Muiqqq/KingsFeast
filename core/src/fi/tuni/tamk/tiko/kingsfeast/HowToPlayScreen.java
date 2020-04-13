@@ -1,8 +1,6 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -13,30 +11,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class CreditsScreen extends ScreenAdapter {
-
+public class HowToPlayScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
-    private final Screen previousScreen;
-    private static final float GAME_WIDTH = 800;
-    private static final float GAME_HEIGHT = 480;
-    private Texture backgroundTexture;
+    private final GameScreen gameScreen;
+    private static final float GAME_WIDTH = 1920;
+    private static final float GAME_HEIGHT = 1080;
     private Stage stage;
-    private Texture okTexture;
+    private final float BUTTON_WIDTH = 550f;
+    private final float BUTTON_HEIGHT = 150f;
 
-    CreditsScreen(KingsFeast kingsFeast, Screen screen) {
+    // Textures
+    private Texture backgroundTexture;
+
+    public HowToPlayScreen(KingsFeast kingsFeast, GameScreen gameScreen) {
         this.kingsFeast = kingsFeast;
-        previousScreen = screen;
+        this.gameScreen = gameScreen;
     }
 
     @Override
     public void show() {
-        stage = new Stage(new FitViewport(GAME_WIDTH, GAME_HEIGHT));
+        stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
+        // Add all buttons to the stage
         stage.addActor(createBackgroundImage());
-        stage.addActor(createOkButton());
+
     }
 
     @Override
@@ -50,27 +51,12 @@ public class CreditsScreen extends ScreenAdapter {
         stage.draw();
     }
 
+    // Returns background image
     private Image createBackgroundImage() {
-        backgroundTexture = kingsFeast.getAssetManager().get("credits_bg.png");
+        backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
-    }
-
-    private ImageButton createOkButton() {
-        okTexture = kingsFeast.getAssetManager().get("OkButton.png");
-        ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
-        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT / 4, Align.center);
-        ok.setSize(150f, 75f);
-        ok.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(previousScreen);
-                dispose();
-            }
-        });
-        return ok;
     }
 
     @Override

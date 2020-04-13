@@ -13,32 +13,46 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+// Using Stage2D
 public class PollutionScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
+
+    // Screen stuff
     private static final float GAME_WIDTH = 1920;
     private static final float GAME_HEIGHT = 1080;
     private final float BUTTON_WIDTH = 500f;
     private final float BUTTON_HEIGHT = 120f;
     private final int FONT_SIZE = 48;
     private SpriteBatch batch;
-    private BitmapFont font;
-    private Texture backgroundTexture;
     private Stage stage;
-    private Texture okTexture;
-    private Texture kingSpeech;
-    private boolean gameWon;
-    private boolean gameLost;
     private OrthographicCamera camera;
 
-    // DOCUMENTATION
+    // Textures and fonts
+    private Texture okTexture;
+    private Texture kingSpeech;
+    private Texture backgroundTexture;
+    private BitmapFont font;
 
+    I18NBundle myBundle;
+
+    // Game logic stuff
+    private boolean gameWon;
+    private boolean gameLost;
+
+    // Constructor receives game object to access it
     public PollutionScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         batch = kingsFeast.getSpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
+
+        // Get and set the language to be used in the level
+        myBundle = kingsFeast.langManager.getCurrentBundle();
+
+        // Initialize booleans to false to enable checking game end
         gameWon = false;
         gameLost = false;
     }
@@ -48,8 +62,12 @@ public class PollutionScreen extends ScreenAdapter {
         stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
         font = Util.initFont(FONT_SIZE);
+
+        // Add background image and ok button to screen
         stage.addActor(createBackgroundImage());
         stage.addActor(createOkButton());
+
+        // Check if game has ended
         checkGameEnd();
     }
 
@@ -64,17 +82,20 @@ public class PollutionScreen extends ScreenAdapter {
         stage.draw();
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+
+        // Depending on game state draw text on the screen
         if(gameWon) {
-            font.draw(batch, "You have saved the river!", GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
-            font.draw(batch, "You have succeeded in teaching\n the king better ways to deal\n with food waste!\n\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 100);
+            font.draw(batch, myBundle.get("gameWonRiver"), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
+            font.draw(batch, myBundle.get("gameWon")+ ": " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 100);
         } else if (gameLost) {
-            font.draw(batch, "Game over!\n\n\n The river pollution level\n has reached critical point!\n\nFinal score: " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
+            font.draw(batch, myBundle.get("gameLost")+ ": " + kingsFeast.getTotalScore(), GAME_WIDTH / 5 + 130, GAME_HEIGHT / 2 + 250);
         } else {
-            font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 3 - 20, GAME_HEIGHT - BUTTON_HEIGHT * 2);
+            font.draw(batch, myBundle.get("pollutionLevel")+ ": " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 3 - 20, GAME_HEIGHT - BUTTON_HEIGHT * 2);
         }
         batch.end();
     }
 
+    // Returns a background image for the screen
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
@@ -82,6 +103,8 @@ public class PollutionScreen extends ScreenAdapter {
         return background;
     }
 
+    // Returns an ok button to the screen. If game is won or lost tapping the button returns player
+    // to main menu and clears the save file for a new game
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
@@ -103,6 +126,7 @@ public class PollutionScreen extends ScreenAdapter {
         return ok;
     }
 
+    // Check if game has ended (pollution 0 or 100)
     private void checkGameEnd() {
         int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
         if(pollution >= 100) {
@@ -112,27 +136,30 @@ public class PollutionScreen extends ScreenAdapter {
         }
     }
 
+    // Adds game end dialog box to the screen if game lost
     private void gameLost() {
-        stage.addActor(createKingSpeech());
+        stage.addActor(createGameEndBg());
         stage.addActor(createOkButton());
         gameLost = true;
     }
 
+    // Adds game end dialog box to the screen if game won
     private void gameWon() {
-        stage.addActor(createKingSpeech());
+        stage.addActor(createGameEndBg());
         stage.addActor(createOkButton());
         gameWon = true;
     }
 
-    private Image createKingSpeech() {
+    // Returns background texture for the game end screen
+    private Image createGameEndBg() {
         kingSpeech = kingsFeast.getAssetManager().get("tekstitaustahorizontal.png");
-        Image kingSpeechBubble = new Image(kingSpeech);
-        kingSpeechBubble.setSize(kingSpeech.getWidth() - 90, kingSpeech.getHeight() - 90);
-        kingSpeechBubble.setPosition(GAME_WIDTH / 2 - kingSpeech.getWidth() / 2 + 50, GAME_HEIGHT / 2 - kingSpeech.getHeight() / 2 + 50);
-        return kingSpeechBubble;
+        Image gameEndBg = new Image(kingSpeech);
+        gameEndBg.setSize(kingSpeech.getWidth(), kingSpeech.getHeight() - 50);
+        gameEndBg.setPosition(GAME_WIDTH / 2 - kingSpeech.getWidth() / 2 + 50, GAME_HEIGHT / 2 - kingSpeech.getHeight() / 2 + 50);
+        return gameEndBg;
     }
 
-
+    // Disposes stage and font
     @Override
     public void dispose() {
         stage.dispose();
