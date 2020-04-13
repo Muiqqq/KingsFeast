@@ -1,21 +1,16 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class PauseScreen extends ScreenAdapter {
@@ -23,15 +18,16 @@ public class PauseScreen extends ScreenAdapter {
     private final GameScreen gameScreen;
     private static final float GAME_WIDTH = 1920;
     private static final float GAME_HEIGHT = 1080;
-    private Texture backgroundTexture;
     private Stage stage;
     private final float BUTTON_WIDTH = 550f;
     private final float BUTTON_HEIGHT = 150f;
 
+    // Textures
     private Texture continueBtnTexture;
     private Texture mainMenuBtnTexture;
     private Texture settingsButtonTexture;
     private Texture exitButtonTexture;
+    private Texture backgroundTexture;
 
 
     public PauseScreen(KingsFeast kingsFeast, GameScreen gameScreen) {

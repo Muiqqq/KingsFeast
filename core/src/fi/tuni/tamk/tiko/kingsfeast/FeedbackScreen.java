@@ -25,71 +25,72 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class FeedbackScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
+
+    // Screen stuff
     private static final float GAME_WIDTH = 1920;
     private static final float GAME_HEIGHT = 1080;
+    private final float BUTTON_WIDTH = 500f;
+    private final float BUTTON_HEIGHT = 120f;
+    private SpriteBatch batch;
+    private OrthographicCamera camera;
+    private Viewport viewport;
+    private Stage stage;
+
+    // Textures
     private Texture backgroundTexture;
     private Texture kingTexture;
     private Texture kingSpeech;
     private Texture scroll;
-    private Stage stage;
-    private final float BUTTON_WIDTH = 500f;
-    private final float BUTTON_HEIGHT = 120f;
-    private SpriteBatch batch;
-    private BitmapFont font;
-    private BitmapFont bitmapFont;
-    private BitmapFont speechFont;
-    private BitmapFont negativeFont;
-    private BitmapFont positiveFont;
-    private OrthographicCamera camera;
-    private final int FONT_SIZE = 38;
-    private final int SPEECH_FONT_SIZE = 48;
-
     private Texture okTexture;
-    private String throwAmount;
-    private String foodWasteAmount;
-    private Viewport viewport;
-
-    private boolean isPigsUsed;
-    private boolean isCompostUsed;
-    private boolean isPoorUsed;
-
     private Texture pigsTexture;
     private Texture compostTexture;
     private Texture poorTexture;
+    private Texture pigsDisabledTexture;
+    private Texture compostDisabledTexture;
+    private Texture poorDisabledTexture;
 
+    // Fonts
+    private BitmapFont font;
+    private BitmapFont speechFont;
+    private BitmapFont negativeFont;
+    private BitmapFont positiveFont;
+    private final int FONT_SIZE = 38;
+    private final int SPEECH_FONT_SIZE = 48;
+
+    // Strings
+    private String throwAmount;
+    private String foodWasteAmount;
+    private String foodWaste;
+    private String kingDialogue = "Well done my loyal servant!\nAlmost no foodwaste!";
+
+    // Game Data
+    private boolean isPigsUsed;
+    private boolean isCompostUsed;
+    private boolean isPoorUsed;
     private int levelScoreCounter;
     private int totalScoreCounter;
     private int pollutionCounter;
     private boolean toTotalScore;
 
-    private String foodWaste;
-
-    private Texture pigsDisabledTexture;
-    private Texture compostDisabledTexture;
-    private Texture poorDisabledTexture;
-
-    private String kingDialogue = "Well done my loyal servant!\nAlmost no foodwaste!";
-
+    // Constructor receives game object to access it. Also 2 ints from gamescreen for accessing
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
         this.kingsFeast = kingsFeast;
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
-        bitmapFont = new BitmapFont();
-        speechFont = new BitmapFont();
-        negativeFont = new BitmapFont();
-        positiveFont = new BitmapFont();
         initFonts();
+
+        // Paskaa
+        /*I18NBundle bundle = kingsFeast.langManager.getCurrentBundle();
+        foodWaste = bundle.get("foodWaste");*/
+
+        // Initialize game data for showing correct data for player
         levelScoreCounter = 0;
         totalScoreCounter = Integer.parseInt(kingsFeast.getTotalScore());
         toTotalScore = false;
         isPigsUsed = false;
         isCompostUsed = false;
         isPoorUsed = false;
-        I18NBundle bundle = kingsFeast.langManager.getCurrentBundle();
-        foodWaste = bundle.get("foodWaste");
-
-        // aMuikku lisäsi
         kingsFeast.getPrefs().putInteger("totalThrows",
                 kingsFeast.getPrefs().getInteger("totalThrows") + throwAmount);
         kingsFeast.getPrefs().flush();
@@ -112,9 +113,10 @@ public class FeedbackScreen extends ScreenAdapter {
        stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
+        // Add all actors to the stage
         stage.addActor(createBackgroundImage());
         stage.addActor(createKingImage());
-        stage.addActor(createKingSpeech());
+        stage.addActor(createKingSpeechBg());
         stage.addActor(createOkButton());
         stage.addActor(createPigsLifeline());
         stage.addActor(createCompostLifeLine());
@@ -136,13 +138,16 @@ public class FeedbackScreen extends ScreenAdapter {
         batch.setProjectionMatrix(camera.combined);
 
         batch.begin();
+
+        // Draw all text to screen
         font.draw(batch, "Throws in the last level: " + throwAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 200);
-        font.draw(batch, foodWaste + ": " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
+        font.draw(batch, "Food Waste: " + ": " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
         font.draw(batch, "Level Score: " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 400);
         font.draw(batch, "Pollution Level: " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 500);
             drawPollutionEffect();
         font.draw(batch, "Total Throws: " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 600);
         font.draw(batch, "Total Score: " + totalScoreCounter, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 700);
+        // If statement to increase score on screen to give player tangible feedback on changed data
         if (this.totalScoreCounter < Integer.parseInt(this.kingsFeast.getTotalScore())) {
             this.totalScoreCounter += 10;
         } else if(this.totalScoreCounter > Integer.parseInt(this.kingsFeast.getTotalScore())) {
@@ -152,6 +157,7 @@ public class FeedbackScreen extends ScreenAdapter {
         batch.end();
     }
 
+    // Returns background image
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
@@ -159,6 +165,7 @@ public class FeedbackScreen extends ScreenAdapter {
         return background;
     }
 
+    // Returns king's image
     private Image createKingImage() {
         kingTexture = kingsFeast.getAssetManager().get("kingplaceholder.png");
         Image king = new Image(kingTexture);
@@ -167,7 +174,8 @@ public class FeedbackScreen extends ScreenAdapter {
         return king;
     }
 
-    private Image createKingSpeech() {
+    // Returns king speech background texture
+    private Image createKingSpeechBg() {
         kingSpeech = kingsFeast.getAssetManager().get("kingspeech.png");
         Image kingSpeechBubble = new Image(kingSpeech);
         kingSpeechBubble.setSize(kingSpeech.getWidth() - 50, kingSpeech.getHeight() - 50);
@@ -175,6 +183,7 @@ public class FeedbackScreen extends ScreenAdapter {
         return kingSpeechBubble;
     }
 
+    // Return image of a scroll
     private Image createScroll() {
         scroll = kingsFeast.getAssetManager().get("tekstitausta.png");
         Image scrollBg = new Image(scroll);
@@ -183,6 +192,7 @@ public class FeedbackScreen extends ScreenAdapter {
         return scrollBg;
     }
 
+    // Return ok imagebutton
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
@@ -192,15 +202,23 @@ public class FeedbackScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
+                // Save game on level swap
                 kingsFeast.saveGameOnLevelSwap();
                 dispose();
+                // Load pollution screen
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             }
         });
         return ok;
     }
 
+    // Initialize all fonts used in screen
     private void initFonts() {
+        speechFont = new BitmapFont();
+        negativeFont = new BitmapFont();
+        positiveFont = new BitmapFont();
+
+        // Font for showing game data (score etc.)
         FreeTypeFontGenerator fontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontParameter.size = FONT_SIZE;
@@ -209,6 +227,7 @@ public class FeedbackScreen extends ScreenAdapter {
         fontParameter.color = Color.WHITE;
         font = fontGenerator.generateFont(fontParameter);
 
+        // Font for king's dialogue
         FreeTypeFontGenerator speechFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter speechFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         speechFontParameter.size = SPEECH_FONT_SIZE;
@@ -217,12 +236,14 @@ public class FeedbackScreen extends ScreenAdapter {
         speechFontParameter.color = Color.WHITE;
         speechFont = speechFontGenerator.generateFont(speechFontParameter);
 
+        // Font for negative pollution change
         FreeTypeFontGenerator negativeFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter negativeFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         negativeFontParameter.size = FONT_SIZE;
         negativeFontParameter.color = Color.RED;
         negativeFont = negativeFontGenerator.generateFont(negativeFontParameter);
 
+        // Font for positive pollution change
         FreeTypeFontGenerator positiveFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter positiveFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         positiveFontParameter.size = FONT_SIZE;
@@ -230,11 +251,13 @@ public class FeedbackScreen extends ScreenAdapter {
         positiveFont = positiveFontGenerator.generateFont(positiveFontParameter);
     }
 
+    // Return pig lifeline imagebutton
     private ImageButton createPigsLifeline() {
         int totalScore = Integer.parseInt(kingsFeast.getTotalScore());
-            pigsTexture = kingsFeast.getAssetManager().get("pigsplaceholder.png");
 
-            pigsDisabledTexture = kingsFeast.getAssetManager().get("pigsdisabledplaceholder.png");
+        // Load two textures for enabled and disabled states
+        pigsTexture = kingsFeast.getAssetManager().get("pigsplaceholder.png");
+        pigsDisabledTexture = kingsFeast.getAssetManager().get("pigsdisabledplaceholder.png");
 
 
         final ImageButton pigsLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(pigsTexture)),
@@ -242,6 +265,8 @@ public class FeedbackScreen extends ScreenAdapter {
                 new TextureRegionDrawable(new TextureRegion(pigsDisabledTexture)));
         pigsLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 400);
         pigsLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+
+        // Check if button is enabled or disabled based on score
         if(totalScore >= 1000) {
             pigsLifeline.setChecked(false);
             isPigsUsed = false;
@@ -249,6 +274,8 @@ public class FeedbackScreen extends ScreenAdapter {
             pigsLifeline.setChecked(true);
             isPigsUsed = true;
         }
+
+        // If lifeline is enabled and not used, add listener
         if(!isPigsUsed) {
             pigsLifeline.addListener(new ActorGestureListener() {
                 @Override
@@ -256,6 +283,8 @@ public class FeedbackScreen extends ScreenAdapter {
                     kingsFeast.setPollutionLevel(-5);
                     kingsFeast.setTotalScore(-1000);
                     pigsLifeline.setChecked(true);
+
+                    // Disable button after used
                     pigsLifeline.setTouchable(Touchable.disabled);
                 }
             });
@@ -263,16 +292,21 @@ public class FeedbackScreen extends ScreenAdapter {
         return pigsLifeline;
     }
 
+    // Return compost lifeline imagebutton
     private ImageButton createCompostLifeLine() {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
-            compostTexture = kingsFeast.getAssetManager().get("compostplaceholder.png");
-            compostDisabledTexture = kingsFeast.getAssetManager().get("compostdisabledplaceholder.png");
+
+        // Load two textures for enabled and disabled states
+        compostTexture = kingsFeast.getAssetManager().get("compostplaceholder.png");
+        compostDisabledTexture = kingsFeast.getAssetManager().get("compostdisabledplaceholder.png");
 
         final ImageButton compostLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(compostTexture)),
                 new TextureRegionDrawable(new TextureRegion(compostTexture)),
                 new TextureRegionDrawable(new TextureRegion(compostDisabledTexture)));
         compostLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 250);
         compostLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+
+        // Check if button is enabled or disabled based on score
         if(totalScore >= 1000) {
             compostLifeline.setChecked(false);
             isCompostUsed = false;
@@ -280,6 +314,8 @@ public class FeedbackScreen extends ScreenAdapter {
             compostLifeline.setChecked(true);
             isCompostUsed = true;
         }
+
+        // If lifeline is enabled and not used, add listener
         if(!isCompostUsed) {
             compostLifeline.addListener(new ActorGestureListener() {
                 @Override
@@ -287,6 +323,8 @@ public class FeedbackScreen extends ScreenAdapter {
                     kingsFeast.setPollutionLevel(-10);
                     kingsFeast.setTotalScore(-2000);
                     compostLifeline.setChecked(true);
+
+                    // Disable button after used
                     compostLifeline.setTouchable(Touchable.disabled);
                 }
             });
@@ -294,15 +332,21 @@ public class FeedbackScreen extends ScreenAdapter {
         return compostLifeline;
     }
 
+    // Return poor lifeline imagebutton
     private ImageButton createPoorLifeLine() {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
-            poorTexture = kingsFeast.getAssetManager().get("poorplaceholder.png");
-            poorDisabledTexture = kingsFeast.getAssetManager().get("poordisabledplaceholder.png");
+
+        // Load two textures for enabled and disabled states
+        poorTexture = kingsFeast.getAssetManager().get("poorplaceholder.png");
+        poorDisabledTexture = kingsFeast.getAssetManager().get("poordisabledplaceholder.png");
+
         final ImageButton poorLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(poorTexture)),
                 new TextureRegionDrawable(new TextureRegion(poorTexture)),
                 new TextureRegionDrawable(new TextureRegion(poorDisabledTexture)));
         poorLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 100);
         poorLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+
+        // Check if button is enabled or disabled based on score
         if(totalScore >= 1000) {
             poorLifeline.setChecked(false);
             isPoorUsed = false;
@@ -310,6 +354,8 @@ public class FeedbackScreen extends ScreenAdapter {
             poorLifeline.setChecked(true);
             isPoorUsed = true;
         }
+
+        // If lifeline is enabled and not used, add listener
         if(!isPoorUsed) {
             poorLifeline.addListener(new ActorGestureListener() {
                 @Override
@@ -317,6 +363,8 @@ public class FeedbackScreen extends ScreenAdapter {
                     kingsFeast.setPollutionLevel(-15);
                     kingsFeast.setTotalScore(-2500);
                     poorLifeline.setChecked(true);
+
+                    // Disable button after used
                     poorLifeline.setTouchable(Touchable.disabled);
                 }
             });
@@ -324,9 +372,12 @@ public class FeedbackScreen extends ScreenAdapter {
         return poorLifeline;
     }
 
+    // Method to draw text showing how pollution level has changed
     private void drawPollutionEffect() {
         int oldPol = kingsFeast.getOldPollution();
         int newPol = Integer.parseInt(kingsFeast.getPollutionLevel());
+
+        // Check did pollution level decrease or increase and show correct text accordingly
         if(oldPol < newPol) {
             negativeFont.draw(batch, "+" + (newPol - oldPol), GAME_WIDTH - 260, GAME_HEIGHT - 500);
         } else if (newPol < oldPol) {
@@ -334,6 +385,7 @@ public class FeedbackScreen extends ScreenAdapter {
         }
     }
 
+    // Dispose stage and fonts
     @Override
     public void dispose() {
         stage.dispose();
