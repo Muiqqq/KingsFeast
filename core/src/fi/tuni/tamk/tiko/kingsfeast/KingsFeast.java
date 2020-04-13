@@ -137,6 +137,7 @@ public class KingsFeast extends Game {
         kfprefs.remove("doPrefsExist");
         kfprefs.remove("totalThrows");
         kfprefs.remove("currentLevel");
+        kfprefs.remove("totalScore");
         kfprefs.remove("pollution");
         kfprefs.flush();
         setCurrentLevel(kfprefs.getInteger("currentLevel"));
@@ -168,9 +169,21 @@ public class KingsFeast extends Game {
     void saveGameOnLevelSwap() {
         if (getCurrentLevel() < getLevels().size - 1) {
             incrementCurrentLevel();
+            getPrefs().putInteger("totalScore",
+                    Integer.parseInt(getTotalScore()));
+
+            getPrefs().putInteger("pollution",
+                    Integer.parseInt(getPollutionLevel()));
+            getPrefs().flush();
         } else {
             //clearSaveState();
             this.currentLevel = 0;
+            getPrefs().putInteger("totalScore",
+                    Integer.parseInt(getTotalScore()));
+
+            getPrefs().putInteger("pollution",
+                    Integer.parseInt(getPollutionLevel()));
+            getPrefs().flush();
         }
     }
 
