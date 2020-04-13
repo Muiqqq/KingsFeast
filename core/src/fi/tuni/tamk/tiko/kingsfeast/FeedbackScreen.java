@@ -83,15 +83,10 @@ public class FeedbackScreen extends ScreenAdapter {
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
         initFonts();
 
-        // Paskaa
-        /*I18NBundle bundle = kingsFeast.langManager.getCurrentBundle();
-        foodWaste = bundle.get("foodWaste");*/
-
-        FileHandle baseFileHandle = Gdx.files.internal("i18n/strings_fi_FI");
+        // Trying to get localization to work
         Locale locale = new Locale("fi", "FI");
-        I18NBundle myBundle = I18NBundle.createBundle(baseFileHandle, locale);
-
-        foodWaste = myBundle.get(foodWaste);
+        I18NBundle myBundle = I18NBundle.createBundle(Gdx.files.internal("MyBundle"), locale);
+        foodWaste = myBundle.get("foodWaste");
 
         // Initialize game data for showing correct data for player
         levelScoreCounter = 0;
