@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.I18NBundle;
 
 import java.util.Locale;
 
@@ -43,7 +42,6 @@ public class KingsFeast extends Game {
 
     private final AssetManager assetManager = new AssetManager();
     private SpriteBatch batch;
-    private LevelBuilder levelBuilder;
     private Array<LevelData> levels;
     private int currentLevel;
     private Preferences kfprefs;
@@ -57,8 +55,8 @@ public class KingsFeast extends Game {
     private String levelScore;
     private int oldPollution;
 
-    // Internalization
-    public LanguageManager langManager;
+    // Internationalization
+    LanguageManager langManager;
 
 
     @Override
@@ -69,9 +67,8 @@ public class KingsFeast extends Game {
         initVariables();
         initLanguages();
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        levelBuilder = new LevelBuilder(this);
         currentLevel = kfprefs.getInteger("currentLevel");
-        setScreen(new LoadingScreen(this, levelBuilder));
+        setScreen(new LoadingScreen(this));
         setMusic();
         setSounds();
     }
@@ -90,14 +87,14 @@ public class KingsFeast extends Game {
     }
 
     // Initialize variables to default for a new game
-    public void initVariables() {
+    private void initVariables() {
         pollutionLevel = Integer.toString(kfprefs.getInteger("pollution", 50));
         totalScore = Integer.toString(kfprefs.getInteger("totalScore", 0));
         totalThrows = Integer.toString(kfprefs.getInteger("totalThrows", 0));
     }
 
     // Clear save data
-    public void clearSaveState() {
+    void clearSaveState() {
         kfprefs.remove("doPrefsExist");
         kfprefs.remove("totalThrows");
         kfprefs.remove("currentLevel");
@@ -108,7 +105,7 @@ public class KingsFeast extends Game {
         initSaveState();
     }
 
-    public void initLanguages() {
+    private void initLanguages() {
         langManager = new LanguageManager();
 
         FileHandle englishFileHandle = Gdx.files.internal("i18n/MyBundle_en");
@@ -194,7 +191,7 @@ public class KingsFeast extends Game {
     }
 
     // Calculate how much pollution changed after last level
-    void calculatePollution(int scoring) {
+    private void calculatePollution(int scoring) {
         oldPollution = Integer.parseInt(getPollutionLevel());
         if (scoring == 1000) {
             setPollutionLevel(-15);
@@ -229,7 +226,7 @@ public class KingsFeast extends Game {
         this.totalScore = Integer.toString(total);
     }
 
-    public void setPollutionLevel(int pollution) {
+    void setPollutionLevel(int pollution) {
         int totalPollution = Integer.parseInt(getPollutionLevel()) + pollution;
         this.pollutionLevel = Integer.toString(totalPollution);
     }
@@ -240,15 +237,15 @@ public class KingsFeast extends Game {
     }
 
     // GETTERS
-    public int getOldPollution() {
+    int getOldPollution() {
         return this.oldPollution;
     }
-    public String getTotalScore() { return this.totalScore; }
-    public String getTotalThrows() {
+    String getTotalScore() { return this.totalScore; }
+    String getTotalThrows() {
         return this.totalThrows;
     }
-    public String getLevelScore() { return this.levelScore; }
-    public String getPollutionLevel() { return this.pollutionLevel; }
+    String getLevelScore() { return this.levelScore; }
+    String getPollutionLevel() { return this.pollutionLevel; }
     Preferences getPrefs() {
         return kfprefs;
     }
@@ -280,7 +277,7 @@ public class KingsFeast extends Game {
         return prefs;
     }
 
-    public void initSaveState() {
+    private void initSaveState() {
         if (!kfprefs.contains("doPrefsExist")) {
             kfprefs.putBoolean("doPrefsExist", true);
             kfprefs.putInteger("totalThrows", 0);

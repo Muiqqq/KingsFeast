@@ -1,6 +1,5 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
@@ -8,15 +7,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.I18NBundle;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.util.Locale;
-
-import sun.applet.Main;
-
 
 /**
  * TODO: DOCUMENTATION!
@@ -28,7 +22,6 @@ import sun.applet.Main;
  */
 public class LoadingScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
-    private final LevelBuilder levelBuilder;
 
     private static final float GAME_WIDTH = 800;
     private static final float GAME_HEIGHT = 480;
@@ -41,9 +34,8 @@ public class LoadingScreen extends ScreenAdapter {
 
     private float progress;
 
-    LoadingScreen(KingsFeast kingsFeast, LevelBuilder levelBuilder) {
+    LoadingScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
-        this.levelBuilder = levelBuilder;
     }
 
     @Override
@@ -59,7 +51,7 @@ public class LoadingScreen extends ScreenAdapter {
         viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT, camera);
         shapeRenderer = new ShapeRenderer();
         loadAssets();
-        kingsFeast.setLevels(levelBuilder.buildLevels());
+        kingsFeast.setLevels(buildLevels());
     }
 
     @Override
@@ -77,10 +69,9 @@ public class LoadingScreen extends ScreenAdapter {
     private void update() {
         if (kingsFeast.getAssetManager().update()) {
             kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
-        } else {
-            progress = kingsFeast.getAssetManager().getProgress();
         }
 
+        progress = kingsFeast.getAssetManager().getProgress();
     }
 
     // All of this just draws the progress bar.
@@ -114,17 +105,13 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("skipButton-up.png", Texture.class);
         kingsFeast.getAssetManager().load("skipButton-down.png", Texture.class);
         kingsFeast.getAssetManager().load("mainmenubackgroundtitle.jpg", Texture.class);
-        //kingsFeast.getAssetManager().load("StartGameButton.png", Texture.class);
         kingsFeast.getAssetManager().load("SettingsButton.png", Texture.class);
         kingsFeast.getAssetManager().load("riverscreen.png", Texture.class);
-        //kingsFeast.getAssetManager().load("credits.png", Texture.class);
         kingsFeast.getAssetManager().load("OkButton.png", Texture.class);
         kingsFeast.getAssetManager().load("MusicOnButton.png", Texture.class);
         kingsFeast.getAssetManager().load("MusicOffButton.png", Texture.class);
         kingsFeast.getAssetManager().load("SoundOnButton.png", Texture.class);
         kingsFeast.getAssetManager().load("SoundOffButton.png", Texture.class);
-        //kingsFeast.getAssetManager().load("credits_bg.png", Texture.class);
-        //kingsFeast.getAssetManager().load("options.jpg", Texture.class);
         kingsFeast.getAssetManager().load("pigsplaceholder.png", Texture.class);
         kingsFeast.getAssetManager().load("compostplaceholder.png", Texture.class);
         kingsFeast.getAssetManager().load("poorplaceholder.png", Texture.class);
@@ -158,5 +145,25 @@ public class LoadingScreen extends ScreenAdapter {
 
         // don't forget this after loading
         kingsFeast.getAssetManager().finishLoading();
+    }
+
+    private Array<LevelData> buildLevels() {
+        Array<LevelData> levels = new Array<>();
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map1.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map2.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map3.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map4.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map5.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map6.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map7.tmx",
+                TiledMap.class)));
+
+        return levels;
     }
 }

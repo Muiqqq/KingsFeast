@@ -36,7 +36,7 @@ public class MainMenuScreen extends ScreenAdapter {
     private Texture settingsTexture;
     private Texture newGameTexture;
 
-    I18NBundle myBundle;
+    private I18NBundle myBundle;
 
     // Constructor here takes the game object so we can swap to a different screen from this one.
     MainMenuScreen(KingsFeast kingsFeast) {
