@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  * TODO: DOCUMENTATION
  */
 class HUD {
+    private final KingsFeast kingsFeast;
     private final GameScreen gameScreen;
 
     private Stage stage;
@@ -44,6 +45,7 @@ class HUD {
     // Constructor creates all the widgets for now.
     // Note to self: clean this up -> separate things to their own methods.
     HUD(SpriteBatch batch, final KingsFeast kingsFeast, final GameScreen gameScreen) {
+        this.kingsFeast = kingsFeast;
         this.gameScreen = gameScreen;
         visitorsServed = this.gameScreen.getVISITORS_SERVED();
         visitorCount = this.gameScreen.getLevelData().getVisitorCount();
@@ -127,6 +129,10 @@ class HUD {
 
         progressLabel.setText(progressAsString);
         throwAmountLabel.setText(throwAmountAsString);
+    }
+
+    void updateI18NBundle() {
+        this.myBundle = kingsFeast.langManager.getCurrentBundle();
     }
 
     Stage getStage() {

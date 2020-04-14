@@ -107,6 +107,7 @@ public class GameScreen extends ScreenAdapter {
         inputProcessing();
 
         Gdx.input.setInputProcessor(multiplexer);
+        hud.updateI18NBundle();
     }
 
     @Override
