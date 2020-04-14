@@ -96,6 +96,6 @@
   <object id="11" x="288" y="800"/>
  </objectgroup>
  <objectgroup id="5" name="goal">
-  <object id="8" x="1284.17" y="825.499" width="93" height="22"/>
+  <object id="8" x="1308.67" y="826.499" width="44" height="22"/>
  </objectgroup>
 </map>

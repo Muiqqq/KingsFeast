@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="46">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="49">
  <layer id="1" name="Tile Layer 1" width="60" height="33">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -88,9 +88,9 @@
   <object id="11" x="288" y="800"/>
  </objectgroup>
  <objectgroup id="5" name="goal">
-  <object id="8" x="1490" y="823.666" width="93" height="22"/>
-  <object id="9" x="1714.33" y="824.333" width="93" height="22"/>
-  <object id="30" x="950" y="823" width="112" height="27"/>
-  <object id="32" x="1163.33" y="823.333" width="106" height="25.3333"/>
+  <object id="30" x="982.333" y="823" width="47.3333" height="27"/>
+  <object id="46" x="1194" y="821.333" width="47.3333" height="27"/>
+  <object id="47" x="1512" y="821.333" width="47.3333" height="27"/>
+  <object id="48" x="1736" y="821.333" width="47.3333" height="27"/>
  </objectgroup>
 </map>
