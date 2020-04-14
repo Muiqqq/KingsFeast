@@ -31,7 +31,7 @@ public class KingsFeast extends Game {
     //  -Written tutorial needs to be made
     //  -Verify that continue button works as intended
     //  -Buttons might be a bit too small for mobile in general? ----> Now resized except the GameScreen buttons
-    //  -Choose a better FreeType Font to resemble the theme more
+    //  -When accessing settings through pause and changing language, language not changed in GameScreen when continued
     //  LOCALIZATION
     //  -Localize all text once written
 
@@ -226,6 +226,11 @@ public class KingsFeast extends Game {
 
     void setPollutionLevel(int pollution) {
         int totalPollution = Integer.parseInt(getPollutionLevel()) + pollution;
+        if(totalPollution < 0) {
+            totalPollution = 0;
+        } else if(totalPollution > 100) {
+            totalPollution = 100;
+        }
         this.pollutionLevel = Integer.toString(totalPollution);
     }
 

@@ -139,8 +139,6 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("musiikkipois.png", Texture.class);
         kingsFeast.getAssetManager().load("uusipeli.png", Texture.class);
         kingsFeast.getAssetManager().load("kuinkapelata.png", Texture.class);
-
-
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
 
         // don't forget this after loading

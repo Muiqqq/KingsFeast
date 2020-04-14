@@ -36,6 +36,7 @@ public class PollutionScreen extends ScreenAdapter {
     private Texture backgroundTexture;
     private BitmapFont font;
 
+    // Localization
     I18NBundle myBundle;
 
     // Game logic stuff

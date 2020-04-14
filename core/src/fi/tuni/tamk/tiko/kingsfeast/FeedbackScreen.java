@@ -388,11 +388,20 @@ public class FeedbackScreen extends ScreenAdapter {
         int oldPol = kingsFeast.getOldPollution();
         int newPol = Integer.parseInt(kingsFeast.getPollutionLevel());
 
+        int x;
+        int y = 500;
+
+        if(kingsFeast.isEnglishEnabled()) {
+            x = 260;
+        } else {
+            x = 370;
+        }
+
         // Check did pollution level decrease or increase and show correct text accordingly
         if(oldPol < newPol) {
-            negativeFont.draw(batch, "+" + (newPol - oldPol), GAME_WIDTH - 260, GAME_HEIGHT - 500);
+            negativeFont.draw(batch, "+" + (newPol - oldPol), GAME_WIDTH - x, GAME_HEIGHT - y);
         } else if (newPol < oldPol) {
-            positiveFont.draw(batch, "-" + (oldPol - newPol), GAME_WIDTH - 260, GAME_HEIGHT - 500);
+            positiveFont.draw(batch, "-" + (oldPol - newPol), GAME_WIDTH - x, GAME_HEIGHT - y);
         }
     }
 
