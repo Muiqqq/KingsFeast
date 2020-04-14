@@ -23,19 +23,17 @@ public class KingsFeast extends Game {
     //  CLEAN CODE
     //  -Lack of documentation ----> Documentation started on various screens
     //  -Check that everything that needs disposing gets disposed when needed
-    //  -All assets need to be changed to be loaded with assetManager
     //  -Move spriteBatch to KingsFeast so it can be used elsewhere ----> Should be ok, now only one instance of batch exists,
     //                                                                      get it with kingsFeast.getSpriteBatch();
     //  MENUS AND MENU FUNCTIONS
     //  -Graphics for: UI, Game, buttons, HUD, backgrounds
-    //  -Menu buttons have incorrect size ---> Should be ok
     //  -Main menu needs a how to play button which leads to the written tutorial ----> Button ok, Tutorial not
     //  -Written tutorial needs to be made
     //  -Verify that continue button works as intended
     //  -Buttons might be a bit too small for mobile in general? ----> Now resized except the GameScreen buttons
     //  -Choose a better FreeType Font to resemble the theme more
     //  LOCALIZATION
-    //  -Implement localisation and make the language button save to prefs
+    //  -Localize all text once written
 
     // remember to give an instance of 'this' to all new screens, if anything
     // from this class or parent class is to be used in that screen.

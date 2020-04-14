@@ -258,7 +258,7 @@ public class FeedbackScreen extends ScreenAdapter {
         FreeTypeFontGenerator positiveFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter positiveFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         positiveFontParameter.size = FONT_SIZE;
-        positiveFontParameter.color = Color.GREEN;
+        positiveFontParameter.color = Color.OLIVE;
         positiveFont = positiveFontGenerator.generateFont(positiveFontParameter);
     }
 
@@ -318,7 +318,7 @@ public class FeedbackScreen extends ScreenAdapter {
         compostLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Check if button is enabled or disabled based on score
-        if(totalScore >= 1000) {
+        if(totalScore >= 2000) {
             compostLifeline.setChecked(false);
             isCompostUsed = false;
         } else {
@@ -358,7 +358,7 @@ public class FeedbackScreen extends ScreenAdapter {
         poorLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Check if button is enabled or disabled based on score
-        if(totalScore >= 1000) {
+        if(totalScore >= 2500) {
             poorLifeline.setChecked(false);
             isPoorUsed = false;
         } else {

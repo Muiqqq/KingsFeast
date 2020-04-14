@@ -109,7 +109,7 @@ public class PollutionScreen extends ScreenAdapter {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        ok.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, BUTTON_HEIGHT - 50);
+        ok.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, BUTTON_HEIGHT);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
