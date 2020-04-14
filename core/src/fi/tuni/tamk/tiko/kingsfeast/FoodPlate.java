@@ -1,5 +1,6 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -31,6 +32,7 @@ class FoodPlate {
     private final float plateDensity = 2.0f;
     private final float restitution = 0.6f;
     private final float friction = 1.0f;
+    private float timePassedInSeconds = 0f;
 
     private float recentSpeed;
 
@@ -45,6 +47,7 @@ class FoodPlate {
     private Body body;
     boolean isPlateFlying = false;
     boolean removeBody = false;
+    boolean recentlyScored = false;
 
     FoodPlate(LevelData levelData, KingsFeast kingsFeast) {
         // anchor pos will come from the slings position once that's implemented.
@@ -157,7 +160,23 @@ class FoodPlate {
             world.destroyBody(body);
             removeBody = false;
             randomizeTexture();
-            gameScreen.cameraReset();
+            if(!recentlyScored) {
+                gameScreen.cameraReset();
+            }
+        }
+    }
+
+    void timedCameraReset(GameScreen gameScreen) {
+        if (recentlyScored) {
+            float timePeriod = 1.499f;
+            timePassedInSeconds += Gdx.graphics.getDeltaTime();
+            if(timePassedInSeconds > timePeriod) {
+                timePassedInSeconds -= timePeriod;
+                randomizeTexture();
+                recentlyScored = false;
+                gameScreen.incrementVISITORS_SERVED();
+                gameScreen.cameraReset();
+            }
         }
     }
 

@@ -34,7 +34,7 @@ class HUD {
     I18NBundle myBundle;
 
     // Widgets for the HUD
-    private Label throwAmountLabel, progressLabel;
+    private Label throwAmountLabel, progressLabel, recentlyScoredLabel;
     private TextButton skipButton;
     private TextButton pauseButton;
 
@@ -76,6 +76,7 @@ class HUD {
         Label.LabelStyle labelStyle = new Label.LabelStyle(bitmapFont, Color.WHITE);
         throwAmountLabel = new Label(throwAmountAsString, labelStyle);
         progressLabel = new Label (progressAsString, labelStyle);
+        recentlyScoredLabel = new Label ("", labelStyle);
 
         skipButton = new TextButton(myBundle.get("skip"),  textButtonStyle);
         skipButton.addListener(new ActorGestureListener() {
@@ -91,7 +92,7 @@ class HUD {
         });
 
         // Pause Button
-        pauseButton = new TextButton("Pause", textButtonStyle);
+        pauseButton = new TextButton(myBundle.get("pause"), textButtonStyle);
         pauseButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
@@ -111,6 +112,8 @@ class HUD {
         table.row();
         table.add(skipButton).expandX().left().padLeft(50).padTop(10);
         table.add(pauseButton).expandX().right().padRight(50).padTop(10);
+        table.row();
+        table.add(recentlyScoredLabel).colspan(3).center();
 
         stage.addActor(table);
     }
@@ -124,11 +127,19 @@ class HUD {
         visitorsServed = this.gameScreen.getVISITORS_SERVED();
         throwAmount = this.gameScreen.getTHROW_AMOUNT();
 
+        skipButton.setText(myBundle.get("skip"));
+        pauseButton.setText(myBundle.get("pause"));
+
         throwAmountAsString = myBundle.get("throwes")+ ": " + throwAmount;
         progressAsString = myBundle.get("progress")+ ": " + visitorsServed + " / " + visitorCount;
 
         progressLabel.setText(progressAsString);
         throwAmountLabel.setText(throwAmountAsString);
+        if(gameScreen.getFoodPlate().recentlyScored) {
+            recentlyScoredLabel.setText(myBundle.get("recentlyScoredLabel"));
+        } else {
+            recentlyScoredLabel.setText("");
+        }
     }
 
     void updateI18NBundle() {

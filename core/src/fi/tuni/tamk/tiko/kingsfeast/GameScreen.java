@@ -145,6 +145,7 @@ public class GameScreen extends ScreenAdapter {
         enableThrowing();
         foodPlate.destroyBody(world, this);
         foodPlate.checkIfBodyStopped();
+        foodPlate.timedCameraReset(this);
         snapCameraToBody();
         handleCameraLimits();
         swapScreen();
@@ -350,8 +351,7 @@ public class GameScreen extends ScreenAdapter {
 
             foodPlate.removeBody = true;
             foodPlate.isPlateFlying = false;
-
-            VISITORS_SERVED++;
+            foodPlate.recentlyScored = true;
 
             // Foodplate's texture gets saved to the userdata of that goal spot, so that
             // texture can be drawn there. Serves as a visual cue to the player to indicate
@@ -372,12 +372,7 @@ public class GameScreen extends ScreenAdapter {
         if (userDataA.equals("foodPlate") && userDataB.equals("walls") ||
                 userDataB.equals("foodPlate") && userDataA.equals("walls")) {
 
-            if (userDataA.equals("foodPlate")) {
-                foodPlate.getBody().setLinearDamping(0.43f);
-            }
-            if (userDataB.equals("foodPlate")) {
-                foodPlate.getBody().setLinearDamping(0.43f);
-            }
+            foodPlate.getBody().setLinearDamping(0.43f);
         }
     }
 
@@ -396,6 +391,10 @@ public class GameScreen extends ScreenAdapter {
 
     float getGAME_HEIGHT() {
         return GAME_HEIGHT;
+    }
+
+    void incrementVISITORS_SERVED() {
+        this.VISITORS_SERVED++;
     }
 
     int getVISITORS_SERVED() {
