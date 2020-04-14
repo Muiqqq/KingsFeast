@@ -288,6 +288,7 @@ public class FeedbackScreen extends ScreenAdapter {
             isPigsUsed = false;
         } else {
             pigsLifeline.setChecked(true);
+            pigsLifeline.setTouchable(Touchable.disabled);
             isPigsUsed = true;
         }
 
@@ -331,6 +332,7 @@ public class FeedbackScreen extends ScreenAdapter {
             isCompostUsed = false;
         } else {
             compostLifeline.setChecked(true);
+            compostLifeline.setTouchable(Touchable.disabled);
             isCompostUsed = true;
         }
 
@@ -373,6 +375,7 @@ public class FeedbackScreen extends ScreenAdapter {
             isPoorUsed = false;
         } else {
             poorLifeline.setChecked(true);
+            poorLifeline.setTouchable(Touchable.disabled);
             isPoorUsed = true;
         }
 
