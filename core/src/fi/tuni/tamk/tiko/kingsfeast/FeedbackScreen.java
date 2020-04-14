@@ -212,8 +212,9 @@ public class FeedbackScreen extends ScreenAdapter {
                 super.tap(event, x, y, count, button);
                 // Save game on level swap
                 kingsFeast.saveGameOnLevelSwap();
+                int tmp = Integer.parseInt(throwAmount);
                 kingsFeast.getPrefs().putInteger("totalThrows",
-                        Integer.parseInt(kingsFeast.getPrefs().getInteger("totalThrows") + throwAmount));
+                        kingsFeast.getPrefs().getInteger("totalThrows") + tmp);
                 kingsFeast.getPrefs().flush();
                 dispose();
                 // Load pollution screen
