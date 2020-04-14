@@ -36,6 +36,10 @@ public class FeedbackScreen extends ScreenAdapter {
     private Viewport viewport;
     private Stage stage;
 
+    private ImageButton pigsLifeline;
+    private ImageButton compostLifeline;
+    private ImageButton poorLifeline;
+
     // Textures
     private Texture backgroundTexture;
     private Texture kingTexture;
@@ -271,7 +275,7 @@ public class FeedbackScreen extends ScreenAdapter {
         pigsDisabledTexture = kingsFeast.getAssetManager().get("pigsdisabledplaceholder.png");
 
 
-        final ImageButton pigsLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(pigsTexture)),
+        pigsLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(pigsTexture)),
                 new TextureRegionDrawable(new TextureRegion(pigsTexture)),
                 new TextureRegionDrawable(new TextureRegion(pigsDisabledTexture)));
         pigsLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 400);
@@ -295,6 +299,9 @@ public class FeedbackScreen extends ScreenAdapter {
                     kingsFeast.setTotalScore(-1000);
                     pigsLifeline.setChecked(true);
 
+                    checkLifelineEligibility("compost");
+                    checkLifelineEligibility("poor");
+
                     // Disable button after used
                     pigsLifeline.setTouchable(Touchable.disabled);
                 }
@@ -311,7 +318,7 @@ public class FeedbackScreen extends ScreenAdapter {
         compostTexture = kingsFeast.getAssetManager().get("compostplaceholder.png");
         compostDisabledTexture = kingsFeast.getAssetManager().get("compostdisabledplaceholder.png");
 
-        final ImageButton compostLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(compostTexture)),
+        compostLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(compostTexture)),
                 new TextureRegionDrawable(new TextureRegion(compostTexture)),
                 new TextureRegionDrawable(new TextureRegion(compostDisabledTexture)));
         compostLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 250);
@@ -334,6 +341,8 @@ public class FeedbackScreen extends ScreenAdapter {
                     kingsFeast.setPollutionLevel(-10);
                     kingsFeast.setTotalScore(-2000);
                     compostLifeline.setChecked(true);
+                    checkLifelineEligibility("pigs");
+                    checkLifelineEligibility("poor");
 
                     // Disable button after used
                     compostLifeline.setTouchable(Touchable.disabled);
@@ -351,7 +360,7 @@ public class FeedbackScreen extends ScreenAdapter {
         poorTexture = kingsFeast.getAssetManager().get("poorplaceholder.png");
         poorDisabledTexture = kingsFeast.getAssetManager().get("poordisabledplaceholder.png");
 
-        final ImageButton poorLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(poorTexture)),
+        poorLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(poorTexture)),
                 new TextureRegionDrawable(new TextureRegion(poorTexture)),
                 new TextureRegionDrawable(new TextureRegion(poorDisabledTexture)));
         poorLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 100);
@@ -374,6 +383,8 @@ public class FeedbackScreen extends ScreenAdapter {
                     kingsFeast.setPollutionLevel(-15);
                     kingsFeast.setTotalScore(-2500);
                     poorLifeline.setChecked(true);
+                    checkLifelineEligibility("compost");
+                    checkLifelineEligibility("pigs");
 
                     // Disable button after used
                     poorLifeline.setTouchable(Touchable.disabled);
@@ -402,6 +413,31 @@ public class FeedbackScreen extends ScreenAdapter {
             negativeFont.draw(batch, "+" + (newPol - oldPol), GAME_WIDTH - x, GAME_HEIGHT - y);
         } else if (newPol < oldPol) {
             positiveFont.draw(batch, "-" + (oldPol - newPol), GAME_WIDTH - x, GAME_HEIGHT - y);
+        }
+    }
+
+    private void checkLifelineEligibility(String lifeLine) {
+        int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
+
+        switch(lifeLine) {
+            case "pigs":
+                if(totalScore < 1000) {
+                    pigsLifeline.setChecked(true);
+                    pigsLifeline.setTouchable(Touchable.disabled);
+                }
+                break;
+            case "compost":
+                if(totalScore < 2000) {
+                    compostLifeline.setChecked(true);
+                    compostLifeline.setTouchable(Touchable.disabled);
+                }
+                break;
+            case "poor":
+                if(totalScore < 2500) {
+                    poorLifeline.setChecked(true);
+                    poorLifeline.setTouchable(Touchable.disabled);
+                }
+                break;
         }
     }
 
