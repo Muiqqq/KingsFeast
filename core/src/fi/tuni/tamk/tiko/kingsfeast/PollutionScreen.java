@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.input.GestureDetector;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -53,6 +55,7 @@ public class PollutionScreen extends ScreenAdapter {
         // Get and set the language to be used in the level
         myBundle = kingsFeast.langManager.getCurrentBundle();
 
+
         // Initialize booleans to false to enable checking game end
         gameWon = false;
         gameLost = false;
@@ -66,10 +69,12 @@ public class PollutionScreen extends ScreenAdapter {
 
         // Add background image and ok button to screen
         stage.addActor(createBackgroundImage());
-        stage.addActor(createOkButton());
 
         // Check if game has ended
         checkGameEnd();
+        if(gameWon || gameLost) {
+            stage.addActor(createOkButton());
+        }
     }
 
     @Override
@@ -94,6 +99,10 @@ public class PollutionScreen extends ScreenAdapter {
             font.draw(batch, myBundle.get("pollutionLevel")+ ": " + kingsFeast.getPollutionLevel() + "/100", GAME_WIDTH / 3 - 20, GAME_HEIGHT - BUTTON_HEIGHT * 2);
         }
         batch.end();
+
+        if(Gdx.input.isTouched() && !gameWon && !gameLost) {
+            kingsFeast.setScreen(new GameScreen(kingsFeast));
+        }
     }
 
     // Returns a background image for the screen
@@ -118,8 +127,6 @@ public class PollutionScreen extends ScreenAdapter {
                 if(gameWon || gameLost) {
                     kingsFeast.clearSaveState();
                     kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
-                } else {
-                    kingsFeast.setScreen(new GameScreen(kingsFeast));
                 }
                 dispose();
             }
