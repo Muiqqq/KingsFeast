@@ -113,7 +113,7 @@ class HUD {
         table.add(skipButton).expandX().left().padLeft(50).padTop(10);
         table.add(pauseButton).expandX().right().padRight(50).padTop(10);
         table.row();
-        table.add(recentlyScoredLabel).colspan(3).center();
+        table.add(recentlyScoredLabel).colspan(3).center().padTop(100);
 
         stage.addActor(table);
     }

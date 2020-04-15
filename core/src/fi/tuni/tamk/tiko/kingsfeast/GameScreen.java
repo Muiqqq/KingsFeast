@@ -173,7 +173,7 @@ public class GameScreen extends ScreenAdapter {
             @Override
             public boolean touchDragged(int screenX, int screenY, int pointer) {
                 handleThrowCalculations(screenX, screenY);
-                handleCameraPanning(tmp, lastTouch, screenX);
+                handleCameraPanning(tmp, lastTouch, screenX, screenY);
                 return true;
             }
 
@@ -275,14 +275,14 @@ public class GameScreen extends ScreenAdapter {
         camera.position.y = 0 + (camera.viewportHeight / 2);
     }
 
-    private void handleCameraPanning(Vector3 tmp, Vector3 lastTouch, int screenX) {
+    private void handleCameraPanning(Vector3 tmp, Vector3 lastTouch, int screenX, int screenY) {
         float posX = Util.convertMetresToPixels(touchPos.x);
         float posY = Util.convertMetresToPixels(touchPos.y);
         if (!foodPlate.isPlateFlying) {
             if (!throwBounds.contains(posX, posY) && !canThrow) {
-                tmp.set(screenX, 0, 0);
+                tmp.set(screenX, screenY, 0);
                 camera.unproject(tmp);
-                tmp.sub(lastTouch).scl(-0.1f, 0, 0);
+                tmp.sub(lastTouch).scl(-0.1f, -0.1f, 0);
                 camera.translate(tmp);
             }
         }

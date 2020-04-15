@@ -31,7 +31,7 @@ class FoodPlate {
     private final float LOWER_ANGLE = MathUtils.PI / 2f;
     private final float plateDensity = 2.0f;
     private final float restitution = 0.6f;
-    private final float friction = 1.0f;
+    private final float friction = 0.6f;
     private float timePassedInSeconds = 0f;
 
     private float recentSpeed;
