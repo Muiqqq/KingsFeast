@@ -54,8 +54,8 @@ class HUD {
         // Get and set the language to be used in the level
         myBundle = kingsFeast.langManager.getCurrentBundle();
 
-        Texture skipButtonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
-        Texture skipButtonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
+        Texture skipButtonDown = kingsFeast.getAssetManager().get("tyhjanappi.png");
+        Texture skipButtonUp = kingsFeast.getAssetManager().get("tyhjanappi.png");
         FONT_SIZE = 28;
         bitmapFont = Util.initFont(FONT_SIZE);
         textButtonStyle = new TextButton.TextButtonStyle(

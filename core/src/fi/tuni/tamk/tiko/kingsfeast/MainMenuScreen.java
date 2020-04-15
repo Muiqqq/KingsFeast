@@ -215,8 +215,8 @@ public class MainMenuScreen extends ScreenAdapter {
 
         // Set font size and load dialog tetures
         BitmapFont font = Util.initFont(36);
-        Texture buttonDown = kingsFeast.getAssetManager().get("skipButton-down.png");
-        Texture buttonUp = kingsFeast.getAssetManager().get("skipButton-up.png");
+        Texture buttonDown = kingsFeast.getAssetManager().get("tyhjanappi.png");
+        Texture buttonUp = kingsFeast.getAssetManager().get("tyhjanappi.png");
 
         // Create textbuttons
         TextButton yesButton = new TextButton(myBundle.get("dialogYes"), new TextButton.TextButtonStyle(

@@ -145,6 +145,7 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("kompostidisabled.png", Texture.class);
         kingsFeast.getAssetManager().load("koyhaenabled.png", Texture.class);
         kingsFeast.getAssetManager().load("koyhadisabled.png", Texture.class);
+        kingsFeast.getAssetManager().load("tyhjanappi.png", Texture.class);
 
 
 
