@@ -197,7 +197,7 @@ public class FeedbackScreen extends ScreenAdapter {
 
     // Return image of a scroll
     private Image createScroll() {
-        scroll = kingsFeast.getAssetManager().get("tekstitausta.png");
+        scroll = kingsFeast.getAssetManager().get("tausta.png");
         Image scrollBg = new Image(scroll);
         scrollBg.setSize(scroll.getWidth() - 180, scroll.getHeight() - 250);
         scrollBg.setPosition(GAME_WIDTH - scroll.getWidth() / 2 + 230, GAME_HEIGHT - scroll.getHeight() / 2 + 150, Align.center);
@@ -271,9 +271,16 @@ public class FeedbackScreen extends ScreenAdapter {
     private ImageButton createPigsLifeline() {
         int totalScore = Integer.parseInt(kingsFeast.getTotalScore());
 
-        // Load two textures for enabled and disabled states
-        pigsTexture = kingsFeast.getAssetManager().get("pigsplaceholder.png");
-        pigsDisabledTexture = kingsFeast.getAssetManager().get("pigsdisabledplaceholder.png");
+        // Checks what language is enabled and loads texture accordingly
+        if(kingsFeast.isEnglishEnabled()) {
+            // Load two textures for enabled and disabled states
+            pigsTexture = kingsFeast.getAssetManager().get("pigsplaceholder.png");
+            pigsDisabledTexture = kingsFeast.getAssetManager().get("pigsdisabledplaceholder.png");
+        } else {
+            // Load two textures for enabled and disabled states
+            pigsTexture = kingsFeast.getAssetManager().get("siatenabled.png");
+            pigsDisabledTexture = kingsFeast.getAssetManager().get("siatdisabled.png");
+        }
 
 
         pigsLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(pigsTexture)),
@@ -316,9 +323,16 @@ public class FeedbackScreen extends ScreenAdapter {
     private ImageButton createCompostLifeLine() {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
 
-        // Load two textures for enabled and disabled states
-        compostTexture = kingsFeast.getAssetManager().get("compostplaceholder.png");
-        compostDisabledTexture = kingsFeast.getAssetManager().get("compostdisabledplaceholder.png");
+        // Checks what language is enabled and loads texture accordingly
+        if(kingsFeast.isEnglishEnabled()) {
+            // Load two textures for enabled and disabled states
+            compostTexture = kingsFeast.getAssetManager().get("compostplaceholder.png");
+            compostDisabledTexture = kingsFeast.getAssetManager().get("compostdisabledplaceholder.png");
+        } else {
+            // Load two textures for enabled and disabled states
+            compostTexture = kingsFeast.getAssetManager().get("kompostienabled.png");
+            compostDisabledTexture = kingsFeast.getAssetManager().get("kompostidisabled.png");
+        }
 
         compostLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(compostTexture)),
                 new TextureRegionDrawable(new TextureRegion(compostTexture)),
@@ -359,9 +373,16 @@ public class FeedbackScreen extends ScreenAdapter {
     private ImageButton createPoorLifeLine() {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
 
-        // Load two textures for enabled and disabled states
-        poorTexture = kingsFeast.getAssetManager().get("poorplaceholder.png");
-        poorDisabledTexture = kingsFeast.getAssetManager().get("poordisabledplaceholder.png");
+        // Checks what language is enabled and loads texture accordingly
+        if(kingsFeast.isEnglishEnabled()) {
+            // Load two textures for enabled and disabled states
+            poorTexture = kingsFeast.getAssetManager().get("poorplaceholder.png");
+            poorDisabledTexture = kingsFeast.getAssetManager().get("poordisabledplaceholder.png");
+        } else {
+            // Load two textures for enabled and disabled states
+            poorTexture = kingsFeast.getAssetManager().get("koyhaenabled.png");
+            poorDisabledTexture = kingsFeast.getAssetManager().get("koyhadisabled.png");
+        }
 
         poorLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(poorTexture)),
                 new TextureRegionDrawable(new TextureRegion(poorTexture)),

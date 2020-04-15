@@ -153,7 +153,7 @@ public class PollutionScreen extends ScreenAdapter {
 
     // Returns background texture for the game end screen
     private Image createGameEndBg() {
-        kingSpeech = kingsFeast.getAssetManager().get("tekstitaustahorizontal.png");
+        kingSpeech = kingsFeast.getAssetManager().get("taustavaaka.png");
         Image gameEndBg = new Image(kingSpeech);
         gameEndBg.setSize(kingSpeech.getWidth(), kingSpeech.getHeight() - 50);
         gameEndBg.setPosition(GAME_WIDTH / 2 - kingSpeech.getWidth() / 2 + 50, GAME_HEIGHT / 2 - kingSpeech.getHeight() / 2 + 50);

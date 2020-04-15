@@ -72,7 +72,7 @@ public class PauseScreen extends ScreenAdapter {
 
     // Return image of a scroll
     private Image createScroll() {
-        scrollBg = kingsFeast.getAssetManager().get("tekstitausta.png");
+        scrollBg = kingsFeast.getAssetManager().get("tausta.png");
         Image scroll = new Image(scrollBg);
         scroll.setSize(scrollBg.getWidth() - 250, scrollBg.getHeight() - 250);
         scroll.setPosition(GAME_WIDTH / 2 - scroll.getWidth() / 2, GAME_HEIGHT / 2 - scroll.getHeight() / 2);

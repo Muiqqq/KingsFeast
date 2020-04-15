@@ -127,8 +127,8 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("poordisabledplaceholder.png", Texture.class);
         kingsFeast.getAssetManager().load("kingplaceholder.png", Texture.class);
         kingsFeast.getAssetManager().load("kingspeech.png", Texture.class);
-        kingsFeast.getAssetManager().load("tekstitausta.png", Texture.class);
-        kingsFeast.getAssetManager().load("tekstitaustahorizontal.png", Texture.class);
+        kingsFeast.getAssetManager().load("tausta.png", Texture.class);
+        kingsFeast.getAssetManager().load("taustavaaka.png", Texture.class);
         kingsFeast.getAssetManager().load("aanetpaalla.png", Texture.class);
         kingsFeast.getAssetManager().load("aanetpois.png", Texture.class);
         kingsFeast.getAssetManager().load("asetukset.png", Texture.class);
@@ -139,6 +139,15 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("musiikkipois.png", Texture.class);
         kingsFeast.getAssetManager().load("uusipeli.png", Texture.class);
         kingsFeast.getAssetManager().load("kuinkapelata.png", Texture.class);
+        kingsFeast.getAssetManager().load("siatenabled.png", Texture.class);
+        kingsFeast.getAssetManager().load("siatdisabled.png", Texture.class);
+        kingsFeast.getAssetManager().load("kompostienabled.png", Texture.class);
+        kingsFeast.getAssetManager().load("kompostidisabled.png", Texture.class);
+        kingsFeast.getAssetManager().load("koyhaenabled.png", Texture.class);
+        kingsFeast.getAssetManager().load("koyhadisabled.png", Texture.class);
+
+
+
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
 
         // don't forget this after loading
