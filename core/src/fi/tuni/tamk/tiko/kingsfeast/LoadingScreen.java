@@ -95,6 +95,9 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("map5.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map6.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map7.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map8.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map9.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map10.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level2.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level3.tmx", TiledMap.class);
@@ -170,6 +173,12 @@ public class LoadingScreen extends ScreenAdapter {
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map6.tmx",
                 TiledMap.class)));
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map7.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map8.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map9.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map10.tmx",
                 TiledMap.class)));
 
         return levels;
