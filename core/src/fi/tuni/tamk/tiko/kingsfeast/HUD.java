@@ -18,7 +18,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * This class contains the Heads-Up Display drawn on top of the gameScreen.
+ * This class contains the Heads-Up Display drawn on top of the GameScreen.
+ *
+ * Made utilizing scene2d stages and tables. Has its own camera so it stays on the screen.
  *
  * TODO: DOCUMENTATION
  */
@@ -31,7 +33,7 @@ class HUD {
     private BitmapFont bitmapFont;
     private TextButton.TextButtonStyle textButtonStyle;
     private int FONT_SIZE;
-    I18NBundle myBundle;
+    private I18NBundle myBundle;
 
     // Widgets for the HUD
     private Label throwAmountLabel, progressLabel, recentlyScoredLabel;
@@ -44,6 +46,7 @@ class HUD {
 
     // Constructor creates all the widgets for now.
     // Note to self: clean this up -> separate things to their own methods.
+    // TODO: DOCUMENT CONSTRUCTOR!!! and clean it up seriously
     HUD(SpriteBatch batch, final KingsFeast kingsFeast, final GameScreen gameScreen) {
         this.kingsFeast = kingsFeast;
         this.gameScreen = gameScreen;
@@ -118,10 +121,18 @@ class HUD {
         stage.addActor(table);
     }
 
+    /**
+     * Gets rid of the stage of this class.
+     * Called in GameScreen's dispose() method.
+     */
     void dispose() {
         stage.dispose();
     }
 
+    /**
+     * Makes all information shown in the HUD update in real time.
+     * This is called in the render method of GameScreen.
+     */
     void update() {
         visitorCount = this.gameScreen.getLevelData().getVisitorCount();
         visitorsServed = this.gameScreen.getVISITORS_SERVED();
@@ -142,10 +153,18 @@ class HUD {
         }
     }
 
+    /**
+     * Simply updates the bundle in case language has been changed.
+     * After returning from the pause menu, GameScreen calls this to make sure correct
+     * language is in use.
+     */
     void updateI18NBundle() {
         this.myBundle = kingsFeast.langManager.getCurrentBundle();
     }
 
+    /**
+     * @return the stage of this class.
+     */
     Stage getStage() {
         return stage;
     }

@@ -16,19 +16,16 @@ import com.badlogic.gdx.utils.Array;
 /**
  * TODO: DOCUMENTATION!
  *
- * Has to be refactored based on other additions to code.
- *
- * Texture etc. could be stored here, as well as everything else a food plate could need.
- * Documentation is work in progress.
  */
 class FoodPlate {
     private final KingsFeast kingsFeast;
     private final LevelData levelData;
 
+    // These are here just so they can be modified easily.
     private final float MAX_STRENGTH = 5f;
     private final float MAX_DISTANCE = 200f;
-    private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
-    private final float LOWER_ANGLE = MathUtils.PI / 2f;
+    //private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
+    //private final float LOWER_ANGLE = MathUtils.PI / 2f;
     private final float plateDensity = 2.0f;
     private final float restitution = 0.6f;
     private final float friction = 0.6f;

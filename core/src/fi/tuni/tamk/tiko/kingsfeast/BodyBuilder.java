@@ -18,11 +18,8 @@ import com.badlogic.gdx.utils.Array;
  * transforming into StaticBodies, support for Dynamic and/or Kinematic bodies needs to be added,
  * if needed.
  *
- * Turns out box2d doesn't support ellipses (without turning them into polygons), and Tiled maps
- * can't create straight up circles, only ellipses. -> Circular objects are not currently supported.
  */
 class BodyBuilder {
-    // unitScale is for pixels -> meters conversion
     private static float unitScale = 0.0f;
 
     /**

@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 /**
  * Supposed to contain universally useful methods. Meant to reduce cluttering
- * of KingsFeast class.
+ * of other classes.
  */
 class Util {
     private static final float unitScale = 1 / 100f;
@@ -22,7 +22,6 @@ class Util {
         return unitScale;
     }
 
-    // Jussi's method for world stepping
     static void worldStep(World world, float deltaTime) {
         float frameTime = deltaTime;
 

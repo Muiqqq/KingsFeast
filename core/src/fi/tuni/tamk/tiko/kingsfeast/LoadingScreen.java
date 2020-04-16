@@ -15,12 +15,11 @@ import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * TODO: DOCUMENTATION!
- *  - Add graphics maybe? Background, progress bar etc.
- *  - Dunno if this will ever be visible for long enough for that to matter.
- *  - Could use this as a splash screen?
+ * This class is used to display a loading screen to the user whilst assets are loaded.
  *
- * This is a loading screen.
+ * A simple screen which renders a background image and an animation. Assets are loaded
+ * with AssetManager asynchronously. Moves on to the next screen after loading is done,
+ * in this case to the main menu screen.
  */
 public class LoadingScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
@@ -39,6 +38,11 @@ public class LoadingScreen extends ScreenAdapter {
     private TextureRegion currentFrame;
     private float stateTime = 0.0f;
 
+    /**
+     * Constructor prepares the animation and background image.
+     *
+     * @param kingsFeast Game object, used to get access to its and its parent's methods.
+     */
     LoadingScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         sb = kingsFeast.getSpriteBatch();
@@ -47,7 +51,7 @@ public class LoadingScreen extends ScreenAdapter {
         loadingSheet = getLocalizedLoadingTexture();
         createAnimation();
         currentFrame = loadingAnimation.getKeyFrame(stateTime, true);
-}
+    }
 
     @Override
     public void resize(int width, int height) {
@@ -79,11 +83,12 @@ public class LoadingScreen extends ScreenAdapter {
         background.dispose();
     }
 
+    /**
+     * Actions that happen once loading is finished.
+     */
     private void update() {
         if (kingsFeast.getAssetManager().update()) {
-            // don't forget this after loading
             kingsFeast.getAssetManager().finishLoading();
-
             kingsFeast.setLevels(buildLevels());
             kingsFeast.setMusic();
             kingsFeast.setSounds();
@@ -92,12 +97,19 @@ public class LoadingScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Draws the background for loading screen and the animation.
+     */
     private void draw() {
         sb.draw(background, 0, 0, GAME_WIDTH, GAME_HEIGHT);
         drawAnimation(sb);
     }
 
-    // All the assets should be loaded here.
+    /**
+     * Loads all the assets. A huge and ugly list of assets to be loaded.
+     *
+     * Note to self: use a texture atlas next time.
+     */
     private void loadAssets() {
         kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
         kingsFeast.getAssetManager().load("map1.tmx", TiledMap.class);
@@ -166,8 +178,21 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
     }
 
+    /**
+     * Creates an array containing all the levels in the game.
+     *
+     * @return an array containing all the levels of the game.
+     */
     private Array<LevelData> buildLevels() {
         Array<LevelData> levels = new Array<>();
+        int mapNumber = 1;
+        for (int i = 0; i < 11; i++) {
+            String mapFileName =  "map" + mapNumber + ".tmx";
+            levels.add(new LevelData(kingsFeast.getAssetManager().get(mapFileName,
+                    TiledMap.class)));
+        }
+
+        /*
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map1.tmx",
                 TiledMap.class)));
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map2.tmx",
@@ -190,10 +215,15 @@ public class LoadingScreen extends ScreenAdapter {
                 TiledMap.class)));
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map11.tmx",
                 TiledMap.class)));
-
+        */
         return levels;
     }
 
+    /**
+     * Checks which language is being used and gets correct texture for loading animation.
+     *
+     * @return localized texture file used in the loading animation
+     */
     private Texture getLocalizedLoadingTexture() {
         if(kingsFeast.isEnglishEnabled()) {
             return new Texture("loading_en.png");
@@ -202,6 +232,9 @@ public class LoadingScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * This creates the animation used in this screen.
+     */
     private void createAnimation() {
         TextureRegion[][] tmp;
         TextureRegion[] frames;
@@ -224,6 +257,11 @@ public class LoadingScreen extends ScreenAdapter {
         loadingAnimation = new Animation<>( 12 / 60f, frames);
     }
 
+    /**
+     * Method used to draw the animation frame by frame.
+     *
+     * @param sb SpriteBatch, required to draw.
+     */
     private void drawAnimation(SpriteBatch sb) {
         stateTime += Gdx.graphics.getDeltaTime();
         sb.draw(currentFrame,

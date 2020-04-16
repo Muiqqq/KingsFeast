@@ -21,12 +21,10 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 
 /**
+ * TODO: DOCUMENTATION!!
  * All main gameplay stuff happens in this screen.
- * This is the previous main class.
  */
 public class GameScreen extends ScreenAdapter {
-    // TODO: Add documentation everywhere
-    //  -Move throwing related methods to FoodPlate class if possible
     private final KingsFeast kingsFeast;
 
     private final boolean DEBUG_PHYSICS = false;
