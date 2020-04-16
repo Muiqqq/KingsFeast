@@ -1,15 +1,20 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
@@ -22,21 +27,30 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class LoadingScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
+    private SpriteBatch sb;
 
-    private static final float GAME_WIDTH = 800;
-    private static final float GAME_HEIGHT = 480;
-    private static final float PROGRESS_BAR_WIDTH = 100;
-    private static final float PROGRESS_BAR_HEIGHT = 25;
+    private static final float GAME_WIDTH = 1920;
+    private static final float GAME_HEIGHT = 1080;
 
-    private ShapeRenderer shapeRenderer;
     private Viewport viewport;
     private OrthographicCamera camera;
 
-    private float progress;
+    private Texture background;
+
+    private Animation<TextureRegion> loadingAnimation;
+    private Texture loadingSheet;
+    private TextureRegion currentFrame;
+    private float stateTime = 0.0f;
 
     LoadingScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
-    }
+        sb = kingsFeast.getSpriteBatch();
+
+        background = new Texture("mainmenubackgroundtitle.jpg");
+        loadingSheet = getLocalizedLoadingTexture();
+        createAnimation();
+        currentFrame = loadingAnimation.getKeyFrame(stateTime, true);
+}
 
     @Override
     public void resize(int width, int height) {
@@ -48,46 +62,49 @@ public class LoadingScreen extends ScreenAdapter {
         camera = new OrthographicCamera();
         camera.position.set(GAME_WIDTH / 2, GAME_HEIGHT / 2, 0);
         camera.update();
-        viewport = new FitViewport(GAME_WIDTH, GAME_HEIGHT, camera);
-        shapeRenderer = new ShapeRenderer();
+        viewport = new StretchViewport(GAME_WIDTH, GAME_HEIGHT, camera);
         loadAssets();
-        kingsFeast.setLevels(buildLevels());
     }
 
     @Override
     public void render(float delta) {
+        sb.setProjectionMatrix(camera.combined);
         update();
         Util.clearScreen();
+        sb.begin();
         draw();
+        sb.end();
     }
 
     @Override
     public void dispose() {
-        shapeRenderer.dispose();
+        loadingSheet.dispose();
+        background.dispose();
     }
 
     private void update() {
         if (kingsFeast.getAssetManager().update()) {
+            // don't forget this after loading
+            kingsFeast.getAssetManager().finishLoading();
+
+            kingsFeast.setLevels(buildLevels());
+            kingsFeast.setMusic();
+            kingsFeast.setSounds();
             kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
         }
-
-        progress = kingsFeast.getAssetManager().getProgress();
     }
 
-    // All of this just draws the progress bar.
     private void draw() {
-        shapeRenderer.setProjectionMatrix(camera.combined);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(
-                (GAME_WIDTH - PROGRESS_BAR_WIDTH) / 2, (GAME_HEIGHT - PROGRESS_BAR_HEIGHT) / 2,
-                progress * PROGRESS_BAR_WIDTH, PROGRESS_BAR_HEIGHT);
-        shapeRenderer.end();
+        sb.draw(background, 0, 0, GAME_WIDTH, GAME_HEIGHT);
+        drawAnimation(sb);
     }
 
     // All the assets should be loaded here.
     private void loadAssets() {
         kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
+        kingsFeast.getAssetManager().load("mainmenubackgroundtitle.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("loading_fi.png", Texture.class);
+        kingsFeast.getAssetManager().load("loading_en.png", Texture.class);
         kingsFeast.getAssetManager().load("map1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map2.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map3.tmx", TiledMap.class);
@@ -151,12 +168,7 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("tyhjanappi.png", Texture.class);
         kingsFeast.getAssetManager().load("howtoplaybg.png", Texture.class);
 
-
-
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
-
-        // don't forget this after loading
-        kingsFeast.getAssetManager().finishLoading();
     }
 
     private Array<LevelData> buildLevels() {
@@ -183,5 +195,46 @@ public class LoadingScreen extends ScreenAdapter {
                 TiledMap.class)));
 
         return levels;
+    }
+
+    private Texture getLocalizedLoadingTexture() {
+        if(kingsFeast.isEnglishEnabled()) {
+            return new Texture("loading_en.png");
+        } else {
+            return new Texture("loading_fi.png");
+        }
+    }
+
+    private void createAnimation() {
+        TextureRegion[][] tmp;
+        TextureRegion[] frames;
+        int FRAME_ROWS = 1;
+        int FRAME_COLS = 5;
+
+        tmp = TextureRegion.split(loadingSheet,
+                loadingSheet.getWidth() / FRAME_COLS,
+                loadingSheet.getHeight() / FRAME_ROWS);
+
+        frames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        int index = 0;
+
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                frames[index++] = tmp[i][j];
+            }
+        }
+
+        loadingAnimation = new Animation<>( 12 / 60f, frames);
+    }
+
+    private void drawAnimation(SpriteBatch sb) {
+        stateTime += Gdx.graphics.getDeltaTime();
+        sb.draw(currentFrame,
+                GAME_WIDTH / 2 - currentFrame.getRegionWidth(),
+                GAME_HEIGHT / 6,
+                currentFrame.getRegionWidth() * 2f,
+                currentFrame.getRegionHeight() * 2f);
+
+        currentFrame = loadingAnimation.getKeyFrame(stateTime, true);
     }
 }
