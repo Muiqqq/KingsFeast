@@ -12,6 +12,8 @@ import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import sun.applet.Main;
+
 /**
  * TODO: DOCUMENTATION!
  *  - Add graphics maybe? Background, progress bar etc.
@@ -149,6 +151,7 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("koyhaenabled.png", Texture.class);
         kingsFeast.getAssetManager().load("koyhadisabled.png", Texture.class);
         kingsFeast.getAssetManager().load("tyhjanappi.png", Texture.class);
+        kingsFeast.getAssetManager().load("howtoplaybg.png", Texture.class);
 
 
 
