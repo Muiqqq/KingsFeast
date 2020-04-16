@@ -194,7 +194,7 @@ public class KingsFeast extends Game {
         if (scoring == 1000) {
             setPollutionLevel(-15);
         } else if (scoring == 750) {
-            setPollutionLevel(-8);
+            setPollutionLevel(-30); // oli 8
         } else if (scoring == 500){
             setPollutionLevel(-2);
         } else if (scoring == 200) {
