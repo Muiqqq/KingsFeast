@@ -3,17 +3,14 @@ package fi.tuni.tamk.tiko.kingsfeast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Logger;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -90,6 +87,7 @@ public class LoadingScreen extends ScreenAdapter {
             kingsFeast.setLevels(buildLevels());
             kingsFeast.setMusic();
             kingsFeast.setSounds();
+            dispose();
             kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
         }
     }
@@ -102,9 +100,6 @@ public class LoadingScreen extends ScreenAdapter {
     // All the assets should be loaded here.
     private void loadAssets() {
         kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
-        kingsFeast.getAssetManager().load("mainmenubackgroundtitle.jpg", Texture.class);
-        kingsFeast.getAssetManager().load("loading_fi.png", Texture.class);
-        kingsFeast.getAssetManager().load("loading_en.png", Texture.class);
         kingsFeast.getAssetManager().load("map1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map2.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map3.tmx", TiledMap.class);
@@ -115,7 +110,7 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("map8.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map9.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map10.tmx", TiledMap.class);
-        kingsFeast.getAssetManager().load("level1.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map11.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level2.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level3.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level4.tmx", TiledMap.class);
@@ -192,6 +187,8 @@ public class LoadingScreen extends ScreenAdapter {
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map9.tmx",
                 TiledMap.class)));
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map10.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map11.tmx",
                 TiledMap.class)));
 
         return levels;
