@@ -65,10 +65,8 @@ public class KingsFeast extends Game {
         initVariables();
         initLanguages();
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        currentLevel = kfprefs.getInteger("currentLevel");
         setScreen(new LoadingScreen(this));
-        setMusic();
-        setSounds();
+        currentLevel = kfprefs.getInteger("currentLevel");
     }
 
     @Override
@@ -121,7 +119,7 @@ public class KingsFeast extends Game {
     }
 
     // Set music to play
-    private void setMusic() {
+    void setMusic() {
         music = assetManager.get("1.mp3");
         music.setLooping(true);
         if(isMusicEnabled()) {
@@ -130,7 +128,7 @@ public class KingsFeast extends Game {
     }
 
     // Set sound effects to play (This might be redundant)
-    private void setSounds() {
+    void setSounds() {
         if(isSoundEffectsEnabled()) {
             // Play sounds
         }
