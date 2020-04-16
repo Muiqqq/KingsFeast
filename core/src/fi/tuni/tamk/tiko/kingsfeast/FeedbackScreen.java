@@ -305,7 +305,7 @@ public class FeedbackScreen extends ScreenAdapter {
             pigsLifeline.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    kingsFeast.setPollutionLevel(-20); // oli 7?
+                    kingsFeast.setPollutionLevel(-7);
                     kingsFeast.setTotalScore(-1000);
                     pigsLifeline.setChecked(true);
 

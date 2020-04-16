@@ -176,31 +176,31 @@ public class KingsFeast extends Game {
         } else if(waste > 6) {
             scores = -100;
         }
-        updateStats(throwes, scores);
+        updateStats(throwes, scores, waste);
     }
 
     // Save new data
-    private void updateStats(int throwes, int scores) {
+    private void updateStats(int throwes, int scores, int waste) {
         setLevelThrows(throwes);
         setTotalThrows(throwes);
         setTotalScore(scores);
-        calculatePollution(scores);
+        calculatePollution(scores, waste);
         setLevelScore(scores);
     }
 
     // Calculate how much pollution changed after last level
-    private void calculatePollution(int scoring) {
+    private void calculatePollution(int scoring, int waste) {
         oldPollution = Integer.parseInt(getPollutionLevel());
         if (scoring == 1000) {
             setPollutionLevel(-15);
         } else if (scoring == 750) {
-            setPollutionLevel(-30); // oli 8
+            setPollutionLevel(-8);
         } else if (scoring == 500){
             setPollutionLevel(-2);
         } else if (scoring == 200) {
-            setPollutionLevel(5);
+            setPollutionLevel(5 + waste);
         } else if (scoring == -100) {
-            setPollutionLevel(10);
+            setPollutionLevel(10 + waste);
         }
     }
 
