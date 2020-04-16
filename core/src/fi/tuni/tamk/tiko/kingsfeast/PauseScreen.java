@@ -2,15 +2,22 @@ package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class PauseScreen extends ScreenAdapter {
@@ -24,16 +31,20 @@ public class PauseScreen extends ScreenAdapter {
 
     // Textures
     private Texture continueBtnTexture;
-    private Texture mainMenuBtnTexture;
+    private Texture newGameTexture;
     private Texture settingsButtonTexture;
     private Texture exitButtonTexture;
     private Texture backgroundTexture;
     private Texture scrollBg;
+    private Texture howToPlayTexture;
+
+    I18NBundle myBundle;
 
 
     public PauseScreen(KingsFeast kingsFeast, GameScreen gameScreen) {
         this.kingsFeast = kingsFeast;
         this.gameScreen = gameScreen;
+        myBundle = kingsFeast.langManager.getCurrentBundle();
     }
 
     @Override
@@ -45,9 +56,9 @@ public class PauseScreen extends ScreenAdapter {
         stage.addActor(createBackgroundImage());
         stage.addActor(createScroll());
         stage.addActor(createContinueButton());
-       // stage.addActor(createMainMenuButton());
+        stage.addActor(createNewGameButton());
         stage.addActor(createSettingsButton());
-        //stage.addActor(createExitButton());
+        stage.addActor(createHowToPlayButton());
 
     }
 
@@ -89,7 +100,7 @@ public class PauseScreen extends ScreenAdapter {
         }
         ImageButton continueButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(continueBtnTexture)));
         continueButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        continueButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3 - 50);
+        continueButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3);
         continueButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -101,21 +112,97 @@ public class PauseScreen extends ScreenAdapter {
         return continueButton;
     }
 
-    // Returns main menu imagebutton
-    private ImageButton createMainMenuButton() {
-        mainMenuBtnTexture = kingsFeast.getAssetManager().get("MainMenuButton.png");
-        ImageButton mainMenuButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(mainMenuBtnTexture)));
-        mainMenuButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        mainMenuButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5);
-        mainMenuButton.addListener(new ActorGestureListener() {
+    // Return new game imagebutton
+    private ImageButton createNewGameButton() {
+        // Checks what language is enabled and loads texture accordingly
+        if(kingsFeast.isEnglishEnabled()) {
+            newGameTexture = kingsFeast.getAssetManager().get("NewGameButton.png");
+        } else {
+            newGameTexture = kingsFeast.getAssetManager().get("uusipeli.png");
+        }
+
+        ImageButton newGame =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(newGameTexture)));
+        newGame.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        newGame.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 4);
+        newGame.addListener(new ActorGestureListener() {
             @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
+            public void tap(InputEvent e, float x, float y, int count, int button) {
+                super.tap(e, x, y, count, button);
+                // Create confirmation dialog to ensure player wants to start a new game
+                createConfirmationDialog();
+            }
+        });
+
+        return newGame;
+    }
+
+    // Returns how to play imagebutton
+    private ImageButton createHowToPlayButton() {
+        // Checks what language is enabled and loads texture accordingly
+        if(kingsFeast.isEnglishEnabled()) {
+            howToPlayTexture = kingsFeast.getAssetManager().get("HowToPlayButton.png");
+        } else {
+            howToPlayTexture = kingsFeast.getAssetManager().get("kuinkapelata.png");
+        }
+
+        ImageButton howToPlay =
+                new ImageButton(new TextureRegionDrawable(new TextureRegion(howToPlayTexture)));
+        howToPlay.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
+        howToPlay.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5);
+        howToPlay.addListener(new ActorGestureListener() {
+            @Override
+            public void tap(InputEvent e, float x, float y, int count, int button) {
+                super.tap(e, x, y, count, button);
+                // Load new screen
+                kingsFeast.setScreen(new HowToPlayScreen(kingsFeast, getThisScreen()));
                 dispose();
             }
         });
-        return mainMenuButton;
+
+        return howToPlay;
+    }
+
+    // Creates confirmation dialog to ensure if player wants to start a new game
+    private void createConfirmationDialog() {
+        Dialog dialog = new Dialog("",
+                new Window.WindowStyle(new BitmapFont(), Color.WHITE, null)) {
+
+            // If player taps 'yes' new game starts and saved data is resetted
+            public void result(Object obj) {
+                if ((boolean) obj) {
+                    kingsFeast.clearSaveState();
+                    dispose();
+                    kingsFeast.setScreen(new GameScreen(kingsFeast));
+                }
+            }
+        };
+
+        // Set font size and load dialog tetures
+        BitmapFont font = Util.initFont(36);
+        Texture buttonDown = kingsFeast.getAssetManager().get("tyhjanappi.png");
+        Texture buttonUp = kingsFeast.getAssetManager().get("tyhjanappi.png");
+
+        // Create textbuttons
+        TextButton yesButton = new TextButton(myBundle.get("dialogYes"), new TextButton.TextButtonStyle(
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                new TextureRegionDrawable(new TextureRegion(buttonDown)),
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                font));
+
+        TextButton noButton = new TextButton(myBundle.get("dialogNo"), new TextButton.TextButtonStyle(
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                new TextureRegionDrawable(new TextureRegion(buttonDown)),
+                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+                font));
+
+        // Create dialog text and set what values dialog buttons will return
+        dialog.text(new Label(myBundle.get("dialogConfirm"),
+                new Label.LabelStyle(font, Color.WHITE)));
+        dialog.button(yesButton, true);
+        dialog.button(noButton, false);
+        // Show dialog
+        dialog.show(stage);
     }
 
     // Returns settings imagebutton
@@ -128,7 +215,7 @@ public class PauseScreen extends ScreenAdapter {
         }
         ImageButton settingsButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(settingsButtonTexture)));
         settingsButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        settingsButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5);
+        settingsButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 6);
         settingsButton.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
