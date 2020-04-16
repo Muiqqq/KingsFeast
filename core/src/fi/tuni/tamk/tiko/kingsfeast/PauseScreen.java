@@ -44,13 +44,15 @@ public class PauseScreen extends ScreenAdapter {
     public PauseScreen(KingsFeast kingsFeast, GameScreen gameScreen) {
         this.kingsFeast = kingsFeast;
         this.gameScreen = gameScreen;
-        myBundle = kingsFeast.langManager.getCurrentBundle();
+        //myBundle = kingsFeast.langManager.getCurrentBundle();
     }
 
     @Override
     public void show() {
         stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
+
+        myBundle = kingsFeast.langManager.getCurrentBundle();
 
         // Add all buttons to the stage
         stage.addActor(createBackgroundImage());
