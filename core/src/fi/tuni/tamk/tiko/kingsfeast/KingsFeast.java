@@ -52,6 +52,8 @@ public class KingsFeast extends Game {
     private String totalScore;
     private String levelScore;
     private int oldPollution;
+    private int cleanLevelCounter;
+    private String levelFoodWaste;
 
     // Internationalization
     LanguageManager langManager;
@@ -69,6 +71,8 @@ public class KingsFeast extends Game {
         setScreen(new LoadingScreen(this));
         setMusic();
         setSounds();
+        cleanLevelCounter = 0;
+        levelFoodWaste = "0";
     }
 
     @Override
@@ -163,6 +167,7 @@ public class KingsFeast extends Game {
     // Calculate score and invoke updateStats method to save new info
     void calculateScore(int throwes, int served) {
         int waste = throwes - served;
+        setLevelFoodWaste(waste);
         int scores = 0;
 
         if(waste == 0) {
@@ -176,22 +181,22 @@ public class KingsFeast extends Game {
         } else if(waste > 6) {
             scores = -100;
         }
-        updateStats(throwes, scores);
+        updateStats(throwes, scores, waste);
     }
 
     // Save new data
-    private void updateStats(int throwes, int scores) {
+    private void updateStats(int throwes, int scores, int waste) {
         setLevelThrows(throwes);
         setTotalThrows(throwes);
         setTotalScore(scores);
-        calculatePollution(scores);
+        calculatePollution(waste);
         setLevelScore(scores);
     }
 
     // Calculate how much pollution changed after last level
     private void calculatePollution(int scoring) {
         oldPollution = Integer.parseInt(getPollutionLevel());
-        if (scoring == 1000) {
+        /*if (scoring == 1000) {
             setPollutionLevel(-15);
         } else if (scoring == 750) {
             setPollutionLevel(-8);
@@ -201,7 +206,16 @@ public class KingsFeast extends Game {
             setPollutionLevel(5);
         } else if (scoring == -100) {
             setPollutionLevel(10);
+        }*/
+
+        if(scoring == 0) {
+            cleanLevelCounter--;
+            setPollutionLevel(cleanLevelCounter);
+        } else {
+            cleanLevelCounter = 0;
+            setPollutionLevel(scoring);
         }
+
     }
 
     // SETTERS
@@ -216,6 +230,16 @@ public class KingsFeast extends Game {
     }
     void setLevelScore(int score) {
         this.levelScore = Integer.toString(score);
+    }
+
+    void setLevelFoodWaste(int waste) {
+        int foodWaste = Integer.parseInt(getLevelFoodWaste());
+        foodWaste += waste;
+        this.levelFoodWaste = Integer.toString(foodWaste);
+    }
+
+    void resetLevelFoodWaste() {
+        this.levelFoodWaste = Integer.toString(0);
     }
 
     void setTotalScore(int score) {
@@ -244,9 +268,8 @@ public class KingsFeast extends Game {
         return this.oldPollution;
     }
     String getTotalScore() { return this.totalScore; }
-    String getTotalThrows() {
-        return this.totalThrows;
-    }
+    String getTotalThrows() { return this.totalThrows; }
+    String getLevelFoodWaste() { return this.levelFoodWaste; }
     String getLevelScore() { return this.levelScore; }
     String getPollutionLevel() { return this.pollutionLevel; }
     Preferences getPrefs() {

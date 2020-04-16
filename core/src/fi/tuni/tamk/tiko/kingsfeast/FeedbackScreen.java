@@ -80,6 +80,7 @@ public class FeedbackScreen extends ScreenAdapter {
     private int totalScoreCounter;
     private int pollutionCounter;
     private boolean toTotalScore;
+    private int levelFoodWaste;
 
     // Constructor receives game object to access it. Also 2 ints from gamescreen for accessing
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
@@ -118,6 +119,7 @@ public class FeedbackScreen extends ScreenAdapter {
                 new OrthographicCamera());
 
         stage = new Stage(viewport, batch);
+        levelFoodWaste = Integer.parseInt(kingsFeast.getLevelFoodWaste());
     }
 
     @Override
@@ -153,7 +155,7 @@ public class FeedbackScreen extends ScreenAdapter {
 
         // Draw all text to screen
         font.draw(batch, throwsInLevel + ": " + throwAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 200);
-        font.draw(batch, foodWaste + ": " + foodWasteAmount, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
+        font.draw(batch, foodWaste + ": " + levelFoodWaste, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 300);
         font.draw(batch, levelScore + ": " + kingsFeast.getLevelScore(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 400);
         font.draw(batch, pollutionLevel + ": " + kingsFeast.getPollutionLevel(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 500);
             drawPollutionEffect();
@@ -167,6 +169,7 @@ public class FeedbackScreen extends ScreenAdapter {
         }
         speechFont.draw(batch, kingDialogue, 50, GAME_HEIGHT - 60);
         batch.end();
+        levelFoodWaste = Integer.parseInt(kingsFeast.getLevelFoodWaste());
     }
 
     // Returns background image
@@ -220,6 +223,7 @@ public class FeedbackScreen extends ScreenAdapter {
                 kingsFeast.getPrefs().putInteger("totalThrows",
                         kingsFeast.getPrefs().getInteger("totalThrows") + tmp);
                 kingsFeast.getPrefs().flush();
+                kingsFeast.resetLevelFoodWaste();
                 dispose();
                 // Load pollution screen
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
@@ -290,7 +294,7 @@ public class FeedbackScreen extends ScreenAdapter {
         pigsLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Check if button is enabled or disabled based on score
-        if(totalScore >= 1000) {
+        if(totalScore >= 1000 && levelFoodWaste > 0) {
             pigsLifeline.setChecked(false);
             isPigsUsed = false;
         } else {
@@ -304,7 +308,14 @@ public class FeedbackScreen extends ScreenAdapter {
             pigsLifeline.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    kingsFeast.setPollutionLevel(-5);
+                    //kingsFeast.setPollutionLevel(-5);
+                    if(levelFoodWaste >= 2) {
+                        kingsFeast.setLevelFoodWaste(-2);
+                        kingsFeast.setPollutionLevel(-2);
+                    } else if(levelFoodWaste > 0 && levelFoodWaste < 2) {
+                        kingsFeast.setLevelFoodWaste(-levelFoodWaste);
+                        kingsFeast.setPollutionLevel(-levelFoodWaste);
+                    }
                     kingsFeast.setTotalScore(-1000);
                     pigsLifeline.setChecked(true);
 
@@ -341,7 +352,7 @@ public class FeedbackScreen extends ScreenAdapter {
         compostLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Check if button is enabled or disabled based on score
-        if(totalScore >= 2000) {
+        if(totalScore >= 2000 && levelFoodWaste > 0) {
             compostLifeline.setChecked(false);
             isCompostUsed = false;
         } else {
@@ -355,7 +366,14 @@ public class FeedbackScreen extends ScreenAdapter {
             compostLifeline.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    kingsFeast.setPollutionLevel(-10);
+                    //kingsFeast.setPollutionLevel(-10);
+                    if(levelFoodWaste >= 5) {
+                        kingsFeast.setLevelFoodWaste(-5);
+                        kingsFeast.setPollutionLevel(-5);
+                    } else if(levelFoodWaste > 0 && levelFoodWaste < 5) {
+                        kingsFeast.setLevelFoodWaste(-levelFoodWaste);
+                        kingsFeast.setPollutionLevel(-levelFoodWaste);
+                    }
                     kingsFeast.setTotalScore(-2000);
                     compostLifeline.setChecked(true);
                     checkLifelineEligibility("pigs");
@@ -391,7 +409,7 @@ public class FeedbackScreen extends ScreenAdapter {
         poorLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Check if button is enabled or disabled based on score
-        if(totalScore >= 2500) {
+        if(totalScore >= 2500 && levelFoodWaste > 0) {
             poorLifeline.setChecked(false);
             isPoorUsed = false;
         } else {
@@ -405,7 +423,14 @@ public class FeedbackScreen extends ScreenAdapter {
             poorLifeline.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    kingsFeast.setPollutionLevel(-15);
+                    //kingsFeast.setPollutionLevel(-15);
+                    if(levelFoodWaste >= 10) {
+                        kingsFeast.setLevelFoodWaste(-10);
+                        kingsFeast.setPollutionLevel(-10);
+                    } else if(levelFoodWaste > 0 && levelFoodWaste < 10) {
+                        kingsFeast.setLevelFoodWaste(-levelFoodWaste);
+                        kingsFeast.setPollutionLevel(-levelFoodWaste);
+                    }
                     kingsFeast.setTotalScore(-2500);
                     poorLifeline.setChecked(true);
                     checkLifelineEligibility("compost");
