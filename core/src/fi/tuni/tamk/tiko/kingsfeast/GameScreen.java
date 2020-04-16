@@ -282,7 +282,7 @@ public class GameScreen extends ScreenAdapter {
             if (!throwBounds.contains(posX, posY) && !canThrow) {
                 tmp.set(screenX, screenY, 0);
                 camera.unproject(tmp);
-                tmp.sub(lastTouch).scl(-0.1f, -0.1f, 0);
+                tmp.sub(lastTouch).scl(-1f, -1f, 0);
                 camera.translate(tmp);
             }
         }
