@@ -123,7 +123,7 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("map9.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map10.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map11.tmx", TiledMap.class);
-        kingsFeast.getAssetManager().load("level2.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("map12.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level3.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level4.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("redfood.png", Texture.class);
@@ -186,8 +186,9 @@ public class LoadingScreen extends ScreenAdapter {
     private Array<LevelData> buildLevels() {
         Array<LevelData> levels = new Array<>();
         int mapNumber = 1;
-        for (int i = 0; i < 11; i++) {
+        for (int i = 0; i < 12; i++) {
             String mapFileName =  "map" + mapNumber + ".tmx";
+            mapNumber++;
             levels.add(new LevelData(kingsFeast.getAssetManager().get(mapFileName,
                     TiledMap.class)));
         }
@@ -214,6 +215,8 @@ public class LoadingScreen extends ScreenAdapter {
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map10.tmx",
                 TiledMap.class)));
         levels.add(new LevelData(kingsFeast.getAssetManager().get("map11.tmx",
+                TiledMap.class)));
+        levels.add(new LevelData(kingsFeast.getAssetManager().get("map12.tmx",
                 TiledMap.class)));
         */
         return levels;
