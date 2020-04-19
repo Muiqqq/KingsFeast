@@ -59,7 +59,7 @@ public class FeedbackScreen extends ScreenAdapter {
     private BitmapFont negativeFont;
     private BitmapFont positiveFont;
     private final int FONT_SIZE = 38;
-    private final int SPEECH_FONT_SIZE = 48;
+    private final int SPEECH_FONT_SIZE = 32;
 
     // Strings
     private String throwAmount;
@@ -71,6 +71,9 @@ public class FeedbackScreen extends ScreenAdapter {
     private String totalThrows;
     private String totalScore;
     private String kingDialogue;
+    private String story;
+
+    I18NBundle myBundle;
 
     // Game Data
     private boolean isPigsUsed;
@@ -81,6 +84,15 @@ public class FeedbackScreen extends ScreenAdapter {
     private int pollutionCounter;
     private boolean toTotalScore;
 
+    // Story Points
+    private boolean storyPoint1Shown;
+    private boolean storyPoint2Shown;
+    private boolean storyPoint3Shown;
+    private boolean storyPoint4Shown;
+    private boolean storyPoint5Shown;
+    private boolean storyPoint6Shown;
+    private boolean storyPoint7Shown;
+
     // Constructor receives game object to access it. Also 2 ints from gamescreen for accessing
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
         this.kingsFeast = kingsFeast;
@@ -90,7 +102,7 @@ public class FeedbackScreen extends ScreenAdapter {
         initFonts();
 
         // Get and set the language to be used in the level
-        I18NBundle myBundle = kingsFeast.langManager.getCurrentBundle();
+        myBundle = kingsFeast.langManager.getCurrentBundle();
         foodWaste = myBundle.get("foodWaste");
         throwsInLevel = myBundle.get("throwsInLevel");
         levelScore = myBundle.get("levelScore");
@@ -107,11 +119,20 @@ public class FeedbackScreen extends ScreenAdapter {
         isCompostUsed = false;
         isPoorUsed = false;
 
+        storyPoint1Shown = false;
+        storyPoint2Shown = false;
+        storyPoint3Shown = false;
+        storyPoint4Shown = false;
+        storyPoint5Shown = false;
+        storyPoint6Shown = false;
+        storyPoint7Shown = false;
+
         this.throwAmount = Integer.toString(throwAmount);
 
         foodWasteAmount = Integer.toString(throwAmount - visitorsServed);
         kingsFeast.calculateScore(throwAmount, visitorsServed);
         pollutionCounter = Integer.parseInt(kingsFeast.getPollutionLevel());
+        checkStoryPoints();
 
         viewport = new FitViewport(GAME_WIDTH,
                 GAME_HEIGHT,
@@ -165,7 +186,8 @@ public class FeedbackScreen extends ScreenAdapter {
         } else if(this.totalScoreCounter > Integer.parseInt(this.kingsFeast.getTotalScore())) {
             this.totalScoreCounter -= 10;
         }
-        speechFont.draw(batch, kingDialogue, 50, GAME_HEIGHT - 60);
+        //speechFont.draw(batch, kingDialogue, 50, GAME_HEIGHT - 60);
+        showStoryPoint();
         batch.end();
         checkIfGameEnd();
     }
@@ -472,6 +494,39 @@ public class FeedbackScreen extends ScreenAdapter {
             kingsFeast.setScreen(new PollutionScreen(kingsFeast));
             dispose();
         }
+    }
+
+    private void checkStoryPoints() {
+        int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
+
+        if(pollution <= 80 && pollution > 70 && !storyPoint1Shown) {
+            story = myBundle.get("story1");
+            storyPoint1Shown = true;
+        } else if(pollution <= 70 && pollution > 60 && !storyPoint2Shown) {
+            story = myBundle.get("story2");
+            storyPoint2Shown = true;
+        } else if(pollution <= 60 && pollution > 50 && !storyPoint3Shown) {
+            story = myBundle.get("story3");
+            storyPoint3Shown = true;
+        } else if(pollution <= 50 && pollution > 40 && !storyPoint4Shown) {
+            story = myBundle.get("story4");
+            storyPoint4Shown = true;
+        } else if(pollution <= 40 && pollution > 30 && !storyPoint5Shown) {
+            story = myBundle.get("story5");
+            storyPoint5Shown = true;
+        } else if(pollution <= 30 && pollution > 20 && !storyPoint6Shown) {
+            story = myBundle.get("story6");
+            storyPoint6Shown = true;
+        } else if(pollution <= 20 && pollution > 0 && !storyPoint7Shown) {
+            story = myBundle.get("story7");
+            storyPoint7Shown = true;
+        } else {
+            story = "";
+        }
+    }
+
+    private void showStoryPoint() {
+        speechFont.draw(batch, story, 15, GAME_HEIGHT - 60);
     }
 
     // Dispose stage and fonts

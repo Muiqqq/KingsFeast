@@ -84,7 +84,7 @@ public class KingsFeast extends Game {
 
     // Initialize variables to default for a new game
     private void initVariables() {
-        pollutionLevel = Integer.toString(kfprefs.getInteger("pollution", 50));
+        pollutionLevel = Integer.toString(kfprefs.getInteger("pollution", 90));
         totalScore = Integer.toString(kfprefs.getInteger("totalScore", 0));
         totalThrows = Integer.toString(kfprefs.getInteger("totalThrows", 0));
     }
@@ -284,7 +284,7 @@ public class KingsFeast extends Game {
             kfprefs.putInteger("totalThrows", 0);
             kfprefs.putInteger("currentLevel", 0);
             kfprefs.putInteger("totalScore", 0);
-            kfprefs.putInteger("pollution", 50);
+            kfprefs.putInteger("pollution", 90);
             kfprefs.flush();
             initVariables();
         }
