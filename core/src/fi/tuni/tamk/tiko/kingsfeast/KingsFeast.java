@@ -34,6 +34,10 @@ public class KingsFeast extends Game {
     //  -When accessing settings through pause and changing language, language not changed in GameScreen when continued
     //  LOCALIZATION
     //  -Localize all text once written
+    //  STORY
+    //  -Make lifeline availability based on story points
+    //  -Find better font
+    //  -Make text fit the text box
 
     // remember to give an instance of 'this' to all new screens, if anything
     // from this class or parent class is to be used in that screen.
