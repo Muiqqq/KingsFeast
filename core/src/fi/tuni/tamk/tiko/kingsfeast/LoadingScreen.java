@@ -93,7 +93,7 @@ public class LoadingScreen extends ScreenAdapter {
             kingsFeast.setMusic();
             kingsFeast.setSounds();
             dispose();
-            kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
+            kingsFeast.setScreen(new FeedbackScreen(kingsFeast,1 ,1));
         }
     }
 

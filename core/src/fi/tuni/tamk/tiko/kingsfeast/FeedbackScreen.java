@@ -59,7 +59,7 @@ public class FeedbackScreen extends ScreenAdapter {
     private BitmapFont negativeFont;
     private BitmapFont positiveFont;
     private final int FONT_SIZE = 38;
-    private final int SPEECH_FONT_SIZE = 32;
+    private final int SPEECH_FONT_SIZE = 42;
 
     // Strings
     private String throwAmount;
@@ -143,13 +143,13 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.addActor(createKingImage());
         stage.addActor(createKingSpeechBg());
         stage.addActor(createOkButton());
-        if(kingsFeast.isStoryPoint1Shown() || kingsFeast.isStoryPoint2Shown()) {
+        if(kingsFeast.isStoryPoint1Shown() || kingsFeast.isStoryPoint2Shown() || kingsFeast.isStoryPoint3Shown() || kingsFeast.isStoryPoint4Shown()) {
             stage.addActor(createPigsLifeline());
         }
-        if(kingsFeast.isStoryPoint2Shown() || kingsFeast.isStoryPoint3Shown()) {
+        if(kingsFeast.isStoryPoint2Shown() || kingsFeast.isStoryPoint3Shown() || kingsFeast.isStoryPoint4Shown() || kingsFeast.isStoryPoint5Shown()) {
             stage.addActor(createCompostLifeLine());
         }
-        if(kingsFeast.isStoryPoint4Shown() || kingsFeast.isStoryPoint5Shown()) {
+        if(kingsFeast.isStoryPoint4Shown() || kingsFeast.isStoryPoint5Shown() || kingsFeast.isStoryPoint6Shown() || kingsFeast.isStoryPoint7Shown()) {
             stage.addActor(createPoorLifeLine());
         }
         stage.addActor(createScroll());
@@ -265,12 +265,12 @@ public class FeedbackScreen extends ScreenAdapter {
         font = fontGenerator.generateFont(fontParameter);
 
         // Font for king's dialogue
-        FreeTypeFontGenerator speechFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
+        FreeTypeFontGenerator speechFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter speechFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         speechFontParameter.size = SPEECH_FONT_SIZE;
-        speechFontParameter.borderWidth = 2;
-        speechFontParameter.borderColor = Color.BLACK;
-        speechFontParameter.color = Color.WHITE;
+        //speechFontParameter.borderWidth = 2;
+        //speechFontParameter.borderColor = Color.BLACK;
+        speechFontParameter.color = Color.BLACK;
         speechFont = speechFontGenerator.generateFont(speechFontParameter);
 
         // Font for negative pollution change
@@ -522,16 +522,16 @@ public class FeedbackScreen extends ScreenAdapter {
         } else {
             if(waste < 4) {
                 story = myBundle.get("commentGreat");
-            } else if (waste >= 4 && waste < 8) {
+            } else if (waste >= 4 && waste < 7) {
                 story = myBundle.get("commentOk");
-            } else if (waste >= 8) {
+            } else if (waste >= 7) {
                 story = myBundle.get("commentBad");
             }
         }
     }
 
     private void showStoryPoint() {
-        speechFont.draw(batch, story, 15, GAME_HEIGHT - 60);
+        speechFont.draw(batch, story, 35, GAME_HEIGHT - 65);
     }
 
     // Dispose stage and fonts
