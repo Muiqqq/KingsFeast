@@ -60,6 +60,15 @@ public class KingsFeast extends Game {
     // Internationalization
     LanguageManager langManager;
 
+    // Story Points
+    private boolean storyPoint1Shown;
+    private boolean storyPoint2Shown;
+    private boolean storyPoint3Shown;
+    private boolean storyPoint4Shown;
+    private boolean storyPoint5Shown;
+    private boolean storyPoint6Shown;
+    private boolean storyPoint7Shown;
+
 
     @Override
     public void create() {
@@ -91,6 +100,13 @@ public class KingsFeast extends Game {
         pollutionLevel = Integer.toString(kfprefs.getInteger("pollution", 90));
         totalScore = Integer.toString(kfprefs.getInteger("totalScore", 0));
         totalThrows = Integer.toString(kfprefs.getInteger("totalThrows", 0));
+        storyPoint1Shown = false;
+        storyPoint2Shown = false;
+        storyPoint3Shown = false;
+        storyPoint4Shown = false;
+        storyPoint5Shown = false;
+        storyPoint6Shown = false;
+        storyPoint7Shown = false;
     }
 
     // Clear save data
@@ -169,11 +185,11 @@ public class KingsFeast extends Game {
 
         if(waste == 0) {
             scores = 1000;
-        } else if (waste == 1) {
+        } else if (waste >= 1 && waste <= 3) {
             scores = 750;
-        } else if(waste > 1 && waste <= 3) {
+        } else if(waste > 3 && waste <= 5) {
             scores = 500;
-        } else if(waste >= 4 && waste <= 6) {
+        } else if(waste >= 5 && waste <= 6) {
             scores = 200;
         } else if(waste > 6) {
             scores = -100;
@@ -194,15 +210,15 @@ public class KingsFeast extends Game {
     private void calculatePollution(int scoring, int waste) {
         oldPollution = Integer.parseInt(getPollutionLevel());
         if (scoring == 1000) {
-            setPollutionLevel(-15);
+            setPollutionLevel(-10);
         } else if (scoring == 750) {
-            setPollutionLevel(-8);
+            setPollutionLevel(-5);
         } else if (scoring == 500){
             setPollutionLevel(-2);
         } else if (scoring == 200) {
-            setPollutionLevel(5 + waste);
+            setPollutionLevel(2 + waste);
         } else if (scoring == -100) {
-            setPollutionLevel(10 + waste);
+            setPollutionLevel(5 + waste);
         }
     }
 
@@ -294,4 +310,59 @@ public class KingsFeast extends Game {
         }
     }
 
+    public boolean isStoryPoint1Shown() {
+        return storyPoint1Shown;
+    }
+
+    public void setStoryPoint1Shown(boolean storyPoint1Shown) {
+        this.storyPoint1Shown = storyPoint1Shown;
+    }
+
+    public boolean isStoryPoint2Shown() {
+        return storyPoint2Shown;
+    }
+
+    public void setStoryPoint2Shown(boolean storyPoint2Shown) {
+        this.storyPoint2Shown = storyPoint2Shown;
+    }
+
+    public boolean isStoryPoint3Shown() {
+        return storyPoint3Shown;
+    }
+
+    public void setStoryPoint3Shown(boolean storyPoint3Shown) {
+        this.storyPoint3Shown = storyPoint3Shown;
+    }
+
+    public boolean isStoryPoint4Shown() {
+        return storyPoint4Shown;
+    }
+
+    public void setStoryPoint4Shown(boolean storyPoint4Shown) {
+        this.storyPoint4Shown = storyPoint4Shown;
+    }
+
+    public boolean isStoryPoint5Shown() {
+        return storyPoint5Shown;
+    }
+
+    public void setStoryPoint5Shown(boolean storyPoint5Shown) {
+        this.storyPoint5Shown = storyPoint5Shown;
+    }
+
+    public boolean isStoryPoint6Shown() {
+        return storyPoint6Shown;
+    }
+
+    public void setStoryPoint6Shown(boolean storyPoint6Shown) {
+        this.storyPoint6Shown = storyPoint6Shown;
+    }
+
+    public boolean isStoryPoint7Shown() {
+        return storyPoint7Shown;
+    }
+
+    public void setStoryPoint7Shown(boolean storyPoint7Shown) {
+        this.storyPoint7Shown = storyPoint7Shown;
+    }
 }

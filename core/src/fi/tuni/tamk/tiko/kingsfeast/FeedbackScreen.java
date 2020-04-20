@@ -85,13 +85,13 @@ public class FeedbackScreen extends ScreenAdapter {
     private boolean toTotalScore;
 
     // Story Points
-    private boolean storyPoint1Shown;
-    private boolean storyPoint2Shown;
-    private boolean storyPoint3Shown;
-    private boolean storyPoint4Shown;
-    private boolean storyPoint5Shown;
-    private boolean storyPoint6Shown;
-    private boolean storyPoint7Shown;
+    /*private boolean storyPoint1Shown = false;
+    private boolean storyPoint2Shown = false;
+    private boolean storyPoint3Shown = false;
+    private boolean storyPoint4Shown = false;
+    private boolean storyPoint5Shown = false;
+    private boolean storyPoint6Shown = false;
+    private boolean storyPoint7Shown = false;*/
 
     // Constructor receives game object to access it. Also 2 ints from gamescreen for accessing
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
@@ -119,14 +119,6 @@ public class FeedbackScreen extends ScreenAdapter {
         isCompostUsed = false;
         isPoorUsed = false;
 
-        storyPoint1Shown = false;
-        storyPoint2Shown = false;
-        storyPoint3Shown = false;
-        storyPoint4Shown = false;
-        storyPoint5Shown = false;
-        storyPoint6Shown = false;
-        storyPoint7Shown = false;
-
         this.throwAmount = Integer.toString(throwAmount);
 
         foodWasteAmount = Integer.toString(throwAmount - visitorsServed);
@@ -151,9 +143,15 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.addActor(createKingImage());
         stage.addActor(createKingSpeechBg());
         stage.addActor(createOkButton());
-        stage.addActor(createPigsLifeline());
-        stage.addActor(createCompostLifeLine());
-        stage.addActor(createPoorLifeLine());
+        if(kingsFeast.isStoryPoint1Shown() || kingsFeast.isStoryPoint2Shown()) {
+            stage.addActor(createPigsLifeline());
+        }
+        if(kingsFeast.isStoryPoint2Shown() || kingsFeast.isStoryPoint3Shown()) {
+            stage.addActor(createCompostLifeLine());
+        }
+        if(kingsFeast.isStoryPoint4Shown() || kingsFeast.isStoryPoint5Shown()) {
+            stage.addActor(createPoorLifeLine());
+        }
         stage.addActor(createScroll());
         stage.addActor(createOkButton());
     }
@@ -270,7 +268,7 @@ public class FeedbackScreen extends ScreenAdapter {
         FreeTypeFontGenerator speechFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("SHOWG.TTF"));
         FreeTypeFontGenerator.FreeTypeFontParameter speechFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         speechFontParameter.size = SPEECH_FONT_SIZE;
-        speechFontParameter.borderWidth = 4;
+        speechFontParameter.borderWidth = 2;
         speechFontParameter.borderColor = Color.BLACK;
         speechFontParameter.color = Color.WHITE;
         speechFont = speechFontGenerator.generateFont(speechFontParameter);
@@ -475,13 +473,13 @@ public class FeedbackScreen extends ScreenAdapter {
                 }
                 break;
             case "compost":
-                if(totalScore < 2000) {
+                if(totalScore < 2000 && kingsFeast.isStoryPoint2Shown()) {
                     compostLifeline.setChecked(true);
                     compostLifeline.setTouchable(Touchable.disabled);
                 }
                 break;
             case "poor":
-                if(totalScore < 2500) {
+                if(totalScore < 2500 && kingsFeast.isStoryPoint4Shown()) {
                     poorLifeline.setChecked(true);
                     poorLifeline.setTouchable(Touchable.disabled);
                 }
@@ -498,30 +496,37 @@ public class FeedbackScreen extends ScreenAdapter {
 
     private void checkStoryPoints() {
         int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
+        int waste = Integer.parseInt(foodWasteAmount);
 
-        if(pollution <= 80 && pollution > 70 && !storyPoint1Shown) {
+        if(pollution <= 80 && pollution > 70 && !kingsFeast.isStoryPoint1Shown()) {
             story = myBundle.get("story1");
-            storyPoint1Shown = true;
-        } else if(pollution <= 70 && pollution > 60 && !storyPoint2Shown) {
+            kingsFeast.setStoryPoint1Shown(true);
+        } else if(pollution <= 70 && pollution > 60 && !kingsFeast.isStoryPoint2Shown()) {
             story = myBundle.get("story2");
-            storyPoint2Shown = true;
-        } else if(pollution <= 60 && pollution > 50 && !storyPoint3Shown) {
+            kingsFeast.setStoryPoint2Shown(true);
+        } else if(pollution <= 60 && pollution > 50 && !kingsFeast.isStoryPoint3Shown()) {
             story = myBundle.get("story3");
-            storyPoint3Shown = true;
-        } else if(pollution <= 50 && pollution > 40 && !storyPoint4Shown) {
+            kingsFeast.setStoryPoint3Shown(true);
+        } else if(pollution <= 50 && pollution > 40 && !kingsFeast.isStoryPoint4Shown()) {
             story = myBundle.get("story4");
-            storyPoint4Shown = true;
-        } else if(pollution <= 40 && pollution > 30 && !storyPoint5Shown) {
+            kingsFeast.setStoryPoint4Shown(true);
+        } else if(pollution <= 40 && pollution > 30 && !kingsFeast.isStoryPoint5Shown()) {
             story = myBundle.get("story5");
-            storyPoint5Shown = true;
-        } else if(pollution <= 30 && pollution > 20 && !storyPoint6Shown) {
+            kingsFeast.setStoryPoint5Shown(true);
+        } else if(pollution <= 30 && pollution > 20 && !kingsFeast.isStoryPoint6Shown()) {
             story = myBundle.get("story6");
-            storyPoint6Shown = true;
-        } else if(pollution <= 20 && pollution > 0 && !storyPoint7Shown) {
+            kingsFeast.setStoryPoint6Shown(true);
+        } else if(pollution <= 20 && pollution > 0 && !kingsFeast.isStoryPoint7Shown()) {
             story = myBundle.get("story7");
-            storyPoint7Shown = true;
+            kingsFeast.setStoryPoint7Shown(true);
         } else {
-            story = "";
+            if(waste < 4) {
+                story = myBundle.get("commentGreat");
+            } else if (waste >= 4 && waste < 8) {
+                story = myBundle.get("commentOk");
+            } else if (waste >= 8) {
+                story = myBundle.get("commentBad");
+            }
         }
     }
 
