@@ -1,6 +1,7 @@
 package fi.tuni.tamk.tiko.kingsfeast;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -30,8 +31,9 @@ class FoodPlate {
     private final float restitution = 0.6f;
     private final float friction = 0.6f;
     private float timePassedInSeconds = 0f;
-
     private float recentSpeed;
+
+    private Sound throwSound;
 
     Vector2 anchor;
     Vector2 firingPos;
@@ -99,6 +101,13 @@ class FoodPlate {
     Body createBody(World world) {
         if (!isPlateFlying) {
             isPlateFlying = true;
+
+            //If sounds enabled, play a sound effect when throwing:
+            if (kingsFeast.isSoundEffectsEnabled()) {
+                int rnd = MathUtils.random(1, 4);
+                throwSound = kingsFeast.getAssetManager().get("throw" + rnd + ".mp3");
+                throwSound.play(0.3f);
+            }
 
             // Dollar store version of creating a polygon for the food plate
             // Yay for cutting corners

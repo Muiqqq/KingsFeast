@@ -285,7 +285,7 @@ public class KingsFeast extends Game {
     private boolean isMusicEnabled() {
         return getPrefs().getBoolean("music.enabled", true);
     }
-    private boolean isSoundEffectsEnabled() {
+    boolean isSoundEffectsEnabled() {
         return getPrefs().getBoolean("sound.enabled", true);
     }
     public boolean isEnglishEnabled() {

@@ -265,7 +265,7 @@ public class FeedbackScreen extends ScreenAdapter {
         font = fontGenerator.generateFont(fontParameter);
 
         // Font for king's dialogue
-        FreeTypeFontGenerator speechFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.TTF"));
+        FreeTypeFontGenerator speechFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter speechFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         speechFontParameter.size = SPEECH_FONT_SIZE;
         //speechFontParameter.borderWidth = 2;

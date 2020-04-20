@@ -3,6 +3,7 @@ package fi.tuni.tamk.tiko.kingsfeast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -176,6 +177,11 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("howtoplaybg.png", Texture.class);
 
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
+
+        kingsFeast.getAssetManager().load("throw1.mp3", Sound.class);
+        kingsFeast.getAssetManager().load("throw2.mp3", Sound.class);
+        kingsFeast.getAssetManager().load("throw3.mp3", Sound.class);
+        kingsFeast.getAssetManager().load("throw4.mp3", Sound.class);
     }
 
     /**
