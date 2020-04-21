@@ -198,32 +198,6 @@ public class LoadingScreen extends ScreenAdapter {
                     TiledMap.class)));
         }
 
-        /*
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map1.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map2.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map3.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map4.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map5.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map6.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map7.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map8.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map9.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map10.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map11.tmx",
-                TiledMap.class)));
-        levels.add(new LevelData(kingsFeast.getAssetManager().get("map12.tmx",
-                TiledMap.class)));
-        */
         return levels;
     }
 

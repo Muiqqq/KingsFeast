@@ -199,6 +199,14 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     // Creates confirmation dialog to ensure if player wants to start a new game
+
+    /**
+     * Creates a confirmation dialog used to confirm if the player wants to start a new game.
+     *
+     * Dialog gets created, buttons are added to it. Buttons have functionality where 'yes' returns
+     * 'true' -> save data is reset and a new game starts, 'no' returns 'false' -> gets rid of the
+     * dialog and nothing else happens.
+     */
     private void createConfirmationDialog() {
         Dialog dialog = new Dialog("",
                 new Window.WindowStyle(new BitmapFont(), Color.WHITE, null)) {
@@ -213,23 +221,21 @@ public class MainMenuScreen extends ScreenAdapter {
             }
         };
 
-        // Set font size and load dialog tetures
+        // Set font size and load dialog textures
         BitmapFont font = Util.initFont(36);
         Texture buttonDown = kingsFeast.getAssetManager().get("tyhjanappi.png");
         Texture buttonUp = kingsFeast.getAssetManager().get("tyhjanappi.png");
 
-        // Create textbuttons
-        TextButton yesButton = new TextButton(myBundle.get("dialogYes"), new TextButton.TextButtonStyle(
-                new TextureRegionDrawable(new TextureRegion(buttonUp)),
+        TextButton.TextButtonStyle tButtonStyle = new TextButton.TextButtonStyle
+                (new TextureRegionDrawable(new TextureRegion(buttonUp)),
                 new TextureRegionDrawable(new TextureRegion(buttonDown)),
                 new TextureRegionDrawable(new TextureRegion(buttonUp)),
-                font));
+                font);
 
-        TextButton noButton = new TextButton(myBundle.get("dialogNo"), new TextButton.TextButtonStyle(
-                new TextureRegionDrawable(new TextureRegion(buttonUp)),
-                new TextureRegionDrawable(new TextureRegion(buttonDown)),
-                new TextureRegionDrawable(new TextureRegion(buttonUp)),
-                font));
+        // Create textbuttons
+        TextButton yesButton = new TextButton(myBundle.get("dialogYes"), tButtonStyle);
+
+        TextButton noButton = new TextButton(myBundle.get("dialogNo"), tButtonStyle);
 
         // Create dialog text and set what values dialog buttons will return
         dialog.text(new Label(myBundle.get("dialogConfirm"),

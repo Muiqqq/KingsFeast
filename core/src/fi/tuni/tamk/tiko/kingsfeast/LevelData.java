@@ -9,8 +9,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * All the information that differs from level to level will be held in an object of this
- * class.
+ * A class that stores information about the game's levels. LevelData stores relevant data that
+ * differs from level to level.
+ *
+ * Objects of this class are put in to an array and that creates a neat list
+ * where all the levels can be stored.
  */
 class LevelData {
     private final float unitScale = Util.getUnitScale();
@@ -21,6 +24,12 @@ class LevelData {
     private Rectangle THROW_BOUNDS;
     private int VISITOR_COUNT;
 
+    /**
+     * Takes a tiled map, stores it. Info such as level height and width, anchor position,
+     * visitor count are taken from the map and then stored.
+     *
+     * @param tiledMap this map is stored and some important data is taken from it.
+     */
     LevelData(TiledMap tiledMap) {
         this.tiledMap = tiledMap;
         LEVEL_WIDTH = Util.getLevelWidth(tiledMap) * unitScale;
@@ -37,20 +46,24 @@ class LevelData {
         return LEVEL_WIDTH;
     }
 
+
     float getLEVEL_HEIGHT() {
         return LEVEL_HEIGHT;
     }
 
-    // This thing needs to be taken from the tiledMap somehow if it's not going to be
-    // the same for every level.
+    /**
+     * Gets and sets the 'anchor' position for the throwing mechanic.
+     *
+     * Anchor pos is taken from the tiled map and then stored as a vector2. Throwing boundaries
+     * are set around the anchor pos. THROW_BOUNDS is the area in which the player has to press
+     * to initiate a throw.
+     */
     private void setSlingAnchorPos() {
         MapObject mapObject = tiledMap.getLayers().get("anchor").getObjects().get(0);
         RectangleMapObject rectangleMapObject = (RectangleMapObject) mapObject;
         slingAnchorPos = new Vector2(rectangleMapObject.getRectangle().getX(),
                 rectangleMapObject.getRectangle().getY());
 
-        // remember to change these to match whatever the bounds are eventually gonna be.
-        // currently this is a bad way to do it but oh well.
         THROW_BOUNDS = new Rectangle(slingAnchorPos.x - 80f, slingAnchorPos.y - 80f,
                 160f, 160f);
     }
@@ -63,8 +76,10 @@ class LevelData {
         return THROW_BOUNDS;
     }
 
-    // Gets the amount of goal objects and sets VISITOR_COUNT to match that.
-    // VISITOR_COUNT is used to track players progress in a level.
+    /**
+     * Gets the amount of goal objects in the tiled map and sets VISITOR_COUNT to match that.
+     * VISITOR_COUNT is used to track player's progress in a level.
+     */
     private void setVisitorCount() {
         MapObjects mapObjects = tiledMap.getLayers().get("goal").getObjects();
         Array<RectangleMapObject> visitorObjects = mapObjects.getByType(RectangleMapObject.class);
