@@ -40,16 +40,15 @@ public class LoadingScreen extends ScreenAdapter {
     private float stateTime = 0.0f;
 
     /**
-     * Constructor prepares the animation and background image.
+     * Constructor gets the game object, batch, and creates the loading animation with localized
+     * textures.
      *
      * @param kingsFeast Game object, used to get access to its and its parent's methods.
      */
     LoadingScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         sb = kingsFeast.getSpriteBatch();
-
-        background = new Texture("mainmenubackgroundtitle.jpg");
-        loadingSheet = getLocalizedLoadingTexture();
+        getLocalizedLoadingTextures();
         createAnimation();
         currentFrame = loadingAnimation.getKeyFrame(stateTime, true);
     }
@@ -229,15 +228,15 @@ public class LoadingScreen extends ScreenAdapter {
     }
 
     /**
-     * Checks which language is being used and gets correct texture for loading animation.
-     *
-     * @return localized texture file used in the loading animation
+     * Checks which language is being used and gets correct textures for loading screen.
      */
-    private Texture getLocalizedLoadingTexture() {
+    private void getLocalizedLoadingTextures() {
         if(kingsFeast.isEnglishEnabled()) {
-            return new Texture("loading_en.png");
+            loadingSheet = new Texture("loading_en.png");
+            background = new Texture("loadingbackground_en.png");
         } else {
-            return new Texture("loading_fi.png");
+            loadingSheet = new Texture("loading_fi.png");
+            background =  new Texture("loadingbackground_fi.png");
         }
     }
 
@@ -275,7 +274,7 @@ public class LoadingScreen extends ScreenAdapter {
         stateTime += Gdx.graphics.getDeltaTime();
         sb.draw(currentFrame,
                 GAME_WIDTH / 2 - currentFrame.getRegionWidth(),
-                GAME_HEIGHT / 6,
+                GAME_HEIGHT / 4,
                 currentFrame.getRegionWidth() * 2f,
                 currentFrame.getRegionHeight() * 2f);
 
