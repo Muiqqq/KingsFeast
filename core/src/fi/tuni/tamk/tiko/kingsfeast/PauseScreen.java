@@ -16,11 +16,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
+/**
+ * PauseScreen class handles all data concerning pause screen and its creation.
+ */
 public class PauseScreen extends ScreenAdapter {
+    // Screen stuff
     private final KingsFeast kingsFeast;
     private final GameScreen gameScreen;
     private static final float GAME_WIDTH = 1920;
@@ -38,13 +41,17 @@ public class PauseScreen extends ScreenAdapter {
     private Texture scrollBg;
     private Texture howToPlayTexture;
 
+    // Localization
     I18NBundle myBundle;
 
-
+    /**
+     * Constructor for pause screen.
+     * @param kingsFeast to access its methods.
+     * @param gameScreen to enable going back to the previous screen and continue playing.
+     */
     public PauseScreen(KingsFeast kingsFeast, GameScreen gameScreen) {
         this.kingsFeast = kingsFeast;
         this.gameScreen = gameScreen;
-        //myBundle = kingsFeast.langManager.getCurrentBundle();
     }
 
     @Override
@@ -52,16 +59,16 @@ public class PauseScreen extends ScreenAdapter {
         stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
+        // Get current language
         myBundle = kingsFeast.langManager.getCurrentBundle();
 
-        // Add all buttons to the stage
+        // Add all buttons and textures to the stage
         stage.addActor(createBackgroundImage());
         stage.addActor(createScroll());
         stage.addActor(createContinueButton());
         stage.addActor(createNewGameButton());
         stage.addActor(createSettingsButton());
         stage.addActor(createHowToPlayButton());
-
     }
 
     @Override
@@ -75,7 +82,10 @@ public class PauseScreen extends ScreenAdapter {
         stage.draw();
     }
 
-    // Returns background image
+    /**
+     * Creates a background image for the pause screen.
+     * @return Background image.
+     */
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
@@ -83,7 +93,10 @@ public class PauseScreen extends ScreenAdapter {
         return background;
     }
 
-    // Return image of a scroll
+    /**
+     * Creates a scroll image to be used as a background for text.
+     * @return Image of a scroll.
+     */
     private Image createScroll() {
         scrollBg = kingsFeast.getAssetManager().get("tausta.png");
         Image scroll = new Image(scrollBg);
@@ -92,14 +105,19 @@ public class PauseScreen extends ScreenAdapter {
         return scroll;
     }
 
-    // Returns continue imagebutton
+    /**
+     * Creates a continue button that enables player to continue the game.
+     * @return Continue button.
+     */
     private ImageButton createContinueButton() {
+
         // Checks what language is enabled and loads texture accordingly
         if(kingsFeast.isEnglishEnabled()) {
             continueBtnTexture = kingsFeast.getAssetManager().get("ContinueButton.png");
         } else {
             continueBtnTexture = kingsFeast.getAssetManager().get("jatkapelia.png");
         }
+
         ImageButton continueButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(continueBtnTexture)));
         continueButton.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
         continueButton.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 3);
@@ -107,14 +125,17 @@ public class PauseScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                dispose();
                 kingsFeast.setScreen(gameScreen);
+                dispose();
             }
         });
         return continueButton;
     }
 
-    // Return new game imagebutton
+    /**
+     * Creates a new game button to give player option to start a new game.
+     * @return New game button.
+     */
     private ImageButton createNewGameButton() {
         // Checks what language is enabled and loads texture accordingly
         if(kingsFeast.isEnglishEnabled()) {
@@ -135,11 +156,13 @@ public class PauseScreen extends ScreenAdapter {
                 createConfirmationDialog();
             }
         });
-
         return newGame;
     }
 
-    // Returns how to play imagebutton
+    /**
+     * Creates a how to play button where the player can access how to play information.
+     * @return How to play button.
+     */
     private ImageButton createHowToPlayButton() {
         // Checks what language is enabled and loads texture accordingly
         if(kingsFeast.isEnglishEnabled()) {
@@ -156,16 +179,16 @@ public class PauseScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
-                // Load new screen
-                kingsFeast.setScreen(new HowToPlayScreen(kingsFeast, getThisScreen()));
+                kingsFeast.setScreen(new TextScreen(kingsFeast, getThisScreen()));
                 dispose();
             }
         });
-
         return howToPlay;
     }
 
-    // Creates confirmation dialog to ensure if player wants to start a new game
+    /**
+     * Creates a confirmation dialog to ensure player wants to start a new game.
+     */
     private void createConfirmationDialog() {
         Dialog dialog = new Dialog("",
                 new Window.WindowStyle(new BitmapFont(), Color.WHITE, null)) {
@@ -180,7 +203,7 @@ public class PauseScreen extends ScreenAdapter {
             }
         };
 
-        // Set font size and load dialog tetures
+        // Set font size and load dialog textures
         BitmapFont font = Util.initFont(36);
         Texture buttonDown = kingsFeast.getAssetManager().get("tyhjanappi.png");
         Texture buttonUp = kingsFeast.getAssetManager().get("tyhjanappi.png");
@@ -207,7 +230,10 @@ public class PauseScreen extends ScreenAdapter {
         dialog.show(stage);
     }
 
-    // Returns settings imagebutton
+    /**
+     * Creates a settings button to let player access game settings.
+     * @return Settings button.
+     */
     private ImageButton createSettingsButton() {
         // Checks what language is enabled and loads texture accordingly
         if(kingsFeast.isEnglishEnabled()) {
@@ -227,23 +253,6 @@ public class PauseScreen extends ScreenAdapter {
             }
         });
         return settingsButton;
-    }
-
-    // Returns exit game imagebutton
-    private ImageButton createExitButton() {
-        exitButtonTexture = kingsFeast.getAssetManager().get("credits.png");
-        ImageButton exitButton = new ImageButton(new TextureRegionDrawable(new TextureRegion(exitButtonTexture)));
-        exitButton.setPosition(GAME_WIDTH, GAME_HEIGHT -400, Align.center);
-        exitButton.setSize(150f, 75f);
-        exitButton.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                Gdx.app.exit();
-                dispose();
-            }
-        });
-        return exitButton;
     }
 
     @Override

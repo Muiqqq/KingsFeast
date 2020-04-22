@@ -165,7 +165,7 @@ public class MainMenuScreen extends ScreenAdapter {
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
                 // Load new screen
-                kingsFeast.setScreen(new HowToPlayScreen(kingsFeast, getThisScreen()));
+                kingsFeast.setScreen(new TextScreen(kingsFeast, getThisScreen()));
                 dispose();
             }
         });
@@ -216,7 +216,7 @@ public class MainMenuScreen extends ScreenAdapter {
                 if ((boolean) obj) {
                     kingsFeast.clearSaveState();
                     dispose();
-                    kingsFeast.setScreen(new HowToPlayScreen(kingsFeast));
+                    kingsFeast.setScreen(new TextScreen(kingsFeast));
                 }
             }
         };
