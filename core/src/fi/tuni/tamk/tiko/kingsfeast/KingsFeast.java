@@ -109,12 +109,14 @@ public class KingsFeast extends Game {
         kfprefs.remove("currentLevel");
         kfprefs.remove("totalScore");
         kfprefs.remove("pollution");
+        kfprefs.remove("playthroughComplete");
         for (int i = 0; i < storyPointAmount; i++) {
             kfprefs.remove("storypoint" + (i+1));
         }
 
         kfprefs.flush();
         setCurrentLevel(kfprefs.getInteger("currentLevel"));
+        levels = Util.buildLevels(this);
         initSaveState();
     }
 
@@ -164,6 +166,8 @@ public class KingsFeast extends Game {
         } else {
             //clearSaveState(); <--- This commented out to test infinite loop probably will either way be deleted
             this.currentLevel = 0;
+            levels.shuffle();
+            getPrefs().putBoolean("playthroughComplete", true);
             getPrefs().putInteger("totalScore",
                     Integer.parseInt(getTotalScore()));
 
@@ -224,7 +228,12 @@ public class KingsFeast extends Game {
         this.levelThrows = Integer.toString(levelThrows);
     }
     void setLevels(Array<LevelData> levels) {
-        this.levels = levels;
+        if (kfprefs.getBoolean("playthroughComplete")) {
+            levels.shuffle();
+            this.levels = levels;
+        } else {
+            this.levels = levels;
+        }
     }
     void setCurrentLevel(int x) {
         currentLevel = x;
@@ -302,6 +311,7 @@ public class KingsFeast extends Game {
             kfprefs.putInteger("currentLevel", 0);
             kfprefs.putInteger("totalScore", 0);
             kfprefs.putInteger("pollution", 90);
+            kfprefs.putBoolean("playthroughComplete", false);
 
             for (int i = 0; i < storyPointAmount; i++) {
                 kfprefs.putBoolean("storypoint" + (i+1), false);

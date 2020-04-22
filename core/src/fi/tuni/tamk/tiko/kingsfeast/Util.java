@@ -8,10 +8,10 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 /**
- * Supposed to contain universally useful methods. Meant to reduce cluttering
- * of other classes.
+ * Meant to reduce cluttering of other classes.
  */
 class Util {
     private static final float unitScale = 1 / 100f;
@@ -72,5 +72,23 @@ class Util {
         fontParameter.borderColor = Color.BLACK;
         fontParameter.color = Color.WHITE;
         return fontGenerator.generateFont(fontParameter);
+    }
+
+    /**
+     * Creates an array containing all the levels in the game.
+     *
+     * @return an array containing all the levels of the game.
+     */
+    static Array<LevelData> buildLevels(KingsFeast kingsFeast) {
+        Array<LevelData> levels = new Array<>();
+        int mapNumber = 1;
+        for (int i = 0; i < 3; i++) {
+            String mapFileName =  "map" + mapNumber + ".tmx";
+            mapNumber++;
+            levels.add(new LevelData(kingsFeast.getAssetManager().get(mapFileName,
+                    TiledMap.class)));
+        }
+
+        return levels;
     }
 }

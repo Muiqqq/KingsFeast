@@ -89,7 +89,7 @@ public class LoadingScreen extends ScreenAdapter {
     private void update() {
         if (kingsFeast.getAssetManager().update()) {
             kingsFeast.getAssetManager().finishLoading();
-            kingsFeast.setLevels(buildLevels());
+            kingsFeast.setLevels(Util.buildLevels(kingsFeast));
             kingsFeast.setMusic();
             kingsFeast.setSounds();
             dispose();
@@ -181,24 +181,6 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("throw2.mp3", Sound.class);
         kingsFeast.getAssetManager().load("throw3.mp3", Sound.class);
         kingsFeast.getAssetManager().load("throw4.mp3", Sound.class);
-    }
-
-    /**
-     * Creates an array containing all the levels in the game.
-     *
-     * @return an array containing all the levels of the game.
-     */
-    private Array<LevelData> buildLevels() {
-        Array<LevelData> levels = new Array<>();
-        int mapNumber = 1;
-        for (int i = 0; i < 13; i++) {
-            String mapFileName =  "map" + mapNumber + ".tmx";
-            mapNumber++;
-            levels.add(new LevelData(kingsFeast.getAssetManager().get(mapFileName,
-                    TiledMap.class)));
-        }
-
-        return levels;
     }
 
     /**
