@@ -7,25 +7,23 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-public class HowToPlayScreen extends ScreenAdapter {
+/**
+ * TextScreen class handles Player intro screen and How to Play screen creation.
+ */
+public class TextScreen extends ScreenAdapter {
+    // Game object
     private final KingsFeast kingsFeast;
+
+    // Screen stuff
     private static final float GAME_WIDTH = 1920;
     private static final float GAME_HEIGHT = 1080;
     private Stage stage;
-    private final float BUTTON_WIDTH = 550f;
-    private final float BUTTON_HEIGHT = 150f;
 
     private final Screen previousScreen;
     private SpriteBatch batch;
@@ -33,40 +31,52 @@ public class HowToPlayScreen extends ScreenAdapter {
     // Textures
     private Texture backgroundTexture;
     private Texture textBackground;
-    private Texture okTexture;
 
+    // Text to be shown
     private String myText;
 
+    // Font stuff
     private final int FONT_SIZE = 45;
     private BitmapFont text;
 
+    // Boolean to check if text to be shown is intro text or how to play
     private boolean intro;
 
     // Localization
     I18NBundle myBundle;
 
-    public HowToPlayScreen(KingsFeast kingsFeast, Screen screen) {
+    /**
+     * Constructor for how to play screen.
+     * @param kingsFeast to access its methods
+     * @param screen to enable possibility to go back to previous screen without
+     *               having to create the previous screen again.
+     */
+    public TextScreen(KingsFeast kingsFeast, Screen screen) {
         this.kingsFeast = kingsFeast;
         previousScreen = screen;
+        batch = kingsFeast.getSpriteBatch();
         initFont();
+        intro = false;
+
         // Get and set the language to be used in the level
         myBundle = kingsFeast.langManager.getCurrentBundle();
         myText = myBundle.get("howToPlay");
-        intro = false;
-
-        batch = kingsFeast.getSpriteBatch();
     }
 
-    public HowToPlayScreen(KingsFeast kingsFeast) {
+    /**
+     * Constructor for player intro screen.
+     * @param kingsFeast to access its methods.
+     */
+    public TextScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         previousScreen = null;
+        batch = kingsFeast.getSpriteBatch();
         initFont();
         intro = true;
+
         // Get and set the language to be used in the level
         myBundle = kingsFeast.langManager.getCurrentBundle();
         myText = myBundle.get("introText");
-
-        batch = kingsFeast.getSpriteBatch();
     }
 
     @Override
@@ -92,6 +102,8 @@ public class HowToPlayScreen extends ScreenAdapter {
         text.draw(batch, myText, 125, GAME_HEIGHT - 160);
         batch.end();
 
+        // Listen for taps and change screen accordingly
+        // Intro boolean checks if current screen is intro screen or not
         if(Gdx.input.isTouched() && intro) {
             kingsFeast.setScreen(new GameScreen(kingsFeast));
             dispose();
@@ -101,7 +113,10 @@ public class HowToPlayScreen extends ScreenAdapter {
         }
     }
 
-    // Returns background image
+    /**
+     * Creates a background image for the Stage.
+     * @return Background image.
+     */
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
@@ -109,7 +124,10 @@ public class HowToPlayScreen extends ScreenAdapter {
         return background;
     }
 
-    // Returns background texture to text
+    /**
+     * Creates a background image for the text.
+     * @return Text background image.
+     */
     private Image createTextBackground() {
         textBackground = kingsFeast.getAssetManager().get("howtoplaybg.png");
         Image textBg = new Image(textBackground);
@@ -118,23 +136,9 @@ public class HowToPlayScreen extends ScreenAdapter {
         return textBg;
     }
 
-    // Returns ok imagebutton
-    private ImageButton createOkButton() {
-        okTexture = kingsFeast.getAssetManager().get("OkButton.png");
-        ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
-        ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        ok.setPosition(GAME_WIDTH / 2, BUTTON_HEIGHT + 50, Align.center);
-        ok.addListener(new ActorGestureListener() {
-            @Override
-            public void tap(InputEvent event, float x, float y, int count, int button) {
-                super.tap(event, x, y, count, button);
-                kingsFeast.setScreen(previousScreen);
-                dispose();
-            }
-        });
-        return ok;
-    }
-
+    /**
+     * Initializes the font to be used. Size and color.
+     */
     private void initFont() {
         FreeTypeFontGenerator textFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter textFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -143,6 +147,9 @@ public class HowToPlayScreen extends ScreenAdapter {
         text = textFontGenerator.generateFont(textFontParameter);
     }
 
+    /**
+     * Disposes elements after screen change.
+     */
     @Override
     public void dispose() {
         stage.dispose();
