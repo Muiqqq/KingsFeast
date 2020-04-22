@@ -40,6 +40,8 @@ public class HowToPlayScreen extends ScreenAdapter {
     private final int FONT_SIZE = 48;
     private BitmapFont text;
 
+    private boolean intro;
+
     // Localization
     I18NBundle myBundle;
 
@@ -50,6 +52,19 @@ public class HowToPlayScreen extends ScreenAdapter {
         // Get and set the language to be used in the level
         myBundle = kingsFeast.langManager.getCurrentBundle();
         myText = myBundle.get("howToPlay");
+        intro = false;
+
+        batch = kingsFeast.getSpriteBatch();
+    }
+
+    public HowToPlayScreen(KingsFeast kingsFeast) {
+        this.kingsFeast = kingsFeast;
+        previousScreen = null;
+        initFont();
+        intro = true;
+        // Get and set the language to be used in the level
+        myBundle = kingsFeast.langManager.getCurrentBundle();
+        myText = myBundle.get("introText");
 
         batch = kingsFeast.getSpriteBatch();
     }
@@ -62,8 +77,6 @@ public class HowToPlayScreen extends ScreenAdapter {
         // Add all buttons to the stage
         stage.addActor(createBackgroundImage());
         stage.addActor(createTextBackground());
-        stage.addActor(createOkButton());
-
     }
 
     @Override
@@ -78,6 +91,12 @@ public class HowToPlayScreen extends ScreenAdapter {
         batch.begin();
         text.draw(batch, myText, 125, GAME_HEIGHT - 175);
         batch.end();
+
+        if(Gdx.input.isTouched() && intro) {
+            kingsFeast.setScreen(new GameScreen(kingsFeast));
+        } else if(Gdx.input.isTouched() && !intro) {
+            kingsFeast.setScreen(previousScreen);
+        }
     }
 
     // Returns background image
