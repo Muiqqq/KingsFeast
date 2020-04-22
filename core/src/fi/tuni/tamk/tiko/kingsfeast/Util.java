@@ -82,7 +82,7 @@ class Util {
     static Array<LevelData> buildLevels(KingsFeast kingsFeast) {
         Array<LevelData> levels = new Array<>();
         int mapNumber = 1;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 13; i++) {
             String mapFileName =  "map" + mapNumber + ".tmx";
             mapNumber++;
             levels.add(new LevelData(kingsFeast.getAssetManager().get(mapFileName,
