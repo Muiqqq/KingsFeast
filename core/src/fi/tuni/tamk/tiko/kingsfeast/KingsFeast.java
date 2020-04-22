@@ -61,14 +61,8 @@ public class KingsFeast extends Game {
     LanguageManager langManager;
 
     // Story Points
-    private boolean storyPoint1Shown;
-    private boolean storyPoint2Shown;
-    private boolean storyPoint3Shown;
-    private boolean storyPoint4Shown;
-    private boolean storyPoint5Shown;
-    private boolean storyPoint6Shown;
-    private boolean storyPoint7Shown;
-
+    private final int storyPointAmount = 7;
+    private boolean[] storyPoints;
 
     @Override
     public void create() {
@@ -100,13 +94,12 @@ public class KingsFeast extends Game {
         pollutionLevel = Integer.toString(kfprefs.getInteger("pollution", 90));
         totalScore = Integer.toString(kfprefs.getInteger("totalScore", 0));
         totalThrows = Integer.toString(kfprefs.getInteger("totalThrows", 0));
-        storyPoint1Shown = false;
-        storyPoint2Shown = false;
-        storyPoint3Shown = false;
-        storyPoint4Shown = false;
-        storyPoint5Shown = false;
-        storyPoint6Shown = false;
-        storyPoint7Shown = false;
+
+        storyPoints = new boolean[storyPointAmount];
+        for (int i = 0; i < storyPointAmount; i++) {
+            String storyPointKey = "storypoint" + (i+1);
+            storyPoints[i] = kfprefs.getBoolean(storyPointKey);
+        }
     }
 
     // Clear save data
@@ -116,6 +109,10 @@ public class KingsFeast extends Game {
         kfprefs.remove("currentLevel");
         kfprefs.remove("totalScore");
         kfprefs.remove("pollution");
+        for (int i = 0; i < storyPointAmount; i++) {
+            kfprefs.remove("storypoint" + (i+1));
+        }
+
         kfprefs.flush();
         setCurrentLevel(kfprefs.getInteger("currentLevel"));
         initSaveState();
@@ -288,7 +285,7 @@ public class KingsFeast extends Game {
     boolean isSoundEffectsEnabled() {
         return getPrefs().getBoolean("sound.enabled", true);
     }
-    public boolean isEnglishEnabled() {
+    boolean isEnglishEnabled() {
         return getPrefs().getBoolean("english.enabled", true);
     }
     private Preferences getPreferencesFromOS(Preferences prefs) {
@@ -305,64 +302,22 @@ public class KingsFeast extends Game {
             kfprefs.putInteger("currentLevel", 0);
             kfprefs.putInteger("totalScore", 0);
             kfprefs.putInteger("pollution", 90);
+
+            for (int i = 0; i < storyPointAmount; i++) {
+                kfprefs.putBoolean("storypoint" + (i+1), false);
+            }
+
             kfprefs.flush();
             initVariables();
         }
     }
 
-    public boolean isStoryPoint1Shown() {
-        return storyPoint1Shown;
+    void setStoryPointShown(int storyPointNum, boolean storyPointShown) {
+        storyPoints[storyPointNum - 1] = storyPointShown;
+        kfprefs.putBoolean("storypoint" + storyPointNum, storyPointShown);
     }
 
-    public void setStoryPoint1Shown(boolean storyPoint1Shown) {
-        this.storyPoint1Shown = storyPoint1Shown;
-    }
-
-    public boolean isStoryPoint2Shown() {
-        return storyPoint2Shown;
-    }
-
-    public void setStoryPoint2Shown(boolean storyPoint2Shown) {
-        this.storyPoint2Shown = storyPoint2Shown;
-    }
-
-    public boolean isStoryPoint3Shown() {
-        return storyPoint3Shown;
-    }
-
-    public void setStoryPoint3Shown(boolean storyPoint3Shown) {
-        this.storyPoint3Shown = storyPoint3Shown;
-    }
-
-    public boolean isStoryPoint4Shown() {
-        return storyPoint4Shown;
-    }
-
-    public void setStoryPoint4Shown(boolean storyPoint4Shown) {
-        this.storyPoint4Shown = storyPoint4Shown;
-    }
-
-    public boolean isStoryPoint5Shown() {
-        return storyPoint5Shown;
-    }
-
-    public void setStoryPoint5Shown(boolean storyPoint5Shown) {
-        this.storyPoint5Shown = storyPoint5Shown;
-    }
-
-    public boolean isStoryPoint6Shown() {
-        return storyPoint6Shown;
-    }
-
-    public void setStoryPoint6Shown(boolean storyPoint6Shown) {
-        this.storyPoint6Shown = storyPoint6Shown;
-    }
-
-    public boolean isStoryPoint7Shown() {
-        return storyPoint7Shown;
-    }
-
-    public void setStoryPoint7Shown(boolean storyPoint7Shown) {
-        this.storyPoint7Shown = storyPoint7Shown;
+    boolean isStoryPointShown(int storyPointNum) {
+        return storyPoints[storyPointNum - 1];
     }
 }
