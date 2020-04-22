@@ -147,13 +147,13 @@ public class FeedbackScreen extends ScreenAdapter {
 
         // Check what lifelines are to be shown on screen (this depends on what story points
         //have been triggered).
-        if(kingsFeast.isStoryPoint1Shown() || kingsFeast.isStoryPoint2Shown() || kingsFeast.isStoryPoint3Shown() || kingsFeast.isStoryPoint4Shown()) {
+        if(kingsFeast.isStoryPointShown(1) || kingsFeast.isStoryPointShown(2) || kingsFeast.isStoryPointShown(3) || kingsFeast.isStoryPointShown(4)) {
             stage.addActor(createPigsLifeline());
         }
-        if(kingsFeast.isStoryPoint2Shown() || kingsFeast.isStoryPoint3Shown() || kingsFeast.isStoryPoint4Shown() || kingsFeast.isStoryPoint5Shown()) {
+        if(kingsFeast.isStoryPointShown(2) || kingsFeast.isStoryPointShown(3) || kingsFeast.isStoryPointShown(4) || kingsFeast.isStoryPointShown(5)) {
             stage.addActor(createCompostLifeLine());
         }
-        if(kingsFeast.isStoryPoint4Shown() || kingsFeast.isStoryPoint5Shown() || kingsFeast.isStoryPoint6Shown() || kingsFeast.isStoryPoint7Shown()) {
+        if(kingsFeast.isStoryPointShown(3) || kingsFeast.isStoryPointShown(4) || kingsFeast.isStoryPointShown(6) || kingsFeast.isStoryPointShown(7)) {
             stage.addActor(createPoorLifeLine());
         }
         stage.addActor(createScroll());
@@ -475,13 +475,13 @@ public class FeedbackScreen extends ScreenAdapter {
                 }
                 break;
             case "compost":
-                if(totalScore < 2000 && kingsFeast.isStoryPoint2Shown()) {
+                if(totalScore < 2000 && kingsFeast.isStoryPointShown(2)) {
                     compostLifeline.setChecked(true);
                     compostLifeline.setTouchable(Touchable.disabled);
                 }
                 break;
             case "poor":
-                if(totalScore < 2500 && kingsFeast.isStoryPoint4Shown()) {
+                if(totalScore < 2500 && kingsFeast.isStoryPointShown(4)) {
                     poorLifeline.setChecked(true);
                     poorLifeline.setTouchable(Touchable.disabled);
                 }
@@ -500,27 +500,27 @@ public class FeedbackScreen extends ScreenAdapter {
         int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
         int waste = Integer.parseInt(foodWasteAmount);
 
-        if(pollution <= 80 && pollution > 70 && !kingsFeast.isStoryPoint1Shown()) {
+        if(pollution <= 80 && pollution > 70 && !kingsFeast.isStoryPointShown(1)) {
             story = myBundle.get("story1");
-            kingsFeast.setStoryPoint1Shown(true);
-        } else if(pollution <= 70 && pollution > 60 && !kingsFeast.isStoryPoint2Shown()) {
+            kingsFeast.setStoryPointShown(1, true);
+        } else if(pollution <= 70 && pollution > 60 && !kingsFeast.isStoryPointShown(2)) {
             story = myBundle.get("story2");
-            kingsFeast.setStoryPoint2Shown(true);
-        } else if(pollution <= 60 && pollution > 50 && !kingsFeast.isStoryPoint3Shown()) {
+            kingsFeast.setStoryPointShown(2,true);
+        } else if(pollution <= 60 && pollution > 50 && !kingsFeast.isStoryPointShown(3)) {
             story = myBundle.get("story3");
-            kingsFeast.setStoryPoint3Shown(true);
-        } else if(pollution <= 50 && pollution > 40 && !kingsFeast.isStoryPoint4Shown()) {
+            kingsFeast.setStoryPointShown(3, true);
+        } else if(pollution <= 50 && pollution > 40 && !kingsFeast.isStoryPointShown(4)) {
             story = myBundle.get("story4");
-            kingsFeast.setStoryPoint4Shown(true);
-        } else if(pollution <= 40 && pollution > 30 && !kingsFeast.isStoryPoint5Shown()) {
+            kingsFeast.setStoryPointShown(4, true);
+        } else if(pollution <= 40 && pollution > 30 && !kingsFeast.isStoryPointShown(5)) {
             story = myBundle.get("story5");
-            kingsFeast.setStoryPoint5Shown(true);
-        } else if(pollution <= 30 && pollution > 20 && !kingsFeast.isStoryPoint6Shown()) {
+            kingsFeast.setStoryPointShown(5, true);
+        } else if(pollution <= 30 && pollution > 20 && !kingsFeast.isStoryPointShown(6)) {
             story = myBundle.get("story6");
-            kingsFeast.setStoryPoint6Shown(true);
-        } else if(pollution <= 20 && pollution > 0 && !kingsFeast.isStoryPoint7Shown()) {
+            kingsFeast.setStoryPointShown(6, true);
+        } else if(pollution <= 20 && pollution > 0 && !kingsFeast.isStoryPointShown(7)) {
             story = myBundle.get("story7");
-            kingsFeast.setStoryPoint7Shown(true);
+            kingsFeast.setStoryPointShown(7, true);
         } else {
             if(waste < 4) {
                 story = myBundle.get("commentGreat");
