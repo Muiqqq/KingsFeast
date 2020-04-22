@@ -216,7 +216,7 @@ public class MainMenuScreen extends ScreenAdapter {
                 if ((boolean) obj) {
                     kingsFeast.clearSaveState();
                     dispose();
-                    kingsFeast.setScreen(new GameScreen(kingsFeast));
+                    kingsFeast.setScreen(new HowToPlayScreen(kingsFeast));
                 }
             }
         };
