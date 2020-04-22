@@ -325,6 +325,7 @@ public class KingsFeast extends Game {
     void setStoryPointShown(int storyPointNum, boolean storyPointShown) {
         storyPoints[storyPointNum - 1] = storyPointShown;
         kfprefs.putBoolean("storypoint" + storyPointNum, storyPointShown);
+        kfprefs.flush();
     }
 
     boolean isStoryPointShown(int storyPointNum) {
