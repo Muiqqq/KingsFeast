@@ -3,8 +3,13 @@ package fi.tuni.tamk.tiko.kingsfeast;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -12,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 public class HowToPlayScreen extends ScreenAdapter {
@@ -23,15 +29,30 @@ public class HowToPlayScreen extends ScreenAdapter {
     private final float BUTTON_HEIGHT = 150f;
 
     private final Screen previousScreen;
+    private SpriteBatch batch;
 
     // Textures
     private Texture backgroundTexture;
     private Texture textBackground;
     private Texture okTexture;
 
+    private String myText;
+
+    private final int FONT_SIZE = 48;
+    private BitmapFont text;
+
+    // Localization
+    I18NBundle myBundle;
+
     public HowToPlayScreen(KingsFeast kingsFeast, Screen screen) {
         this.kingsFeast = kingsFeast;
         previousScreen = screen;
+        initFont();
+        // Get and set the language to be used in the level
+        myBundle = kingsFeast.langManager.getCurrentBundle();
+        myText = myBundle.get("howToPlay");
+
+        batch = kingsFeast.getSpriteBatch();
     }
 
     @Override
@@ -55,6 +76,9 @@ public class HowToPlayScreen extends ScreenAdapter {
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
+        batch.begin();
+        text.draw(batch, myText, 125, GAME_HEIGHT - 175);
+        batch.end();
     }
 
     // Returns background image
@@ -79,7 +103,7 @@ public class HowToPlayScreen extends ScreenAdapter {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
         ok.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
-        ok.setPosition(GAME_WIDTH / 2, GAME_HEIGHT - BUTTON_HEIGHT * 5 - 150, Align.center);
+        ok.setPosition(GAME_WIDTH / 2, BUTTON_HEIGHT + 50, Align.center);
         ok.addListener(new ActorGestureListener() {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
@@ -88,6 +112,14 @@ public class HowToPlayScreen extends ScreenAdapter {
             }
         });
         return ok;
+    }
+
+    private void initFont() {
+        FreeTypeFontGenerator textFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter textFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        textFontParameter.size = FONT_SIZE;
+        textFontParameter.color = Color.BLACK;
+        text = textFontGenerator.generateFont(textFontParameter);
     }
 
     @Override

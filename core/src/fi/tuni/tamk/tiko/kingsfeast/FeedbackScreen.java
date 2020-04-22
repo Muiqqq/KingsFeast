@@ -61,6 +61,9 @@ public class FeedbackScreen extends ScreenAdapter {
     private final int FONT_SIZE = 38;
     private final int SPEECH_FONT_SIZE = 42;
 
+    // Localization
+    I18NBundle myBundle;
+
     // Strings
     private String throwAmount;
     private String foodWasteAmount;
@@ -73,8 +76,6 @@ public class FeedbackScreen extends ScreenAdapter {
     private String kingDialogue;
     private String story;
 
-    I18NBundle myBundle;
-
     // Game Data
     private boolean isPigsUsed;
     private boolean isCompostUsed;
@@ -84,16 +85,16 @@ public class FeedbackScreen extends ScreenAdapter {
     private int pollutionCounter;
     private boolean toTotalScore;
 
-    // Story Points
-    /*private boolean storyPoint1Shown = false;
-    private boolean storyPoint2Shown = false;
-    private boolean storyPoint3Shown = false;
-    private boolean storyPoint4Shown = false;
-    private boolean storyPoint5Shown = false;
-    private boolean storyPoint6Shown = false;
-    private boolean storyPoint7Shown = false;*/
-
     // Constructor receives game object to access it. Also 2 ints from gamescreen for accessing
+
+    /**
+     * Constructor receives game object and two integers for game data calculation purposes.
+     * It sets the camera for stage2D and gets current language to display correct text.
+     * It also initializes some variables and booleans for game progress tracking.
+     * @param kingsFeast The Game object to access its methods.
+     * @param throwAmount Amount of food thrown in the last level.
+     * @param visitorsServed Amount of visitors served in the last level.
+     */
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
         this.kingsFeast = kingsFeast;
         batch = new SpriteBatch();
@@ -118,24 +119,24 @@ public class FeedbackScreen extends ScreenAdapter {
         isPigsUsed = false;
         isCompostUsed = false;
         isPoorUsed = false;
-
         this.throwAmount = Integer.toString(throwAmount);
-
         foodWasteAmount = Integer.toString(throwAmount - visitorsServed);
         kingsFeast.calculateScore(throwAmount, visitorsServed);
         pollutionCounter = Integer.parseInt(kingsFeast.getPollutionLevel());
+
+        // Check what story text is to be shown on screen
         checkStoryPoints();
 
+        // Stage2D stuff
         viewport = new FitViewport(GAME_WIDTH,
                 GAME_HEIGHT,
                 new OrthographicCamera());
-
         stage = new Stage(viewport, batch);
     }
 
     @Override
     public void show() {
-       stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
+        stage = new Stage(new StretchViewport(GAME_WIDTH, GAME_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
         // Add all actors to the stage
@@ -143,6 +144,9 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.addActor(createKingImage());
         stage.addActor(createKingSpeechBg());
         stage.addActor(createOkButton());
+
+        // Check what lifelines are to be shown on screen (this depends on what story points
+        //have been triggered).
         if(kingsFeast.isStoryPoint1Shown() || kingsFeast.isStoryPoint2Shown() || kingsFeast.isStoryPoint3Shown() || kingsFeast.isStoryPoint4Shown()) {
             stage.addActor(createPigsLifeline());
         }
@@ -268,8 +272,6 @@ public class FeedbackScreen extends ScreenAdapter {
         FreeTypeFontGenerator speechFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/arial.ttf"));
         FreeTypeFontGenerator.FreeTypeFontParameter speechFontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         speechFontParameter.size = SPEECH_FONT_SIZE;
-        //speechFontParameter.borderWidth = 2;
-        //speechFontParameter.borderColor = Color.BLACK;
         speechFontParameter.color = Color.BLACK;
         speechFont = speechFontGenerator.generateFont(speechFontParameter);
 
