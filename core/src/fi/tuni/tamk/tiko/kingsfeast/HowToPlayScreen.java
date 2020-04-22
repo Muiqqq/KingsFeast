@@ -37,7 +37,7 @@ public class HowToPlayScreen extends ScreenAdapter {
 
     private String myText;
 
-    private final int FONT_SIZE = 48;
+    private final int FONT_SIZE = 45;
     private BitmapFont text;
 
     private boolean intro;
@@ -89,7 +89,7 @@ public class HowToPlayScreen extends ScreenAdapter {
         stage.act(delta);
         stage.draw();
         batch.begin();
-        text.draw(batch, myText, 125, GAME_HEIGHT - 175);
+        text.draw(batch, myText, 125, GAME_HEIGHT - 160);
         batch.end();
 
         if(Gdx.input.isTouched() && intro) {
