@@ -94,8 +94,10 @@ public class HowToPlayScreen extends ScreenAdapter {
 
         if(Gdx.input.isTouched() && intro) {
             kingsFeast.setScreen(new GameScreen(kingsFeast));
+            dispose();
         } else if(Gdx.input.isTouched() && !intro) {
             kingsFeast.setScreen(previousScreen);
+            dispose();
         }
     }
 
@@ -127,6 +129,7 @@ public class HowToPlayScreen extends ScreenAdapter {
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
                 kingsFeast.setScreen(previousScreen);
+                dispose();
             }
         });
         return ok;
