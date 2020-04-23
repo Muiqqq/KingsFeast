@@ -22,7 +22,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-
+/**
+ * Feedback screen class handles showing the player information regarding level performance
+ * and performance overall. It shows level data and story points to the player.
+ */
 public class FeedbackScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
 
@@ -36,6 +39,7 @@ public class FeedbackScreen extends ScreenAdapter {
     private Viewport viewport;
     private Stage stage;
 
+    // Imagebuttons
     private ImageButton pigsLifeline;
     private ImageButton compostLifeline;
     private ImageButton poorLifeline;
@@ -85,8 +89,6 @@ public class FeedbackScreen extends ScreenAdapter {
     private int pollutionCounter;
     private boolean toTotalScore;
 
-    // Constructor receives game object to access it. Also 2 ints from gamescreen for accessing
-
     /**
      * Constructor receives game object and two integers for game data calculation purposes.
      * It sets the camera for stage2D and gets current language to display correct text.
@@ -102,7 +104,7 @@ public class FeedbackScreen extends ScreenAdapter {
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
         initFonts();
 
-        // Get and set the language to be used in the level
+        // Get and set the correct language to String variables
         myBundle = kingsFeast.langManager.getCurrentBundle();
         foodWaste = myBundle.get("foodWaste");
         throwsInLevel = myBundle.get("throwsInLevel");
@@ -182,19 +184,22 @@ public class FeedbackScreen extends ScreenAdapter {
             drawPollutionEffect();
         font.draw(batch, totalThrows + ": " + kingsFeast.getTotalThrows(), GAME_WIDTH / 2 + 220, GAME_HEIGHT - 600);
         font.draw(batch, totalScore + ": " + totalScoreCounter, GAME_WIDTH / 2 + 220, GAME_HEIGHT - 700);
+
         // If statement to increase score on screen to give player tangible feedback on changed data
         if (this.totalScoreCounter < Integer.parseInt(this.kingsFeast.getTotalScore())) {
             this.totalScoreCounter += 10;
         } else if(this.totalScoreCounter > Integer.parseInt(this.kingsFeast.getTotalScore())) {
             this.totalScoreCounter -= 10;
         }
-        //speechFont.draw(batch, kingDialogue, 50, GAME_HEIGHT - 60);
         showStoryPoint();
         batch.end();
         checkIfGameEnd();
     }
 
-    // Returns background image
+    /**
+     * Creates a background image for the feedback screen.
+     * @return Background image.
+     */
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
@@ -211,7 +216,10 @@ public class FeedbackScreen extends ScreenAdapter {
         return king;
     }
 
-    // Returns king speech background texture
+    /**
+     * Creates a background for king's speech text.
+     * @return Background texture.
+     */
     private Image createKingSpeechBg() {
         kingSpeech = kingsFeast.getAssetManager().get("kingspeech.png");
         Image kingSpeechBubble = new Image(kingSpeech);
@@ -220,7 +228,10 @@ public class FeedbackScreen extends ScreenAdapter {
         return kingSpeechBubble;
     }
 
-    // Return image of a scroll
+    /**
+     * Creates a scroll background for level data.
+     * @return Scroll texture.
+     */
     private Image createScroll() {
         scroll = kingsFeast.getAssetManager().get("tausta.png");
         Image scrollBg = new Image(scroll);
@@ -229,7 +240,10 @@ public class FeedbackScreen extends ScreenAdapter {
         return scrollBg;
     }
 
-    // Return ok imagebutton
+    /**
+     * Creates an imagebutton for ok. Tapping it changes the next screen ans saves level data.
+     * @return Ok Imagebutton
+     */
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
@@ -253,7 +267,9 @@ public class FeedbackScreen extends ScreenAdapter {
         return ok;
     }
 
-    // Initialize all fonts used in screen
+    /**
+     * Initializes all fonts and sets their parameters.
+     */
     private void initFonts() {
         speechFont = new BitmapFont();
         negativeFont = new BitmapFont();
@@ -290,7 +306,11 @@ public class FeedbackScreen extends ScreenAdapter {
         positiveFont = positiveFontGenerator.generateFont(positiveFontParameter);
     }
 
-    // Return pig lifeline imagebutton
+    /**
+     * Creates an imagebutton for Pig lifeline. Imagebutton is disabled or enabled depending on
+     * story and score. Listener is added if the button is enabled and not used.
+     * @return Pig lifeline imagebutton.
+     */
     private ImageButton createPigsLifeline() {
         int totalScore = Integer.parseInt(kingsFeast.getTotalScore());
 
@@ -327,10 +347,12 @@ public class FeedbackScreen extends ScreenAdapter {
             pigsLifeline.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
+                    // Effects of the lifeline
                     kingsFeast.setPollutionLevel(-7);
                     kingsFeast.setTotalScore(-1000);
                     pigsLifeline.setChecked(true);
 
+                    // Check if lowered score has disabled other lifelines from use
                     checkLifelineEligibility("compost");
                     checkLifelineEligibility("poor");
 
@@ -342,7 +364,11 @@ public class FeedbackScreen extends ScreenAdapter {
         return pigsLifeline;
     }
 
-    // Return compost lifeline imagebutton
+    /**
+     * Creates an imagebutton for Compost lifeline. Imagebutton is disabled or enabled depending on
+     * story and score. Listener is added if the button is enabled and not used.
+     * @return Compost lifeline imagebutton.
+     */
     private ImageButton createCompostLifeLine() {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
 
@@ -378,9 +404,12 @@ public class FeedbackScreen extends ScreenAdapter {
             compostLifeline.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
+                    // Effects of the lifeline
                     kingsFeast.setPollutionLevel(-10);
                     kingsFeast.setTotalScore(-2000);
                     compostLifeline.setChecked(true);
+
+                    // Check if lowered score has disabled other lifelines from use
                     checkLifelineEligibility("pigs");
                     checkLifelineEligibility("poor");
 
@@ -392,7 +421,11 @@ public class FeedbackScreen extends ScreenAdapter {
         return compostLifeline;
     }
 
-    // Return poor lifeline imagebutton
+    /**
+     * Creates an imagebutton for Poor lifeline. Imagebutton is disabled or enabled depending on
+     * story and score. Listener is added if the button is enabled and not used.
+     * @return Poor lifeline imagebutton.
+     */
     private ImageButton createPoorLifeLine() {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
 
@@ -428,9 +461,12 @@ public class FeedbackScreen extends ScreenAdapter {
             poorLifeline.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
+                    // Effects of the lifeline
                     kingsFeast.setPollutionLevel(-15);
                     kingsFeast.setTotalScore(-2500);
                     poorLifeline.setChecked(true);
+
+                    // Check if lowered score has disabled other lifelines from use
                     checkLifelineEligibility("compost");
                     checkLifelineEligibility("pigs");
 
@@ -442,7 +478,10 @@ public class FeedbackScreen extends ScreenAdapter {
         return poorLifeline;
     }
 
-    // Method to draw text showing how pollution level has changed
+    /**
+     * Draws positive or negative pollution number on screen depending on changed pollution
+     * levels.
+     */
     private void drawPollutionEffect() {
         int oldPol = kingsFeast.getOldPollution();
         int newPol = Integer.parseInt(kingsFeast.getPollutionLevel());
@@ -450,6 +489,7 @@ public class FeedbackScreen extends ScreenAdapter {
         int x;
         int y = 500;
 
+        // Check where to draw it depending on language
         if(kingsFeast.isEnglishEnabled()) {
             x = 260;
         } else {
@@ -464,6 +504,10 @@ public class FeedbackScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Checks if changed score disables other lifelines from use.
+     * @param lifeLine to see which lifeline is checked for eligibility.
+     */
     private void checkLifelineEligibility(String lifeLine) {
         int totalScore  = Integer.parseInt(kingsFeast.getTotalScore());
 
@@ -489,6 +533,9 @@ public class FeedbackScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Check if the game has ended (pollution has reached 0).
+     */
     public void checkIfGameEnd() {
         if(pollutionCounter == 0) {
             kingsFeast.setScreen(new PollutionScreen(kingsFeast));
@@ -496,6 +543,10 @@ public class FeedbackScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Check what story point to show depending on pollution levels. Also triggers a flag if
+     * some story point is shown to not to show it again. That story point is put in story variable.
+     */
     private void checkStoryPoints() {
         int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
         int waste = Integer.parseInt(foodWasteAmount);
@@ -522,6 +573,7 @@ public class FeedbackScreen extends ScreenAdapter {
             story = myBundle.get("story7");
             kingsFeast.setStoryPointShown(7, true);
         } else {
+            // If no story point is triggered. Show a comment on level performance.
             if(waste < 4) {
                 story = myBundle.get("commentGreat");
             } else if (waste >= 4 && waste < 7) {
@@ -532,6 +584,9 @@ public class FeedbackScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Draws the story point to the screen.
+     */
     private void showStoryPoint() {
         speechFont.draw(batch, story, 35, GAME_HEIGHT - 65);
     }

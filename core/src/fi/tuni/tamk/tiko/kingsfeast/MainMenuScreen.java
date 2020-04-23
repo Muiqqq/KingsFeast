@@ -19,8 +19,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-// Using Stage2D
+/**
+ * MainMenuScreen class handles all data concerning Main Menu and its creation.
+ */
 public class MainMenuScreen extends ScreenAdapter {
+    // Game object
     private final KingsFeast kingsFeast;
 
     // Screen stuff
@@ -36,15 +39,17 @@ public class MainMenuScreen extends ScreenAdapter {
     private Texture settingsTexture;
     private Texture newGameTexture;
 
+    // Localization
     private I18NBundle myBundle;
 
-    // Constructor here takes the game object so we can swap to a different screen from this one.
+    /**
+     * Constructor takes the game object to access its methods and swap screens.
+     * @param kingsFeast to access its methods.
+     */
     MainMenuScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
     }
 
-    // screens use show() instead of create()
-    // same thing essentially.
     @Override
     public void show() {
 
@@ -62,6 +67,7 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.addActor(createHowToPlayButton());
         stage.addActor(createNewGameButton());
         resize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         // Get and set the language to be used in the level
         myBundle = kingsFeast.langManager.getCurrentBundle();
     }
@@ -84,7 +90,10 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.dispose();
     }
 
-    // Returns background image
+    /**
+     * Creates a background image for main menu.
+     * @return Background image.
+     */
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("mainmenubackgroundtitle.jpg");
         Image background = new Image(backgroundTexture);
@@ -92,7 +101,10 @@ public class MainMenuScreen extends ScreenAdapter {
         return background;
     }
 
-    // Returns continue game imagebutton
+    /**
+     * Creates an imagebutton for continuing the game.
+     * @return Continue game imagebutton.
+     */
     private ImageButton createContinueButton() {
         // Checks what language is enabled and loads texture accordingly
         if(kingsFeast.isEnglishEnabled()) {
@@ -121,7 +133,10 @@ public class MainMenuScreen extends ScreenAdapter {
         return continueGame;
     }
 
-    // Returns settings imagebutton
+    /**
+     * Creates an imagebutton for accessing settings screen.
+     * @return Settings imagebutton.
+     */
     private ImageButton createSettingsButton() {
         // Checks what language is enabled and loads texture accordingly
         if(kingsFeast.isEnglishEnabled()) {
@@ -138,7 +153,7 @@ public class MainMenuScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
-                // Load new screen
+                // Load new screen and pass this screen to enable returning to it
                 kingsFeast.setScreen(new OptionsScreen(kingsFeast, getThisScreen()));
                 dispose();
             }
@@ -147,7 +162,10 @@ public class MainMenuScreen extends ScreenAdapter {
         return settingsButton;
     }
 
-    // Returns how to play imagebutton
+    /**
+     * Creates an imagebutton for accessing how to play screen.
+     * @return How to play button.
+     */
     private ImageButton createHowToPlayButton() {
         // Checks what language is enabled and loads texture accordingly
         if(kingsFeast.isEnglishEnabled()) {
@@ -173,7 +191,10 @@ public class MainMenuScreen extends ScreenAdapter {
         return howToPlay;
     }
 
-    // Return new game imagebutton
+    /**
+     * Creates an imagebutton for starting a New Game.
+     * @return New game imagebutton.
+     */
     private ImageButton createNewGameButton() {
         // Checks what language is enabled and loads texture accordingly
         if(kingsFeast.isEnglishEnabled()) {
@@ -197,8 +218,6 @@ public class MainMenuScreen extends ScreenAdapter {
 
         return newGame;
     }
-
-    // Creates confirmation dialog to ensure if player wants to start a new game
 
     /**
      * Creates a confirmation dialog used to confirm if the player wants to start a new game.
