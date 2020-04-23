@@ -16,7 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-// Using Stage2D
+/**
+ * PollutionScreen class handles all stuff related to showing the player visually the pollution
+ * level.
+ */
 public class PollutionScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
 
@@ -43,7 +46,10 @@ public class PollutionScreen extends ScreenAdapter {
     private boolean gameWon;
     private boolean gameLost;
 
-    // Constructor receives game object to access it
+    /**
+     * Constructor takes in the game object to access its methods.
+     * @param kingsFeast to access its methods.
+     */
     public PollutionScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         batch = kingsFeast.getSpriteBatch();
@@ -65,10 +71,10 @@ public class PollutionScreen extends ScreenAdapter {
         Gdx.input.setInputProcessor(stage);
         font = Util.initFont(FONT_SIZE);
 
-        // Add background image and ok button to screen
+        // Add actors to the stage
         stage.addActor(createBackgroundImage());
 
-        // Check if game has ended
+        // Check if game has ended and if so initiate game end
         checkGameEnd();
         if(gameWon || gameLost) {
             stage.addActor(createOkButton());
@@ -98,12 +104,16 @@ public class PollutionScreen extends ScreenAdapter {
         }
         batch.end();
 
+        // If game has not ended, continue game by tapping
         if(Gdx.input.isTouched() && !gameWon && !gameLost) {
             kingsFeast.setScreen(new GameScreen(kingsFeast));
         }
     }
 
-    // Returns a background image for the screen
+    /**
+     * Creates a background image for the screen.
+     * @return Background image.
+     */
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
@@ -111,6 +121,11 @@ public class PollutionScreen extends ScreenAdapter {
         return background;
     }
 
+    /**
+     * Returns an ok button to the screen. If game is won or lost tapping the button returns player
+     * to main menu and clears the save file for a new game.
+     * @return ok Imagebutton.
+     */
     // Returns an ok button to the screen. If game is won or lost tapping the button returns player
     // to main menu and clears the save file for a new game
     private ImageButton createOkButton() {
@@ -122,6 +137,7 @@ public class PollutionScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
+                // If game is won or los
                 if(gameWon || gameLost) {
                     kingsFeast.clearSaveState();
                     kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
@@ -132,7 +148,9 @@ public class PollutionScreen extends ScreenAdapter {
         return ok;
     }
 
-    // Check if game has ended (pollution 0 or 100)
+    /**
+     * Checks if game has ended (pollution 0 or 100). If so, initiate correct screen.
+     */
     private void checkGameEnd() {
         int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
         if(pollution >= 100) {
@@ -142,21 +160,28 @@ public class PollutionScreen extends ScreenAdapter {
         }
     }
 
-    // Adds game end dialog box to the screen if game lost
+    /**
+     * Shows game lost screen.
+     */
     private void gameLost() {
         stage.addActor(createGameEndBg());
         stage.addActor(createOkButton());
         gameLost = true;
     }
 
-    // Adds game end dialog box to the screen if game won
+    /**
+     * Shows game won screen.
+     */
     private void gameWon() {
         stage.addActor(createGameEndBg());
         stage.addActor(createOkButton());
         gameWon = true;
     }
 
-    // Returns background texture for the game end screen
+    /**
+     * Creates a background scroll for game end text.
+     * @return Background image for game end text.
+     */
     private Image createGameEndBg() {
         kingSpeech = kingsFeast.getAssetManager().get("taustavaaka.png");
         Image gameEndBg = new Image(kingSpeech);
