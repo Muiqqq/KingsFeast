@@ -17,27 +17,18 @@ import java.util.Locale;
 public class KingsFeast extends Game {
     // TODO: Current issues:
     //  GENERAL PROBLEMS
-    //  -Fix flickering of the screen edges, explore viewports ----> Changed all UI viewports to StretchViewport,
-    //                                                                  needs further testing but seems to work.
-    //                                                                  Some graphics might look stretched on some screen sizes ~Muikku
     //  CLEAN CODE
     //  -Lack of documentation ----> Documentation started on various screens
     //  -Check that everything that needs disposing gets disposed when needed
     //  -Move spriteBatch to KingsFeast so it can be used elsewhere ----> Should be ok, now only one instance of batch exists,
     //                                                                      get it with kingsFeast.getSpriteBatch();
     //  MENUS AND MENU FUNCTIONS
-    //  -Graphics for: UI, Game, buttons, HUD, backgrounds
-    //  -Main menu needs a how to play button which leads to the written tutorial ----> Button ok, Tutorial not
-    //  -Written tutorial needs to be made
+    //  -Graphics for: Sling, River Pollution, King's dining hall
     //  -Verify that continue button works as intended
-    //  -Buttons might be a bit too small for mobile in general? ----> Now resized except the GameScreen buttons
     //  -When accessing settings through pause and changing language, language not changed in GameScreen when continued
     //  LOCALIZATION
     //  -Localize all text once written
     //  STORY
-    //  -Make lifeline availability based on story points
-    //  -Find better font
-    //  -Make text fit the text box
 
     // remember to give an instance of 'this' to all new screens, if anything
     // from this class or parent class is to be used in that screen.
@@ -120,6 +111,10 @@ public class KingsFeast extends Game {
         initSaveState();
     }
 
+    /**
+     * Initializes localization. Creates new LanguageManager to which language .pref location and
+     * info is fed. Fetches current language from prefs and sets it at the start of the game.
+     */
     private void initLanguages() {
         langManager = new LanguageManager();
 
@@ -137,7 +132,9 @@ public class KingsFeast extends Game {
 
     }
 
-    // Set music to play
+    /**
+     * Starts music.
+     */
     void setMusic() {
         music = assetManager.get("1.mp3");
         music.setLooping(true);
@@ -207,7 +204,11 @@ public class KingsFeast extends Game {
         setLevelScore(scores);
     }
 
-    // Calculate how much pollution changed after last level
+    /**
+     * Calculates new pollution level and sets it depending on score and waste.
+     * @param scoring Level score.
+     * @param waste Amount of waste accumulated in the last level.
+     */
     private void calculatePollution(int scoring, int waste) {
         oldPollution = Integer.parseInt(getPollutionLevel());
         if (scoring == 1000) {
@@ -227,6 +228,7 @@ public class KingsFeast extends Game {
     void setLevelThrows(int levelThrows) {
         this.levelThrows = Integer.toString(levelThrows);
     }
+
     void setLevels(Array<LevelData> levels) {
         if (kfprefs.getBoolean("playthroughComplete")) {
             levels.shuffle();
@@ -235,19 +237,37 @@ public class KingsFeast extends Game {
             this.levels = levels;
         }
     }
+
+    /**
+     * Set current level. Keeps track of the levels played.
+     * @param x number of the level.
+     */
     void setCurrentLevel(int x) {
         currentLevel = x;
     }
+
+    /**
+     * Set current level score.
+     * @param score of the current level.
+     */
     void setLevelScore(int score) {
         this.levelScore = Integer.toString(score);
     }
 
+    /**
+     * Set total score.
+     * @param score to be added to total amount.
+     */
     void setTotalScore(int score) {
         int total = Integer.parseInt(getTotalScore());
         total += score;
         this.totalScore = Integer.toString(total);
     }
 
+    /**
+     * Sets the pollution level.
+     * @param pollution Change to old level (plus or minus)
+     */
     void setPollutionLevel(int pollution) {
         int totalPollution = Integer.parseInt(getPollutionLevel()) + pollution;
         if(totalPollution < 0) {
@@ -258,45 +278,106 @@ public class KingsFeast extends Game {
         this.pollutionLevel = Integer.toString(totalPollution);
     }
 
+    /**
+     * Sets the total throws.
+     * @param throwes Throws to be added to total amount.
+     */
     void setTotalThrows(int throwes) {
         int total = Integer.parseInt(getTotalThrows()) + throwes;
         this.totalThrows = Integer.toString(total);
     }
 
     // GETTERS
+
+    /**
+     * Get pollution level before the change.
+     * @return Pollution level before change.
+     */
     int getOldPollution() {
         return this.oldPollution;
     }
+
+    /**
+     * Get total score.
+     * @return Total score.
+     */
     String getTotalScore() { return this.totalScore; }
+
+    /**
+     * Get total throws.
+     * @return Total throws.
+     */
     String getTotalThrows() {
         return this.totalThrows;
     }
+
+    /**
+     * Get level score.
+     * @return Level score.
+     */
     String getLevelScore() { return this.levelScore; }
+
+    /**
+     * Get current pollution level.
+     * @return Current pollution level.
+     */
     String getPollutionLevel() { return this.pollutionLevel; }
     Preferences getPrefs() {
         return kfprefs;
     }
+
+    /**
+     * Get Spritebatch.
+     * @return Spritebatch.
+     */
     SpriteBatch getSpriteBatch() {
         return batch;
     }
+
+    /**
+     * Get AssetManager.
+     * @return AssetManager.
+     */
     AssetManager getAssetManager() {
         return assetManager;
     }
+
+    /**
+     * Get created levels.
+     * @return Levels.
+     */
     Array<LevelData> getLevels() { return levels; }
     int getCurrentLevel() {
         return currentLevel;
     }
 
-    // Preferences and save game methods
+    // PREFERENCE STUFF
+
+    /**
+     * Check if music is enabled.
+     * @return true or false.
+     */
     private boolean isMusicEnabled() {
         return getPrefs().getBoolean("music.enabled", true);
     }
+
+    /**
+     * Check if sound effects are enabled.
+     * @return true or false.
+     */
     boolean isSoundEffectsEnabled() {
         return getPrefs().getBoolean("sound.enabled", true);
     }
+
+    /**
+     * Check if english is enabled.
+     * @return true or false.
+     */
     boolean isEnglishEnabled() {
         return getPrefs().getBoolean("english.enabled", true);
     }
+
+
     private Preferences getPreferencesFromOS(Preferences prefs) {
         if (prefs == null) {
             prefs = Gdx.app.getPreferences("kfsettings");
