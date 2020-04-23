@@ -591,7 +591,9 @@ public class FeedbackScreen extends ScreenAdapter {
         speechFont.draw(batch, story, 35, GAME_HEIGHT - 65);
     }
 
-    // Dispose stage and fonts
+    /**
+     * Disposes elements after screen change.
+     */
     @Override
     public void dispose() {
         stage.dispose();

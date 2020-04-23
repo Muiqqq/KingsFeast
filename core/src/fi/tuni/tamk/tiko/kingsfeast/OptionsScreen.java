@@ -14,7 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
-// Using Stage2D
+/**
+ * OptionsScreen class handles the creation of options screen.
+ */
 public class OptionsScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
 
@@ -68,7 +70,10 @@ public class OptionsScreen extends ScreenAdapter {
         stage.draw();
     }
 
-    // Returns background image
+    /**
+     * Creates a background image for the screen.
+     * @return Background image.
+     */
     private Image createBackgroundImage() {
         backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
         Image background = new Image(backgroundTexture);
@@ -76,7 +81,10 @@ public class OptionsScreen extends ScreenAdapter {
         return background;
     }
 
-    // Return image of a scroll
+    /**
+     * Creates a background image of a scroll for the buttons.
+     * @return Background scroll image.
+     */
     private Image createScroll() {
         scrollBg = kingsFeast.getAssetManager().get("tausta.png");
         Image scroll = new Image(scrollBg);
@@ -85,7 +93,10 @@ public class OptionsScreen extends ScreenAdapter {
         return scroll;
     }
 
-    // Returns ok imagebutton
+    /**
+     * Creates an imagebutton for ok. Tapping it returns the player to the main menu.
+     * @return Ok imagebutton.
+     */
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
@@ -101,7 +112,10 @@ public class OptionsScreen extends ScreenAdapter {
         return ok;
     }
 
-    // Returns music imagebutton
+    /**
+     * Creates an imagebutton for music enabling and disabling.
+     * @return Music imagebutton.
+     */
     private ImageButton createMusicButton() {
         // Two textures for on and off state as well as two textures in finnish
         // Checks is english or finnish enabled as a language and loads textures accordingly
@@ -146,6 +160,10 @@ public class OptionsScreen extends ScreenAdapter {
         return musicButton;
     }
 
+    /**
+     * Creates an imagebutton for sound enabling and disabling.
+     * @return Sound imagebutton.
+     */
     private ImageButton createSoundButton() {
         // Two textures for on and off state as well as two textures in finnish
         // Checks is english or finnish enabled as a language and loads textures accordingly
@@ -189,6 +207,10 @@ public class OptionsScreen extends ScreenAdapter {
         return soundButton;
     }
 
+    /**
+     * Creates an imagebutton for changing the languages.
+     * @return Language imagebutton.
+     */
     private ImageButton createLanguageButton() {
         // Two textures for on and off state as well as two textures in finnish
         // Checks is english or finnish enabled as a language and loads textures accordingly
@@ -232,29 +254,44 @@ public class OptionsScreen extends ScreenAdapter {
         return langButton;
     }
 
-    // Set and save music settings
+    /**
+     * Sets the music enabled or disabled and saves it to preferences.
+     * @param musicEnabled takes true or false.
+     */
     private void setMusicEnabled(boolean musicEnabled) {
         kingsFeast.getPrefs().putBoolean("music.enabled", musicEnabled);
         kingsFeast.getPrefs().flush();
     }
 
-    // Method to check if music is set to enabled in the settings file
+    /**
+     * Method to check if music is set to enabled in the settings file.
+     * @return true or false.
+     */
     private boolean isMusicEnabled() {
         return kingsFeast.getPrefs().getBoolean("music.enabled", true);
     }
 
-    // Method to check if sound effects are set to enabled in the settings file
+    /**
+     * Method to check if sounds are set to enabled in the settings file.
+     * @return true or false.
+     */
     private boolean isSoundEffectsEnabled() {
         return kingsFeast.getPrefs().getBoolean("sound.enabled", true);
     }
 
-    // Set and save sound effect settings
+    /**
+     * Set sounds on or off.
+     * @param soundEffectsEnabled takes in true or false.
+     */
     private void setSoundEffectsEnabled(boolean soundEffectsEnabled) {
         kingsFeast.getPrefs().putBoolean("sound.enabled", soundEffectsEnabled);
         kingsFeast.getPrefs().flush();
     }
 
-    // Set and save language settings
+    /**
+     * Sets the language.
+     * @param englishEnabled true = english, false = finnish.
+     */
     private void setEnglishEnabled(boolean englishEnabled) {
         kingsFeast.getPrefs().putBoolean("english.enabled", englishEnabled);
         kingsFeast.getPrefs().flush();

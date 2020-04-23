@@ -165,7 +165,9 @@ public class PollutionScreen extends ScreenAdapter {
         return gameEndBg;
     }
 
-    // Disposes stage and font
+    /**
+     * Disposes elements after screen change.
+     */
     @Override
     public void dispose() {
         stage.dispose();

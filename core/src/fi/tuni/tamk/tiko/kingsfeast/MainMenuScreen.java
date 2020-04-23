@@ -85,11 +85,6 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.draw();
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
-
     /**
      * Creates a background image for main menu.
      * @return Background image.
@@ -268,4 +263,13 @@ public class MainMenuScreen extends ScreenAdapter {
     private MainMenuScreen getThisScreen() {
         return this;
     }
+
+    /**
+     * Disposes elements after screen change.
+     */
+    @Override
+    public void dispose() {
+        stage.dispose();
+    }
+
 }
