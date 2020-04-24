@@ -191,9 +191,9 @@ public class KingsFeast extends Game {
             scores = 750;
         } else if(waste > 3 && waste <= 5) {
             scores = 500;
-        } else if(waste >= 5 && waste <= 6) {
+        } else if(waste >= 5 && waste <= 8) {
             scores = 200;
-        } else if(waste > 6) {
+        } else if(waste > 8) {
             scores = -100;
         }
         updateStats(throwes, scores, waste);
@@ -225,9 +225,9 @@ public class KingsFeast extends Game {
         } else if (scoring == 750) {
             setPollutionLevel(-5);
         } else if (scoring == 500){
-            setPollutionLevel(0);
+            setPollutionLevel(waste);
         } else if (scoring == 200) {
-            setPollutionLevel(2 + waste);
+            setPollutionLevel(waste);
         } else if (scoring == -100) {
             setPollutionLevel(5 + waste);
         }

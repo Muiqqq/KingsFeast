@@ -154,7 +154,7 @@ public class FeedbackScreen extends ScreenAdapter {
         if(kingsFeast.isStoryPointShown(2) || kingsFeast.isStoryPointShown(3) || kingsFeast.isStoryPointShown(4) || kingsFeast.isStoryPointShown(5)) {
             stage.addActor(createCompostLifeLine());
         }
-        if(kingsFeast.isStoryPointShown(3) || kingsFeast.isStoryPointShown(4) || kingsFeast.isStoryPointShown(6) || kingsFeast.isStoryPointShown(7)) {
+        if(kingsFeast.isStoryPointShown(4) || kingsFeast.isStoryPointShown(5) || kingsFeast.isStoryPointShown(6) || kingsFeast.isStoryPointShown(7)) {
             stage.addActor(createPoorLifeLine());
         }
         stage.addActor(createScroll());
