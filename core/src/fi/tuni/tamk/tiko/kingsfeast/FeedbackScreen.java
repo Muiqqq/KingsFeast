@@ -264,6 +264,11 @@ public class FeedbackScreen extends ScreenAdapter {
                         kingsFeast.getPrefs().getInteger("totalThrows") + tmp);
                 kingsFeast.getPrefs().flush();
                 kingsFeast.resetLevelFoodWaste();
+                if(levelFoodWaste > 0) {
+                    kingsFeast.resetCleanLevelCounter();
+                } else if(levelFoodWaste == 0) {
+                    kingsFeast.setCleanLevelCounter(5);
+                }
                 dispose();
                 // Load pollution screen
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
@@ -352,13 +357,11 @@ public class FeedbackScreen extends ScreenAdapter {
             pigsLifeline.addListener(new ActorGestureListener() {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
-                    // Effects of the lifeline
-                    kingsFeast.setPollutionLevel(-7);
                     //kingsFeast.setPollutionLevel(-5);
-                    if(levelFoodWaste >= 2) {
-                        kingsFeast.setLevelFoodWaste(-2);
-                        kingsFeast.setPollutionLevel(-2);
-                    } else if(levelFoodWaste > 0 && levelFoodWaste < 2) {
+                    if(levelFoodWaste > 3) {
+                        kingsFeast.setLevelFoodWaste(-3);
+                        kingsFeast.setPollutionLevel(-3);
+                    } else if(levelFoodWaste > 0 && levelFoodWaste <= 3) {
                         kingsFeast.setLevelFoodWaste(-levelFoodWaste);
                         kingsFeast.setPollutionLevel(-levelFoodWaste);
                     }
@@ -418,10 +421,10 @@ public class FeedbackScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     //kingsFeast.setPollutionLevel(-10);
-                    if(levelFoodWaste >= 5) {
-                        kingsFeast.setLevelFoodWaste(-5);
-                        kingsFeast.setPollutionLevel(-5);
-                    } else if(levelFoodWaste > 0 && levelFoodWaste < 5) {
+                    if(levelFoodWaste > 6) {
+                        kingsFeast.setLevelFoodWaste(-6);
+                        kingsFeast.setPollutionLevel(-6);
+                    } else if(levelFoodWaste > 0 && levelFoodWaste <= 6) {
                         kingsFeast.setLevelFoodWaste(-levelFoodWaste);
                         kingsFeast.setPollutionLevel(-levelFoodWaste);
                     }
@@ -481,10 +484,10 @@ public class FeedbackScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     //kingsFeast.setPollutionLevel(-15);
-                    if(levelFoodWaste >= 10) {
+                    if(levelFoodWaste > 10) {
                         kingsFeast.setLevelFoodWaste(-10);
                         kingsFeast.setPollutionLevel(-10);
-                    } else if(levelFoodWaste > 0 && levelFoodWaste < 10) {
+                    } else if(levelFoodWaste > 0 && levelFoodWaste <= 10) {
                         kingsFeast.setLevelFoodWaste(-levelFoodWaste);
                         kingsFeast.setPollutionLevel(-levelFoodWaste);
                     }
@@ -576,32 +579,32 @@ public class FeedbackScreen extends ScreenAdapter {
         int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
         int waste = Integer.parseInt(foodWasteAmount);
 
-        if(pollution <= 80 && pollution > 70 && !kingsFeast.isStoryPointShown(1)) {
+        if(pollution <= 80 && !kingsFeast.isStoryPointShown(1)) {
             story = myBundle.get("story1");
             kingsFeast.setStoryPointShown(1, true);
-        } else if(pollution <= 70 && pollution > 60 && !kingsFeast.isStoryPointShown(2)) {
+        } else if(pollution <= 70 && !kingsFeast.isStoryPointShown(2)) {
             story = myBundle.get("story2");
             kingsFeast.setStoryPointShown(2,true);
-        } else if(pollution <= 60 && pollution > 50 && !kingsFeast.isStoryPointShown(3)) {
+        } else if(pollution <= 60 && !kingsFeast.isStoryPointShown(3)) {
             story = myBundle.get("story3");
             kingsFeast.setStoryPointShown(3, true);
-        } else if(pollution <= 50 && pollution > 40 && !kingsFeast.isStoryPointShown(4)) {
+        } else if(pollution <= 50 && !kingsFeast.isStoryPointShown(4)) {
             story = myBundle.get("story4");
             kingsFeast.setStoryPointShown(4, true);
-        } else if(pollution <= 40 && pollution > 30 && !kingsFeast.isStoryPointShown(5)) {
+        } else if(pollution <= 40 && !kingsFeast.isStoryPointShown(5)) {
             story = myBundle.get("story5");
             kingsFeast.setStoryPointShown(5, true);
-        } else if(pollution <= 30 && pollution > 20 && !kingsFeast.isStoryPointShown(6)) {
+        } else if(pollution <= 30 && !kingsFeast.isStoryPointShown(6)) {
             story = myBundle.get("story6");
             kingsFeast.setStoryPointShown(6, true);
-        } else if(pollution <= 20 && pollution > 0 && !kingsFeast.isStoryPointShown(7)) {
+        } else if(pollution <= 20 && !kingsFeast.isStoryPointShown(7)) {
             story = myBundle.get("story7");
             kingsFeast.setStoryPointShown(7, true);
         } else {
             // If no story point is triggered. Show a comment on level performance.
-            if(waste < 4) {
+            if(waste < 2) {
                 story = myBundle.get("commentGreat");
-            } else if (waste >= 4 && waste < 7) {
+            } else if (waste >= 2 && waste <= 6) {
                 story = myBundle.get("commentOk");
             } else if (waste >= 7) {
                 story = myBundle.get("commentBad");

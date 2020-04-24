@@ -180,7 +180,6 @@ public class PauseScreen extends ScreenAdapter {
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
                 kingsFeast.setScreen(new TextScreen(kingsFeast, getThisScreen()));
-                dispose();
             }
         });
         return howToPlay;

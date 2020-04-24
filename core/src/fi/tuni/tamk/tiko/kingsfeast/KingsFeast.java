@@ -57,6 +57,8 @@ public class KingsFeast extends Game {
     private final int storyPointAmount = 7;
     private boolean[] storyPoints;
 
+    private boolean tutorialLevels;
+
     @Override
     public void create() {
         batch = new SpriteBatch();
@@ -67,8 +69,6 @@ public class KingsFeast extends Game {
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         setScreen(new LoadingScreen(this));
         currentLevel = kfprefs.getInteger("currentLevel");
-        setMusic();
-        setSounds();
         cleanLevelCounter = 0;
         levelFoodWaste = "0";
     }
@@ -97,6 +97,8 @@ public class KingsFeast extends Game {
             String storyPointKey = "storypoint" + (i+1);
             storyPoints[i] = kfprefs.getBoolean(storyPointKey);
         }
+
+        tutorialLevels = true;
     }
 
     // Clear save data
@@ -189,53 +191,43 @@ public class KingsFeast extends Game {
         int scores = 0;
 
         if(waste == 0) {
-            scores = 1000;
+            scores = 3000;
         } else if (waste == 1) {
-            scores = 750;
+            scores = 2000;
         } else if(waste > 1 && waste <= 3) {
-            scores = 500;
-        } else if(waste >= 4 && waste <= 6) {
-            scores = 200;
-        } else if(waste > 6) {
+            scores = 1500;
+        } else if(waste >= 4 && waste <= 7) {
+            scores = 750;
+        } else if(waste > 7) {
             scores = -100;
         }
-        updateStats(throwes, scores, waste);
+        updateStats(throwes, scores, waste, served);
     }
 
     // Save new data
-    private void updateStats(int throwes, int scores, int waste) {
+    private void updateStats(int throwes, int scores, int waste, int served) {
         setLevelThrows(throwes);
         setTotalThrows(throwes);
         setTotalScore(scores);
-        calculatePollution(waste);
+        if(isStoryPointShown(1)) {
+            tutorialLevels = false;
+        }
+        calculatePollution(waste, served);
         setLevelScore(scores);
     }
 
     /**
      * Calculates new pollution level and sets it depending on score and waste.
-     * @param scoring Level score.
-     * @param waste Amount of waste accumulated in the last level.
+     * @param waste Level score.
+     * @param served Amount of served guests.
      */
-    private void calculatePollution(int scoring, int waste) {
+    private void calculatePollution(int waste, int served) {
         oldPollution = Integer.parseInt(getPollutionLevel());
-        /*if (scoring == 1000) {
-            setPollutionLevel(-15);
-        } else if (scoring == 750) {
-            setPollutionLevel(-8);
-        } else if (scoring == 500){
-            setPollutionLevel(-2);
-        } else if (scoring == 200) {
-            setPollutionLevel(5);
-        } else if (scoring == -100) {
-            setPollutionLevel(10);
-        }*/
 
-        if(scoring == 0) {
-            cleanLevelCounter--;
-            setPollutionLevel(cleanLevelCounter);
-        } else {
-            cleanLevelCounter = 0;
-            setPollutionLevel(scoring);
+        if(tutorialLevels){
+            setPollutionLevel(waste - (served * 3) - cleanLevelCounter);
+        } else if(!tutorialLevels) {
+            setPollutionLevel(waste - served - cleanLevelCounter);
         }
     }
 
@@ -243,6 +235,8 @@ public class KingsFeast extends Game {
     void setLevelThrows(int levelThrows) {
         this.levelThrows = Integer.toString(levelThrows);
     }
+    void setCleanLevelCounter(int counter) {this.cleanLevelCounter += counter; }
+    void resetCleanLevelCounter() {this.cleanLevelCounter = 0;}
 
     void setLevels(Array<LevelData> levels) {
         if (kfprefs.getBoolean("playthroughComplete")) {
