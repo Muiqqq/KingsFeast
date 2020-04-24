@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,6 +25,7 @@ public class TextScreen extends ScreenAdapter {
     private static final float GAME_WIDTH = 1920;
     private static final float GAME_HEIGHT = 1080;
     private Stage stage;
+    private OrthographicCamera camera;
 
     private final Screen previousScreen;
     private SpriteBatch batch;
@@ -55,6 +57,8 @@ public class TextScreen extends ScreenAdapter {
         this.kingsFeast = kingsFeast;
         previousScreen = screen;
         batch = kingsFeast.getSpriteBatch();
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
         initFont();
         intro = false;
 
@@ -71,6 +75,8 @@ public class TextScreen extends ScreenAdapter {
         this.kingsFeast = kingsFeast;
         previousScreen = null;
         batch = kingsFeast.getSpriteBatch();
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
         initFont();
         intro = true;
 
@@ -98,6 +104,7 @@ public class TextScreen extends ScreenAdapter {
     public void render(float delta) {
         stage.act(delta);
         stage.draw();
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         text.draw(batch, myText, 125, GAME_HEIGHT - 160);
         batch.end();
