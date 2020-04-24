@@ -126,8 +126,6 @@ public class PollutionScreen extends ScreenAdapter {
      * to main menu and clears the save file for a new game.
      * @return ok Imagebutton.
      */
-    // Returns an ok button to the screen. If game is won or lost tapping the button returns player
-    // to main menu and clears the save file for a new game
     private ImageButton createOkButton() {
         okTexture = kingsFeast.getAssetManager().get("OkButton.png");
         ImageButton ok = new ImageButton(new TextureRegionDrawable(new TextureRegion(okTexture)));
@@ -137,7 +135,7 @@ public class PollutionScreen extends ScreenAdapter {
             @Override
             public void tap(InputEvent event, float x, float y, int count, int button) {
                 super.tap(event, x, y, count, button);
-                // If game is won or los
+                // If game is won or lost clear game data for a new game and go back to main menu
                 if(gameWon || gameLost) {
                     kingsFeast.clearSaveState();
                     kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
