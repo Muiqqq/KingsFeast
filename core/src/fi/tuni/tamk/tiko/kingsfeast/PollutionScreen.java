@@ -148,6 +148,9 @@ public class PollutionScreen extends ScreenAdapter {
         return ok;
     }
 
+    /**
+     * Gets correct river background depending on pollution level.
+     */
     private void getPollutionBackground() {
         int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
 
