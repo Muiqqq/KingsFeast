@@ -176,7 +176,11 @@ public class KingsFeast extends Game {
 
     // Game logic methods
 
-    // Calculate score and invoke updateStats method to save new info
+    /**
+     * Calculates score based on accumulated waste. Throws - served = waste.
+     * @param throwes How many foods player threw.
+     * @param served How many guests served.
+     */
     void calculateScore(int throwes, int served) {
         int waste = throwes - served;
         int scores = 0;
@@ -195,7 +199,12 @@ public class KingsFeast extends Game {
         updateStats(throwes, scores, waste);
     }
 
-    // Save new data
+    /**
+     * Updates all stats based on last level. Passes three parameters to calculate new data.
+     * @param throwes Food thrown in last level.
+     * @param scores Score gained in last level.
+     * @param waste Waste accumulated in last level.
+     */
     private void updateStats(int throwes, int scores, int waste) {
         setLevelThrows(throwes);
         setTotalThrows(throwes);
@@ -225,9 +234,15 @@ public class KingsFeast extends Game {
     }
 
     // SETTERS
+
+    /**
+     * Sets the amount of throws in last level to a variable.
+     * @param levelThrows Amount of food thrown.
+     */
     void setLevelThrows(int levelThrows) {
         this.levelThrows = Integer.toString(levelThrows);
     }
+
 
     void setLevels(Array<LevelData> levels) {
         if (kfprefs.getBoolean("playthroughComplete")) {

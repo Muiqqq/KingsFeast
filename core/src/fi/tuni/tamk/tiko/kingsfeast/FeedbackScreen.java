@@ -338,7 +338,7 @@ public class FeedbackScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     // Effects of the lifeline
-                    kingsFeast.setPollutionLevel(-7);
+                    kingsFeast.setPollutionLevel(-5);
                     kingsFeast.setTotalScore(-1000);
                     pigsLifeline.setChecked(true);
 
@@ -395,7 +395,7 @@ public class FeedbackScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     // Effects of the lifeline
-                    kingsFeast.setPollutionLevel(-10);
+                    kingsFeast.setPollutionLevel(-8);
                     kingsFeast.setTotalScore(-2000);
                     compostLifeline.setChecked(true);
 
@@ -452,7 +452,7 @@ public class FeedbackScreen extends ScreenAdapter {
                 @Override
                 public void tap(InputEvent event, float x, float y, int count, int button) {
                     // Effects of the lifeline
-                    kingsFeast.setPollutionLevel(-15);
+                    kingsFeast.setPollutionLevel(-12);
                     kingsFeast.setTotalScore(-2500);
                     poorLifeline.setChecked(true);
 
