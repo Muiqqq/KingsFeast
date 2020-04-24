@@ -47,6 +47,8 @@ public class KingsFeast extends Game {
     private String totalScore;
     private String levelScore;
     private int oldPollution;
+    private int cleanLevelCounter;
+    private String levelFoodWaste;
 
     // Internationalization
     LanguageManager langManager;
@@ -65,6 +67,10 @@ public class KingsFeast extends Game {
         assetManager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         setScreen(new LoadingScreen(this));
         currentLevel = kfprefs.getInteger("currentLevel");
+        setMusic();
+        setSounds();
+        cleanLevelCounter = 0;
+        levelFoodWaste = "0";
     }
 
     @Override
@@ -179,15 +185,16 @@ public class KingsFeast extends Game {
     // Calculate score and invoke updateStats method to save new info
     void calculateScore(int throwes, int served) {
         int waste = throwes - served;
+        setLevelFoodWaste(waste);
         int scores = 0;
 
         if(waste == 0) {
             scores = 1000;
-        } else if (waste >= 1 && waste <= 3) {
+        } else if (waste == 1) {
             scores = 750;
-        } else if(waste > 3 && waste <= 5) {
+        } else if(waste > 1 && waste <= 3) {
             scores = 500;
-        } else if(waste >= 5 && waste <= 6) {
+        } else if(waste >= 4 && waste <= 6) {
             scores = 200;
         } else if(waste > 6) {
             scores = -100;
@@ -200,7 +207,7 @@ public class KingsFeast extends Game {
         setLevelThrows(throwes);
         setTotalThrows(throwes);
         setTotalScore(scores);
-        calculatePollution(scores, waste);
+        calculatePollution(waste);
         setLevelScore(scores);
     }
 
@@ -211,16 +218,24 @@ public class KingsFeast extends Game {
      */
     private void calculatePollution(int scoring, int waste) {
         oldPollution = Integer.parseInt(getPollutionLevel());
-        if (scoring == 1000) {
-            setPollutionLevel(-10);
+        /*if (scoring == 1000) {
+            setPollutionLevel(-15);
         } else if (scoring == 750) {
-            setPollutionLevel(-5);
+            setPollutionLevel(-8);
         } else if (scoring == 500){
-            setPollutionLevel(0);
+            setPollutionLevel(-2);
         } else if (scoring == 200) {
-            setPollutionLevel(2 + waste);
+            setPollutionLevel(5);
         } else if (scoring == -100) {
-            setPollutionLevel(5 + waste);
+            setPollutionLevel(10);
+        }*/
+
+        if(scoring == 0) {
+            cleanLevelCounter--;
+            setPollutionLevel(cleanLevelCounter);
+        } else {
+            cleanLevelCounter = 0;
+            setPollutionLevel(scoring);
         }
     }
 
@@ -254,10 +269,16 @@ public class KingsFeast extends Game {
         this.levelScore = Integer.toString(score);
     }
 
-    /**
-     * Set total score.
-     * @param score to be added to total amount.
-     */
+    void setLevelFoodWaste(int waste) {
+        int foodWaste = Integer.parseInt(getLevelFoodWaste());
+        foodWaste += waste;
+        this.levelFoodWaste = Integer.toString(foodWaste);
+    }
+
+    void resetLevelFoodWaste() {
+        this.levelFoodWaste = Integer.toString(0);
+    }
+
     void setTotalScore(int score) {
         int total = Integer.parseInt(getTotalScore());
         total += score;
@@ -302,34 +323,13 @@ public class KingsFeast extends Game {
      * @return Total score.
      */
     String getTotalScore() { return this.totalScore; }
-
-    /**
-     * Get total throws.
-     * @return Total throws.
-     */
-    String getTotalThrows() {
-        return this.totalThrows;
-    }
-
-    /**
-     * Get level score.
-     * @return Level score.
-     */
+    String getTotalThrows() { return this.totalThrows; }
+    String getLevelFoodWaste() { return this.levelFoodWaste; }
     String getLevelScore() { return this.levelScore; }
-
-    /**
-     * Get current pollution level.
-     * @return Current pollution level.
-     */
     String getPollutionLevel() { return this.pollutionLevel; }
     Preferences getPrefs() {
         return kfprefs;
     }
-
-    /**
-     * Get Spritebatch.
-     * @return Spritebatch.
-     */
     SpriteBatch getSpriteBatch() {
         return batch;
     }
