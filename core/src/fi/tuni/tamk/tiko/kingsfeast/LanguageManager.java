@@ -6,7 +6,8 @@ import com.badlogic.gdx.utils.ObjectMap;
 import java.util.Locale;
 
 /**
- * LanguageManager class handles everything related to localization.
+ * LanguageManager class handles everything related to localization. Different bundles are saved to
+ * ObjectMap.
  */
 public class LanguageManager {
     private ObjectMap<String, I18NBundle> languages;
