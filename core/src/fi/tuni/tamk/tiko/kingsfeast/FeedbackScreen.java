@@ -143,7 +143,6 @@ public class FeedbackScreen extends ScreenAdapter {
 
         // Add all actors to the stage
         stage.addActor(createBackgroundImage());
-        stage.addActor(createKingImage());
         stage.addActor(createKingSpeechBg());
         stage.addActor(createOkButton());
 
@@ -205,15 +204,6 @@ public class FeedbackScreen extends ScreenAdapter {
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
-    }
-
-    // Returns king's image
-    private Image createKingImage() {
-        kingTexture = kingsFeast.getAssetManager().get("kingplaceholder.png");
-        Image king = new Image(kingTexture);
-        king.setSize(kingTexture.getWidth(), kingTexture.getHeight());
-        king.setPosition(kingTexture.getWidth() / 2 - 100, kingTexture.getHeight() / 3);
-        return king;
     }
 
     /**
@@ -329,7 +319,7 @@ public class FeedbackScreen extends ScreenAdapter {
         pigsLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(pigsTexture)),
                 new TextureRegionDrawable(new TextureRegion(pigsTexture)),
                 new TextureRegionDrawable(new TextureRegion(pigsDisabledTexture)));
-        pigsLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 400);
+        pigsLifeline.setPosition((GAME_WIDTH / 2) / 2 - (BUTTON_WIDTH / 2) + 50, 400);
         pigsLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Check if button is enabled or disabled based on score
@@ -386,7 +376,7 @@ public class FeedbackScreen extends ScreenAdapter {
         compostLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(compostTexture)),
                 new TextureRegionDrawable(new TextureRegion(compostTexture)),
                 new TextureRegionDrawable(new TextureRegion(compostDisabledTexture)));
-        compostLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 250);
+        compostLifeline.setPosition((GAME_WIDTH / 2) / 2 - (BUTTON_WIDTH / 2) + 50, 250);
         compostLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Check if button is enabled or disabled based on score
@@ -443,7 +433,7 @@ public class FeedbackScreen extends ScreenAdapter {
         poorLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(poorTexture)),
                 new TextureRegionDrawable(new TextureRegion(poorTexture)),
                 new TextureRegionDrawable(new TextureRegion(poorDisabledTexture)));
-        poorLifeline.setPosition(GAME_WIDTH / 2 - BUTTON_WIDTH + 100, 100);
+        poorLifeline.setPosition((GAME_WIDTH / 2) / 2 - (BUTTON_WIDTH / 2) + 50, 100);
         poorLifeline.setSize(BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Check if button is enabled or disabled based on score
