@@ -99,9 +99,11 @@ public class FeedbackScreen extends ScreenAdapter {
      */
     public FeedbackScreen(KingsFeast kingsFeast, int throwAmount, int visitorsServed) {
         this.kingsFeast = kingsFeast;
-        batch = new SpriteBatch();
+        batch = kingsFeast.getSpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, GAME_WIDTH, GAME_HEIGHT);
+
+        // Initialize fonts
         initFonts();
 
         // Get and set the correct language to String variables
@@ -147,7 +149,7 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.addActor(createOkButton());
 
         // Check what lifelines are to be shown on screen (this depends on what story points
-        //have been triggered).
+        // have been triggered).
         if(kingsFeast.isStoryPointShown(1) || kingsFeast.isStoryPointShown(2) || kingsFeast.isStoryPointShown(3) || kingsFeast.isStoryPointShown(4)) {
             stage.addActor(createPigsLifeline());
         }
@@ -172,7 +174,6 @@ public class FeedbackScreen extends ScreenAdapter {
         stage.act(delta);
         stage.draw();
         batch.setProjectionMatrix(camera.combined);
-
         batch.begin();
 
         // Draw all text to screen
@@ -190,8 +191,11 @@ public class FeedbackScreen extends ScreenAdapter {
         } else if(this.totalScoreCounter > Integer.parseInt(this.kingsFeast.getTotalScore())) {
             this.totalScoreCounter -= 10;
         }
+        // Call showStoryPoint method to draw correct text to screen
         showStoryPoint();
         batch.end();
+
+        // Check if game has ended
         checkIfGameEnd();
     }
 
@@ -249,9 +253,9 @@ public class FeedbackScreen extends ScreenAdapter {
                 kingsFeast.getPrefs().putInteger("totalThrows",
                         kingsFeast.getPrefs().getInteger("totalThrows") + tmp);
                 kingsFeast.getPrefs().flush();
-                dispose();
                 // Load pollution screen
                 kingsFeast.setScreen(new PollutionScreen(kingsFeast));
+                dispose();
             }
         });
         return ok;
@@ -314,7 +318,6 @@ public class FeedbackScreen extends ScreenAdapter {
             pigsTexture = kingsFeast.getAssetManager().get("siatenabled.png");
             pigsDisabledTexture = kingsFeast.getAssetManager().get("siatdisabled.png");
         }
-
 
         pigsLifeline = new ImageButton(new TextureRegionDrawable(new TextureRegion(pigsTexture)),
                 new TextureRegionDrawable(new TextureRegion(pigsTexture)),
@@ -587,7 +590,6 @@ public class FeedbackScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        batch.dispose();
         font.dispose();
         speechFont.dispose();
         negativeFont.dispose();

@@ -59,7 +59,6 @@ public class PollutionScreen extends ScreenAdapter {
         // Get and set the language to be used in the level
         myBundle = kingsFeast.langManager.getCurrentBundle();
 
-
         // Initialize booleans to false to enable checking game end
         gameWon = false;
         gameLost = false;
@@ -107,6 +106,7 @@ public class PollutionScreen extends ScreenAdapter {
         // If game has not ended, continue game by tapping
         if(Gdx.input.isTouched() && !gameWon && !gameLost) {
             kingsFeast.setScreen(new GameScreen(kingsFeast));
+            dispose();
         }
     }
 
@@ -141,8 +141,8 @@ public class PollutionScreen extends ScreenAdapter {
                 if(gameWon || gameLost) {
                     kingsFeast.clearSaveState();
                     kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
+                    dispose();
                 }
-                dispose();
             }
         });
         return ok;
