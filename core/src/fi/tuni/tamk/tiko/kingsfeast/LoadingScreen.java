@@ -173,6 +173,14 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("koyhadisabled.png", Texture.class);
         kingsFeast.getAssetManager().load("tyhjanappi.png", Texture.class);
         kingsFeast.getAssetManager().load("howtoplaybg.png", Texture.class);
+        kingsFeast.getAssetManager().load("Jokinäkymä0%.png", Texture.class);
+        kingsFeast.getAssetManager().load("Jokinäkymä10%.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("Jokinäkymä20%.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("Jokinäkymä30%.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("Jokinäkymä40%.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("Jokinäkymä50%.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("Jokinäkymä60%.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("Jokinäkymä70%.jpg", Texture.class);
 
         kingsFeast.getAssetManager().load("1.mp3", Music.class);
 

@@ -115,7 +115,7 @@ public class PollutionScreen extends ScreenAdapter {
      * @return Background image.
      */
     private Image createBackgroundImage() {
-        backgroundTexture = kingsFeast.getAssetManager().get("riverscreen.png");
+        getPollutionBackground();
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
@@ -146,6 +146,29 @@ public class PollutionScreen extends ScreenAdapter {
             }
         });
         return ok;
+    }
+
+    private void getPollutionBackground() {
+        int pollution = Integer.parseInt(kingsFeast.getPollutionLevel());
+
+        if(pollution == 0) {
+            backgroundTexture =  kingsFeast.getAssetManager().get("Jokinäkymä0%.png");
+        } else if (pollution > 0 && pollution < 20) {
+            backgroundTexture =  kingsFeast.getAssetManager().get("Jokinäkymä10%.jpg");
+        } else if (pollution >= 20 && pollution < 30) {
+            backgroundTexture =  kingsFeast.getAssetManager().get("Jokinäkymä20%.jpg");
+        } else if (pollution >= 30 && pollution < 40) {
+            backgroundTexture =  kingsFeast.getAssetManager().get("Jokinäkymä30%.jpg");
+        } else if (pollution >= 40 && pollution < 50) {
+            backgroundTexture =  kingsFeast.getAssetManager().get("Jokinäkymä40%.jpg");
+        } else if (pollution >= 50 && pollution < 70) {
+            backgroundTexture =  kingsFeast.getAssetManager().get("Jokinäkymä50%.jpg");
+        } else if (pollution >= 70 && pollution < 90) {
+            backgroundTexture =  kingsFeast.getAssetManager().get("Jokinäkymä60%.jpg");
+        } else if (pollution >= 90 && pollution <= 100) {
+            backgroundTexture =  kingsFeast.getAssetManager().get("Jokinäkymä70%.jpg");
+        }
+
     }
 
     /**
