@@ -22,16 +22,14 @@ class FoodPlate {
     private final KingsFeast kingsFeast;
     private final LevelData levelData;
 
-    // These are here just so they can be modified easily.
     private final float MAX_STRENGTH = 5f;
     private final float MAX_DISTANCE = 200f;
-    //private final float UPPER_ANGLE = 3 * MathUtils.PI / 2f;
-    //private final float LOWER_ANGLE = MathUtils.PI / 2f;
     private final float plateDensity = 2.0f;
     private final float restitution = 0.6f;
     private final float friction = 0.6f;
     private float timePassedInSeconds = 0f;
     private float recentSpeed;
+    private Vector2 gravity;
 
     private Sound throwSound;
 
@@ -48,16 +46,14 @@ class FoodPlate {
     boolean removeBody = false;
     boolean recentlyScored = false;
 
-    FoodPlate(LevelData levelData, KingsFeast kingsFeast) {
+    FoodPlate(LevelData levelData, KingsFeast kingsFeast, GameScreen gameScreen) {
         // anchor pos will come from the slings position once that's implemented.
         this.kingsFeast = kingsFeast;
         this.levelData = levelData;
         anchor = levelData.getSlingAnchorPos();
-
-
-        randomizeTexture();
-
         firingPos = anchor.cpy();
+        randomizeTexture();
+        gravity = gameScreen.getGravity();
     }
 
     // Gets the angle between two points
@@ -86,13 +82,7 @@ class FoodPlate {
         if (distance > MAX_DISTANCE) {
             distance = MAX_DISTANCE;
         }
-        /*if (angle > LOWER_ANGLE) {
-            if (angle > UPPER_ANGLE) {
-                angle = 0;
-            } else {
-                angle = LOWER_ANGLE;
-            }
-        } */
+
         firingPos.set(anchor.x + (distance * -MathUtils.cos(angle)),
                 anchor.y + (distance * -MathUtils.sin(angle)));
     }
@@ -124,8 +114,6 @@ class FoodPlate {
             body.getFixtureList().get(0).setRestitution(restitution);
             polygon.dispose();
 
-            //float velocityX = Math.abs( (MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f)));
-            //float velocityY = Math.abs( (MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f)));
             float velocityX = -(MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 100f));
             float velocityY = -(MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 100f));
 
@@ -134,13 +122,6 @@ class FoodPlate {
 
             // used to check if body has stopped moving so it can be cleared.
             recentSpeed = body.getLinearVelocity().len();
-
-            // debugging stuff
-            System.out.println("velocityX: " + velocityX + " + velocityY: " + velocityY);
-            System.out.println("angle: " + angle);
-            System.out.println("drag distance: " + distance);
-            System.out.println("anchor position (pixels): " + anchor);
-            System.out.println("release position (pixels): " + firingPos);
 
             return body;
         } else {
@@ -259,6 +240,39 @@ class FoodPlate {
                     Util.convertPixelsToMetres(firingPos.x) - width / 2,
                     Util.convertPixelsToMetres(firingPos.y) - height / 2,
                     width, height);
+        }
+    }
+
+    private Vector2 getStartingVelocity() {
+        float velocityX = -(MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 5.7f));
+        float velocityY = -(MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 5.7f));
+        return new Vector2(velocityX, velocityY);
+    }
+
+    private float getTrajectoryX(float t) {
+        return getStartingVelocity().x * t + anchor.x;
+    }
+
+    private float getTrajectoryY(float t) {
+        return 0.5f * gravity.y * t * t + getStartingVelocity().y * t + anchor.y;
+    }
+
+    void drawTrajectory(SpriteBatch sb, GameScreen gameScreen) {
+        if (gameScreen.wasTouchDragged) {
+            Texture texture = kingsFeast.getAssetManager().get("dot.png");
+
+            float t = 0;
+            float timeStep = 1 / 2f;
+            int trajectoryPointCount = 6;
+
+            for (int i = 0; i < trajectoryPointCount; i++) {
+                float x = getTrajectoryX(t);
+                float y = getTrajectoryY(t);
+                x = Util.convertPixelsToMetres(x);
+                y = Util.convertPixelsToMetres(y);
+                sb.draw(texture, x, y, 0.16f, 0.16f);
+                t += timeStep;
+            }
         }
     }
 }

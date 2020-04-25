@@ -126,6 +126,9 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("map12.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map13.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("level4.tmx", TiledMap.class);
+        kingsFeast.getAssetManager().load("ritsa_fground.png", Texture.class);
+        kingsFeast.getAssetManager().load("ritsa_bground.png", Texture.class);
+        kingsFeast.getAssetManager().load("dot.png", Texture.class);
         kingsFeast.getAssetManager().load("redfood.png", Texture.class);
         kingsFeast.getAssetManager().load("bluefood.png", Texture.class);
         kingsFeast.getAssetManager().load("greenfood.png", Texture.class);

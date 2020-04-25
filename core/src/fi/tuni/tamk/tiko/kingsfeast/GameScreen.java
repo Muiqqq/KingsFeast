@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,6 +21,8 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
+
+import static com.badlogic.gdx.graphics.g3d.particles.ParticleChannels.Color;
 
 /**
  * TODO: DOCUMENTATION!!
@@ -53,7 +57,7 @@ public class GameScreen extends ScreenAdapter {
     // note to self: put this in FoodPlate too if possible
     private boolean canThrow;
 
-    private boolean wasTouchDragged;
+    boolean wasTouchDragged;
 
     private int VISITORS_SERVED;
     private int THROW_AMOUNT;
@@ -81,7 +85,7 @@ public class GameScreen extends ScreenAdapter {
         BodyBuilder.transformObjectsToBodies(tiledMap, world,
                 "goal", "goal", true);
 
-        foodPlate = new FoodPlate(levelData, kingsFeast);
+        foodPlate = new FoodPlate(levelData, kingsFeast, this);
         touchPos = new Vector3();
 
         // bounds should be set to something representing the object being flung from the sling
@@ -116,11 +120,14 @@ public class GameScreen extends ScreenAdapter {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
 
+        drawDebug();
         batch.begin();
+        drawSling(false);
         foodPlate.draw(batch, world);
+        foodPlate.drawTrajectory(batch, this);
+        drawSling(true);
         batch.end();
 
-        drawDebug();
         update();
         Util.worldStep(world, delta);
 
@@ -216,26 +223,59 @@ public class GameScreen extends ScreenAdapter {
         if (DEBUG_PHYSICS) {
             box2DDebugRenderer.render(world, camera.combined);
         }
-            // Following code draws the rectangles and the line you see when testing.
-            shapeRenderer.setProjectionMatrix(camera.combined);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        // Following code draws the rectangles and the line you see when testing.
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        /*
+        shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.anchor.x - 95),
+                Util.convertPixelsToMetres(foodPlate.anchor.y - 5),
+                Util.convertPixelsToMetres(10),
+                Util.convertPixelsToMetres(10));
 
-            shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.anchor.x - 5),
-                    Util.convertPixelsToMetres(foodPlate.anchor.y - 5),
-                    Util.convertPixelsToMetres(10),
-                    Util.convertPixelsToMetres(10));
+        shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.anchor.x + 95),
+                Util.convertPixelsToMetres(foodPlate.anchor.y - 5),
+                Util.convertPixelsToMetres(10),
+                Util.convertPixelsToMetres(10));
 
-            shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.firingPos.x - 5),
-                    Util.convertPixelsToMetres(foodPlate.firingPos.y - 5),
-                    Util.convertPixelsToMetres(10),
-                    Util.convertPixelsToMetres(10));
 
-            shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x),
-                    Util.convertPixelsToMetres(foodPlate.anchor.y),
-                    Util.convertPixelsToMetres(foodPlate.firingPos.x),
-                    Util.convertPixelsToMetres(foodPlate.firingPos.y));
+        shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.firingPos.x - 5),
+                Util.convertPixelsToMetres(foodPlate.firingPos.y - 5),
+                Util.convertPixelsToMetres(10),
+                Util.convertPixelsToMetres(10));
+        */
 
-            shapeRenderer.end();
+        float distX = (foodPlate.anchor.x - foodPlate.firingPos.x);
+        float distY = (foodPlate.anchor.y - foodPlate.firingPos.y);
+
+        /*
+        shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x),
+                Util.convertPixelsToMetres(foodPlate.anchor.y),
+                Util.convertPixelsToMetres(foodPlate.firingPos.x),
+                Util.convertPixelsToMetres(foodPlate.firingPos.y));
+        */
+        /*
+        shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x),
+                Util.convertPixelsToMetres(foodPlate.anchor.y),
+                Util.convertPixelsToMetres(foodPlate.anchor.x + distX),
+                Util.convertPixelsToMetres(foodPlate.anchor.y + distY));
+        */
+
+        shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x + 95),
+                Util.convertPixelsToMetres(foodPlate.anchor.y),
+                Util.convertPixelsToMetres(foodPlate.firingPos.x),
+                Util.convertPixelsToMetres(foodPlate.firingPos.y),
+                com.badlogic.gdx.graphics.Color.FIREBRICK,
+                com.badlogic.gdx.graphics.Color.BROWN);
+
+        shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x - 95),
+                Util.convertPixelsToMetres(foodPlate.anchor.y),
+                Util.convertPixelsToMetres(foodPlate.firingPos.x),
+                Util.convertPixelsToMetres(foodPlate.firingPos.y),
+                com.badlogic.gdx.graphics.Color.FIREBRICK,
+                com.badlogic.gdx.graphics.Color.BROWN);
+
+
+        shapeRenderer.end();
     }
 
     // put camera stuff in util maybe? might not work
@@ -383,6 +423,22 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    private void drawSling(boolean drawInFront) {
+        Texture sling;
+        if (drawInFront) {
+            sling = kingsFeast.getAssetManager().get("ritsa_fground.png");
+        } else {
+            sling = kingsFeast.getAssetManager().get("ritsa_bground.png");
+        }
+        float posX = levelData.getSlingAnchorPos().x - (sling.getWidth() / 2f);
+        float posY = levelData.getSlingAnchorPos().y - sling.getHeight();
+        batch.draw(sling,
+                Util.convertPixelsToMetres(posX),
+                Util.convertPixelsToMetres(posY + 15),
+                Util.convertPixelsToMetres(sling.getWidth()),
+                Util.convertPixelsToMetres(sling.getHeight()));
+    }
+
     float getGAME_WIDTH() {
         return GAME_WIDTH;
     }
@@ -409,6 +465,10 @@ public class GameScreen extends ScreenAdapter {
 
     FoodPlate getFoodPlate() {
         return foodPlate;
+    }
+
+    Vector2 getGravity() {
+        return gravity;
     }
 
     GameScreen getThis() {
