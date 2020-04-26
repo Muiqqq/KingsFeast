@@ -136,7 +136,7 @@ public class KingsFeast extends Game {
      * Starts music.
      */
     void setMusic() {
-        music = assetManager.get("1.mp3");
+        music = assetManager.get("bgmusic.mp3");
         music.setLooping(true);
         if(isMusicEnabled()) {
             music.play();
