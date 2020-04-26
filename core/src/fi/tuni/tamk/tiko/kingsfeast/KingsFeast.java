@@ -15,24 +15,6 @@ import com.badlogic.gdx.utils.Array;
 import java.util.Locale;
 
 public class KingsFeast extends Game {
-    // TODO: Current issues:
-    //  GENERAL PROBLEMS
-    //  CLEAN CODE
-    //  -Lack of documentation ----> Documentation started on various screens
-    //  -Check that everything that needs disposing gets disposed when needed
-    //  -Move spriteBatch to KingsFeast so it can be used elsewhere ----> Should be ok, now only one instance of batch exists,
-    //                                                                      get it with kingsFeast.getSpriteBatch();
-    //  MENUS AND MENU FUNCTIONS
-    //  -Graphics for: Sling, River Pollution, King's dining hall
-    //  -Verify that continue button works as intended
-    //  -When accessing settings through pause and changing language, language not changed in GameScreen when continued
-    //  LOCALIZATION
-    //  -Localize all text once written
-    //  STORY
-
-    // remember to give an instance of 'this' to all new screens, if anything
-    // from this class or parent class is to be used in that screen.
-
     private final AssetManager assetManager = new AssetManager();
     private SpriteBatch batch;
     private Array<LevelData> levels;
@@ -143,13 +125,6 @@ public class KingsFeast extends Game {
         }
     }
 
-    // Set sound effects to play (This might be redundant)
-    void setSounds() {
-        if(isSoundEffectsEnabled()) {
-            // Play sounds
-        }
-    }
-
     // Save game when level changes
     void saveGameOnLevelSwap() {
         if (getCurrentLevel() < getLevels().size - 1) {
@@ -161,7 +136,6 @@ public class KingsFeast extends Game {
                     Integer.parseInt(getPollutionLevel()));
             getPrefs().flush();
         } else {
-            //clearSaveState(); <--- This commented out to test infinite loop probably will either way be deleted
             this.currentLevel = 0;
             levels.shuffle();
             getPrefs().putBoolean("playthroughComplete", true);
@@ -239,7 +213,7 @@ public class KingsFeast extends Game {
      * Sets the amount of throws in last level to a variable.
      * @param levelThrows Amount of food thrown.
      */
-    void setLevelThrows(int levelThrows) {
+    private void setLevelThrows(int levelThrows) {
         this.levelThrows = Integer.toString(levelThrows);
     }
 
@@ -257,7 +231,7 @@ public class KingsFeast extends Game {
      * Set current level. Keeps track of the levels played.
      * @param x number of the level.
      */
-    void setCurrentLevel(int x) {
+    private void setCurrentLevel(int x) {
         currentLevel = x;
     }
 
@@ -265,7 +239,7 @@ public class KingsFeast extends Game {
      * Set current level score.
      * @param score of the current level.
      */
-    void setLevelScore(int score) {
+    private void setLevelScore(int score) {
         this.levelScore = Integer.toString(score);
     }
 
@@ -297,7 +271,7 @@ public class KingsFeast extends Game {
      * Sets the total throws.
      * @param throwes Throws to be added to total amount.
      */
-    void setTotalThrows(int throwes) {
+    private void setTotalThrows(int throwes) {
         int total = Integer.parseInt(getTotalThrows()) + throwes;
         this.totalThrows = Integer.toString(total);
     }

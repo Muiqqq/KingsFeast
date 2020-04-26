@@ -60,9 +60,6 @@ class FoodPlate {
     private float angleBetweenTwoPoints() {
         float angle = MathUtils.atan2(anchor.y - firingPos.y, anchor.x - firingPos.x);
         angle %= 2 * MathUtils.PI;
-        /*if (angle < 0) {
-            angle += 2 * MathUtils.PI2;
-        }*/
         return angle;
     }
 
@@ -104,10 +101,8 @@ class FoodPlate {
             MapLayer layer;
             if (foodTexture.toString().contains("_flat")) {
                 layer = levelData.getTiledMap().getLayers().get("flatplate");
-                System.out.println("flatplate");
             } else {
                 layer = levelData.getTiledMap().getLayers().get("bowlplate");
-                System.out.println("bowlplate");
             }
             PolygonMapObject polyObj = layer.getObjects().getByType(PolygonMapObject.class).get(0);
             polygon = BodyBuilder.getPolygonShape(polyObj);

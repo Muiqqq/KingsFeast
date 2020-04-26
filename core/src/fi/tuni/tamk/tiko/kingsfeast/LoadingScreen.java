@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -90,7 +89,6 @@ public class LoadingScreen extends ScreenAdapter {
             kingsFeast.getAssetManager().finishLoading();
             kingsFeast.setLevels(Util.buildLevels(kingsFeast));
             kingsFeast.setMusic();
-            kingsFeast.setSounds();
             dispose();
             kingsFeast.setScreen(new MainMenuScreen(kingsFeast));
         }
@@ -110,7 +108,6 @@ public class LoadingScreen extends ScreenAdapter {
      * Note to self: use a texture atlas next time.
      */
     private void loadAssets() {
-        kingsFeast.getAssetManager().getLogger().setLevel(Logger.DEBUG);
         kingsFeast.getAssetManager().load("map1.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map2.tmx", TiledMap.class);
         kingsFeast.getAssetManager().load("map3.tmx", TiledMap.class);

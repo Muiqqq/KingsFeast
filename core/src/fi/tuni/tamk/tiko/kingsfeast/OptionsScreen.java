@@ -301,8 +301,4 @@ public class OptionsScreen extends ScreenAdapter {
     public void dispose() {
         stage.dispose();
     }
-
-    private OptionsScreen getThisScreen() {
-        return this;
-    }
 }

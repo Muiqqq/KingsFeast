@@ -77,8 +77,6 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.getViewport().update(width, height, true);
     }
 
-    // stage.act() calls every single actor's act() method.
-    // stage.draw() draws all actors.
     @Override
     public void render(float delta) {
         stage.act(delta);

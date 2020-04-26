@@ -45,7 +45,7 @@ public class TextScreen extends ScreenAdapter {
     private boolean intro;
 
     // Localization
-    I18NBundle myBundle;
+    private I18NBundle myBundle;
 
     /**
      * Constructor for how to play screen.
@@ -53,7 +53,7 @@ public class TextScreen extends ScreenAdapter {
      * @param screen to enable possibility to go back to previous screen without
      *               having to create the previous screen again.
      */
-    public TextScreen(KingsFeast kingsFeast, Screen screen) {
+    TextScreen(KingsFeast kingsFeast, Screen screen) {
         this.kingsFeast = kingsFeast;
         previousScreen = screen;
         batch = kingsFeast.getSpriteBatch();
@@ -71,7 +71,7 @@ public class TextScreen extends ScreenAdapter {
      * Constructor for player intro screen.
      * @param kingsFeast to access its methods.
      */
-    public TextScreen(KingsFeast kingsFeast) {
+    TextScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         previousScreen = null;
         batch = kingsFeast.getSpriteBatch();

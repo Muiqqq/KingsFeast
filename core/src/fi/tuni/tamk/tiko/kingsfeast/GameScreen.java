@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -34,7 +33,6 @@ public class GameScreen extends ScreenAdapter {
     private final boolean DEBUG_PHYSICS = false;
 
     private final float unitScale = Util.getUnitScale();
-    // Initial values, work in progress. Pixels -> meters.
     private final float GAME_WIDTH = 1280 * unitScale;
     private final float GAME_HEIGHT = 736 * unitScale;
 
@@ -54,7 +52,6 @@ public class GameScreen extends ScreenAdapter {
     private Vector3 touchPos;
     private Rectangle throwBounds;
 
-    // note to self: put this in FoodPlate too if possible
     private boolean canThrow;
 
     boolean wasTouchDragged;
@@ -88,8 +85,6 @@ public class GameScreen extends ScreenAdapter {
         foodPlate = new FoodPlate(levelData, kingsFeast, this);
         touchPos = new Vector3();
 
-        // bounds should be set to something representing the object being flung from the sling
-        // eventually.
         throwBounds = levelData.getTHROW_BOUNDS();
         canThrow = false;
         wasTouchDragged = false;
@@ -155,7 +150,6 @@ public class GameScreen extends ScreenAdapter {
         handleCameraLimits();
         swapScreen();
 
-        // all camera methods have to be before camera.update();
         camera.update();
         hud.update();
     }
@@ -218,7 +212,6 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
-    // Draws debugging stuff
     private void drawDebug() {
         if (DEBUG_PHYSICS) {
             box2DDebugRenderer.render(world, camera.combined);
@@ -240,11 +233,9 @@ public class GameScreen extends ScreenAdapter {
                 com.badlogic.gdx.graphics.Color.FIREBRICK,
                 com.badlogic.gdx.graphics.Color.BROWN);
 
-
         shapeRenderer.end();
     }
 
-    // put camera stuff in util maybe? might not work
     private void handleCameraLimits() {
         if (camera.position.x - (camera.viewportWidth / 2) <= 0)  {
             camera.position.x = 0 + camera.viewportWidth / 2;
@@ -302,9 +293,6 @@ public class GameScreen extends ScreenAdapter {
         if (Gdx.input.justTouched()) {
             if (throwBounds.contains(posX, posY)) {
                 canThrow = true;
-
-                System.out.println("touchPosX: " + touchPos.x / unitScale);
-                System.out.println("touchPosY: " + touchPos.y / unitScale);
             }
         }
     }

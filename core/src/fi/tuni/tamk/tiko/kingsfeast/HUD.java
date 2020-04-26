@@ -135,7 +135,6 @@ class HUD {
             @Override
             public void tap(InputEvent e, float x, float y, int count, int button) {
                 super.tap(e, x, y, count, button);
-                System.out.println(x + " + " + y);
                 if (gameScreen.getFoodPlate().isPlateFlying) {
                     gameScreen.getFoodPlate().isPlateFlying = false;
                     gameScreen.getFoodPlate().removeBody= true;
