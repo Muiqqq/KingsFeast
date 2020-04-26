@@ -126,7 +126,7 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("dot.png", Texture.class);
         kingsFeast.getAssetManager().load("skipButton-up.png", Texture.class);
         kingsFeast.getAssetManager().load("skipButton-down.png", Texture.class);
-        kingsFeast.getAssetManager().load("mainmenubackgroundtitle.jpg", Texture.class);
+        kingsFeast.getAssetManager().load("mainmenubackgroundtitle.png", Texture.class);
         kingsFeast.getAssetManager().load("SettingsButton.png", Texture.class);
         kingsFeast.getAssetManager().load("riverscreen.png", Texture.class);
         kingsFeast.getAssetManager().load("OkButton.png", Texture.class);

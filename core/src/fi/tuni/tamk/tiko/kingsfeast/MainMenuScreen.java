@@ -88,7 +88,7 @@ public class MainMenuScreen extends ScreenAdapter {
      * @return Background image.
      */
     private Image createBackgroundImage() {
-        backgroundTexture = kingsFeast.getAssetManager().get("mainmenubackgroundtitle.jpg");
+        backgroundTexture = kingsFeast.getAssetManager().get("mainmenubackgroundtitle.png");
         Image background = new Image(backgroundTexture);
         background.setSize(GAME_WIDTH, GAME_HEIGHT);
         return background;
