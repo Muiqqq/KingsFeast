@@ -101,7 +101,14 @@ class FoodPlate {
 
             // Dollar store version of creating a polygon for the food plate
             // Yay for cutting corners
-            MapLayer layer = levelData.getTiledMap().getLayers().get("foodplate");
+            MapLayer layer;
+            if (foodTexture.toString().contains("_flat")) {
+                layer = levelData.getTiledMap().getLayers().get("flatplate");
+                System.out.println("flatplate");
+            } else {
+                layer = levelData.getTiledMap().getLayers().get("bowlplate");
+                System.out.println("bowlplate");
+            }
             PolygonMapObject polyObj = layer.getObjects().getByType(PolygonMapObject.class).get(0);
             polygon = BodyBuilder.getPolygonShape(polyObj);
 
@@ -180,8 +187,11 @@ class FoodPlate {
     private void randomizeTexture() {
         Array<Texture> foodTextures = new Array<>();
         foodTextures.add(kingsFeast.getAssetManager().get("fruitSalad.png", Texture.class));
-        foodTextures.add(kingsFeast.getAssetManager().get("fruitSalad.png", Texture.class));
-        foodTextures.add(kingsFeast.getAssetManager().get("fruitSalad.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("kana_flat.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("keitto.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("spagetti_flat.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("kakku_flat.png", Texture.class));
+        foodTextures.add(kingsFeast.getAssetManager().get("puuro.png", Texture.class));
 
         foodTexture = foodTextures.get(MathUtils.random(0, foodTextures.size - 1));
     }
@@ -196,7 +206,7 @@ class FoodPlate {
     void draw(SpriteBatch batch, World world) {
         Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
-        MapLayer layer = levelData.getTiledMap().getLayers().get("foodplate");
+        MapLayer layer = levelData.getTiledMap().getLayers().get("bowlplate");
         PolygonMapObject polyObj = layer.getObjects().getByType(PolygonMapObject.class).get(0);
         float width = Util.convertPixelsToMetres
                 (polyObj.getPolygon().getBoundingRectangle().getWidth());

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="104">
+<map version="1.2" tiledversion="1.3.2" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="60" height="33" tilewidth="32" tileheight="32" infinite="0" nextlayerid="9" nextobjectid="106">
  <layer id="1" name="Tile Layer 1" width="60" height="33">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -221,9 +221,14 @@
    <polygon points="0,0 0.363636,25.6364 15.0909,44.7273 38.9091,44.9091 55.0909,26.3636 55.0909,0.363636 28.1818,-11.0909"/>
   </object>
  </objectgroup>
- <objectgroup id="7" name="foodplate">
+ <objectgroup id="7" name="bowlplate">
   <object id="21" x="241.75" y="780">
    <polygon points="0,0 32,32 64,32 96,0 82.25,-8.75 10.25,-9.25"/>
+  </object>
+ </objectgroup>
+ <objectgroup id="8" name="flatplate">
+  <object id="105" x="234" y="742.5">
+   <polygon points="5.61018,49.2632 19.7324,66.5823 88.9891,66.9672 102.337,47.3389 83.4515,31.1263 23.8675,31.2225"/>
   </object>
  </objectgroup>
  <objectgroup id="6" name="anchor">

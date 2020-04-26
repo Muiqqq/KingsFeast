@@ -223,42 +223,8 @@ public class GameScreen extends ScreenAdapter {
         if (DEBUG_PHYSICS) {
             box2DDebugRenderer.render(world, camera.combined);
         }
-        // Following code draws the rectangles and the line you see when testing.
         shapeRenderer.setProjectionMatrix(camera.combined);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        /*
-        shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.anchor.x - 95),
-                Util.convertPixelsToMetres(foodPlate.anchor.y - 5),
-                Util.convertPixelsToMetres(10),
-                Util.convertPixelsToMetres(10));
-
-        shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.anchor.x + 95),
-                Util.convertPixelsToMetres(foodPlate.anchor.y - 5),
-                Util.convertPixelsToMetres(10),
-                Util.convertPixelsToMetres(10));
-
-
-        shapeRenderer.rect(Util.convertPixelsToMetres(foodPlate.firingPos.x - 5),
-                Util.convertPixelsToMetres(foodPlate.firingPos.y - 5),
-                Util.convertPixelsToMetres(10),
-                Util.convertPixelsToMetres(10));
-        */
-
-        float distX = (foodPlate.anchor.x - foodPlate.firingPos.x);
-        float distY = (foodPlate.anchor.y - foodPlate.firingPos.y);
-
-        /*
-        shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x),
-                Util.convertPixelsToMetres(foodPlate.anchor.y),
-                Util.convertPixelsToMetres(foodPlate.firingPos.x),
-                Util.convertPixelsToMetres(foodPlate.firingPos.y));
-        */
-        /*
-        shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x),
-                Util.convertPixelsToMetres(foodPlate.anchor.y),
-                Util.convertPixelsToMetres(foodPlate.anchor.x + distX),
-                Util.convertPixelsToMetres(foodPlate.anchor.y + distY));
-        */
 
         shapeRenderer.line(Util.convertPixelsToMetres(foodPlate.anchor.x + 95),
                 Util.convertPixelsToMetres(foodPlate.anchor.y),
