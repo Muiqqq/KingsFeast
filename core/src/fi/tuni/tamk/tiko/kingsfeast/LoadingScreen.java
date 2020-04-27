@@ -182,7 +182,7 @@ public class LoadingScreen extends ScreenAdapter {
         kingsFeast.getAssetManager().load("Jokinäkymä60%.jpg", Texture.class);
         kingsFeast.getAssetManager().load("Jokinäkymä70%.jpg", Texture.class);
 
-        kingsFeast.getAssetManager().load("bgmusik.mp3", Music.class);
+        kingsFeast.getAssetManager().load("bgmusic.mp3", Music.class);
 
         kingsFeast.getAssetManager().load("throw1.mp3", Sound.class);
         kingsFeast.getAssetManager().load("throw2.mp3", Sound.class);

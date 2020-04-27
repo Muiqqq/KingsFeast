@@ -118,7 +118,7 @@ public class KingsFeast extends Game {
      * Starts music.
      */
     void setMusic() {
-        music = assetManager.get("bgmusik.mp3");
+        music = assetManager.get("bgmusic.mp3");
         music.setLooping(true);
         if(isMusicEnabled()) {
             music.play();
@@ -199,7 +199,7 @@ public class KingsFeast extends Game {
         } else if (scoring == 750) {
             setPollutionLevel(-5);
         } else if (scoring == 500){
-            setPollutionLevel(waste);
+            setPollutionLevel(1);
         } else if (scoring == 200) {
             setPollutionLevel(waste);
         } else if (scoring == -100) {
@@ -374,6 +374,9 @@ public class KingsFeast extends Game {
         return prefs;
     }
 
+    /**
+     * Set all values to defaults in preferences and save to start a new game.
+     */
     private void initSaveState() {
         if (!kfprefs.contains("doPrefsExist")) {
             kfprefs.putBoolean("doPrefsExist", true);
@@ -392,12 +395,22 @@ public class KingsFeast extends Game {
         }
     }
 
+    /**
+     * Set story point state to shown, to not show it again.
+     * @param storyPointNum Number of the story point.
+     * @param storyPointShown True or false depending on if it is shown.
+     */
     void setStoryPointShown(int storyPointNum, boolean storyPointShown) {
         storyPoints[storyPointNum - 1] = storyPointShown;
         kfprefs.putBoolean("storypoint" + storyPointNum, storyPointShown);
         kfprefs.flush();
     }
 
+    /**
+     * Check if certain story point is shown.
+     * @param storyPointNum Number of story point.
+     * @return True or false.
+     */
     boolean isStoryPointShown(int storyPointNum) {
         return storyPoints[storyPointNum - 1];
     }
