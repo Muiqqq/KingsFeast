@@ -24,8 +24,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import static com.badlogic.gdx.graphics.g3d.particles.ParticleChannels.Color;
 
 /**
- * TODO: DOCUMENTATION!!
- * All main gameplay stuff happens in this screen.
+ * All main gameplay magic happens in a GameScreen.
+ *
+ * Contains everything necessary for the physics-based throwing mechanic, levels, camera handling,
+ * input handling, contact handling, etc.
  */
 public class GameScreen extends ScreenAdapter {
     private final KingsFeast kingsFeast;
@@ -59,7 +61,13 @@ public class GameScreen extends ScreenAdapter {
     private int VISITORS_SERVED;
     private int THROW_AMOUNT;
 
-    // KingsFeast object gets stored to access its and its parent's methods.
+    /**
+     * Constructor sets up all the necessary things. Almost nothing is initialized in the show()
+     * method and gets initialized by the constructor instead, because this screen can be returned
+     * to from the pause menu. This way the state of this screen gets preserved through screen swaps.
+     *
+     * @param kingsFeast Game object to get access to its and its parent's methods
+     */
     GameScreen(KingsFeast kingsFeast) {
         this.kingsFeast = kingsFeast;
         levelData = kingsFeast.getLevels().get(kingsFeast.getCurrentLevel());
@@ -92,11 +100,7 @@ public class GameScreen extends ScreenAdapter {
 
         hud = new HUD(batch, kingsFeast,this);
     }
-    /**
-     * Screens use show() instead of create()
-     *
-     * They are pretty much the same thing.
-     */
+
     @Override
     public void show() {
         multiplexer.addProcessor(hud.getStage());
@@ -141,6 +145,10 @@ public class GameScreen extends ScreenAdapter {
         shapeRenderer.dispose();
     }
 
+    /**
+     * Called in render(), this method contains all the other methods necessary to be called all the
+     * time.
+     */
     private void update() {
         enableThrowing();
         foodPlate.destroyBody(world, this);
@@ -154,8 +162,10 @@ public class GameScreen extends ScreenAdapter {
         hud.update();
     }
 
-    // Input processing happens here. Actual processing should happen in case specific methods.
-    // Check them for additional documentation
+    /**
+     * Sets up input processing through an input multiplexer. Input actions are contained in their
+     * own respective methods.
+     */
     private void inputProcessing() {
         multiplexer.addProcessor(new InputAdapter() {
 
@@ -184,8 +194,11 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
-    // Contact processing happens here. Actual processing should happen in case specific methods.
-    // Check them for additional documentation.
+
+    /**
+     * Sets up contact processing, for box2d physics. Contact actions are contained in their own
+     * respective methods.
+     */
     private void contactProcessing() {
         world.setContactListener(new ContactListener() {
 
@@ -212,6 +225,18 @@ public class GameScreen extends ScreenAdapter {
         });
     }
 
+    /**
+     * Draws the box2d debugging lines, if DEBUG_PHYSICS is true.
+     *
+     * The ShapeRenderer was used as par of the debugging initially as well, but ended up being an
+     * actual feature, due to not having enough time to do things properly.
+     * ShapeRenderer draws the lines which come from the sling, so the sling actually looks and
+     * behaves a bit like a sling.
+     *
+     * At the very minimum, the ShapeRenderer stuff should have been separated into a method of
+     * their own since it became an actual feature, but I'm leaving this as is, because this is how
+     * it ended up being in the released product.
+     */
     private void drawDebug() {
         if (DEBUG_PHYSICS) {
             box2DDebugRenderer.render(world, camera.combined);
@@ -236,6 +261,9 @@ public class GameScreen extends ScreenAdapter {
         shapeRenderer.end();
     }
 
+    /**
+     * Checks for the limits of the camera and makes sure it stays within the level.
+     */
     private void handleCameraLimits() {
         if (camera.position.x - (camera.viewportWidth / 2) <= 0)  {
             camera.position.x = 0 + camera.viewportWidth / 2;
@@ -255,7 +283,9 @@ public class GameScreen extends ScreenAdapter {
     }
 
 
-    // Makes the camera follow the foodplate when one is flying.
+    /**
+     * Makes the camera follow a thrown foodPlate object.
+     */
     private void snapCameraToBody() {
         if (foodPlate.isPlateFlying) {
             camera.position.x = foodPlate.getBody().getWorldCenter().x;
@@ -263,13 +293,22 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    // Resets camera's position back to default
-    // This gets called, f. ex., when a foodplate is destroyed or hits a goal.
+    /**
+     * Resets the cameras position back to default.
+     */
     void cameraReset() {
         camera.position.x = 0 + (camera.viewportWidth / 2);
         camera.position.y = 0 + (camera.viewportHeight / 2);
     }
 
+    /**
+     * Handles camera panning, so the player can look around a level.
+     *
+     * @param tmp  Vector used to calculate the necessary camera translation
+     * @param lastTouch Position of the last touch by the user
+     * @param screenX X coord of an input event
+     * @param screenY Y coord of an input event
+     */
     private void handleCameraPanning(Vector3 tmp, Vector3 lastTouch, int screenX, int screenY) {
         float posX = Util.convertMetresToPixels(touchPos.x);
         float posY = Util.convertMetresToPixels(touchPos.y);
@@ -283,7 +322,10 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    // these might belong in FoodPlate?
+    /**
+     * Sets the canThrow flag to true, if the player is touching an area near the food object.
+     * This allows the player to perform the throw. Touching elsewhere will just pan the camera.
+     */
     private void enableThrowing() {
         touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
         camera.unproject(touchPos);
@@ -297,6 +339,15 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * This input action is called within the touchDragged input event. When the user is dragging on
+     * the screen (only when the dragging started near the throwable object, and if there isn't
+     * an object flying already!) the necessary calculations for a potential throw are made.
+     * Sets the wasTouchDragged flag to true.
+     *
+     * @param screenX X coord of the input event
+     * @param screenY Y coord of the input event
+     */
     private void handleThrowCalculations(int screenX, int screenY) {
         if (canThrow && !foodPlate.isPlateFlying) {
             // transforms screen coordinates to game coordinates.
@@ -313,8 +364,11 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    // Currently the physics object gets created when the user lets go of
-    // mouse button, or stops touching the screen. Could be done differently.
+    /**
+     * This input action is called within the touchUp input event. When the user stops touching the
+     * screen after dragging, a throw is made. Creates a body for the flying object based on prior
+     * calculations, and increments THROW_AMOUNT. Resets the relevant flags and the firing position.
+     */
     private void handleThrowing() {
         if (canThrow && !foodPlate.isPlateFlying && wasTouchDragged) {
             foodPlate.setBody(foodPlate.createBody(world));
@@ -328,11 +382,18 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
-    // Handles the collision between a foodplate and a goal.
-    // Foodplate which hit a goal gets removed, it's texture is set to be drawn at that goal
-    // and level progression (VISITORS_SERVED) is incremented.
-    // Also makes sure that you cannot progress by hitting the same goal again, by changing
-    // the userdata to something different.
+    /**
+     * Handles the collision between a foodPlate and a 'goal'.
+     * If a flying foodPlate object collides with a 'goal' object, the foodPlate physics object gets
+     * marked for removal. FoodPlate's recentlyScored flag is set to true, so that the progress in
+     * the level gets incremented eventually.
+     *
+     * The same 'goal' can't get hit again, because it's userData gets changed to something
+     * different, in this case, the texture of the foodPlate. The texture gets saved to the userData
+     * of that specific goal which was hit, so that the texture can be drawn there. That serves as
+     * a visual cue to the player to indicate a 'goal' has already been hit.
+     * @param contact Contact object from the contact event.
+     */
     private void handleCollisionWithGoal(Contact contact) {
         Object userDataA = contact.getFixtureA().getBody().getUserData();
         Object userDataB = contact.getFixtureB().getBody().getUserData();
@@ -357,6 +418,11 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Whenever a foodPlate hits anything, it starts slowing down. This method does just that, it
+     * adds linear damping on the body of foodPlate, whenever it hits a wall.
+     * @param contact Contact object from the contact event.
+     */
     private void setLinearDampingOnCollision(Contact contact) {
         Object userDataA = contact.getFixtureA().getBody().getUserData();
         Object userDataB = contact.getFixtureB().getBody().getUserData();
@@ -370,6 +436,11 @@ public class GameScreen extends ScreenAdapter {
 
     // swaps the level to the next one if current one is finished (all objects have been thrown)
     // currently just loops back to the first level after all levels have been completed.
+
+    /**
+     * Swaps the screen to the feedback screen if current level is completed
+     * (all the guests have been served).
+     */
     private void swapScreen() {
         if (VISITORS_SERVED == levelData.getVisitorCount()) {
             dispose();
@@ -377,6 +448,12 @@ public class GameScreen extends ScreenAdapter {
         }
     }
 
+    /**
+     * Draws the sling based on where the anchor position is for the throwing mechanic.
+     * @param drawInFront There's two parts to the sling, the bit that is supposed to be drawn
+     *                    in front of the foodPlate's texture, and the bit that's part of the
+     *                    background. This is used to check which one should be drawn.
+     */
     private void drawSling(boolean drawInFront) {
         Texture sling;
         if (drawInFront) {

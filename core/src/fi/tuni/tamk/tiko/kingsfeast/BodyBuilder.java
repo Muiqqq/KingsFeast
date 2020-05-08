@@ -111,8 +111,7 @@ class BodyBuilder {
 
     /**
      * Currently redundant, exists for the sake of consistency.
-     * Should be made to store the location like rectangular polygons do in the
-     * createRectangleBodyDef() method. Not necessary for functionality, will be changed
+     * Not necessary for functionality, will be changed
      * later if there's time for it.
      *
      * @param polygonObject Does nothing

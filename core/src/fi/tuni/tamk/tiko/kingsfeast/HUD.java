@@ -17,12 +17,10 @@ import com.badlogic.gdx.utils.I18NBundle;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-// this needs elaboration
 /**
  * This class contains the Heads-Up Display drawn on top of the GameScreen.
  *
  * Made utilizing scene2d stages and tables. Has its own camera so it stays on the screen.
- *
  */
 class HUD {
     private final KingsFeast kingsFeast;

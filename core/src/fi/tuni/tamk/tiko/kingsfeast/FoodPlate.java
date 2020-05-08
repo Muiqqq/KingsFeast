@@ -15,7 +15,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * TODO: DOCUMENTATION!
+ * This class contains things that have something to do with the object that gets thrown around the
+ * levels in the game. A lot of the calculations needed for the throwing mechanic happen with
+ * methods from this class. Also, methods for manipulating the object, such as creating and handling
+ * the destruction of the box2d physics body etc., are found here.
  *
  */
 class FoodPlate {
@@ -46,6 +49,14 @@ class FoodPlate {
     boolean removeBody = false;
     boolean recentlyScored = false;
 
+    /**
+     * Relevant data is stored with constructor. Also randomizes the first texture that is to be
+     * used.
+     * @param levelData LevelData object stores some information about the level
+     *                 that is needed by this class
+     * @param kingsFeast Game object, used to access its and its parent's methods
+     * @param gameScreen GameScreen object, used to access its and its parent's methods
+     */
     FoodPlate(LevelData levelData, KingsFeast kingsFeast, GameScreen gameScreen) {
         // anchor pos will come from the slings position once that's implemented.
         this.kingsFeast = kingsFeast;
@@ -56,20 +67,31 @@ class FoodPlate {
         gravity = gameScreen.getGravity();
     }
 
-    // Gets the angle between two points
+    /**
+     * Calculates the angle between the throwing anchor point and the firing position.
+     * @return Angle between two points
+     */
     private float angleBetweenTwoPoints() {
         float angle = MathUtils.atan2(anchor.y - firingPos.y, anchor.x - firingPos.x);
         angle %= 2 * MathUtils.PI;
         return angle;
     }
 
-    // Gets the distance between two points
+    /**
+     * Calculates the distance between the throwing anchor point and the firing position.
+     * @return Distance between two points (in pixels)
+     */
     private float distanceBetweenTwoPoints() {
         return (float) Math.sqrt(((anchor.x - firingPos.x) * (anchor.x - firingPos.x)) +
                 ((anchor.y - firingPos.y) * (anchor.y - firingPos.y)));
     }
 
-    // Calculates angle and distance of the throw
+    /**
+     * Sets angle and distance based on their respective methods, based on the firing position.
+     * Distance can't be bigger than max distance.
+     * @param screenX Screen X coordinate for the firing pos.
+     * @param screenY Screen Y coordinate for the firing pos.
+     */
     void calculateAngleAndDistance(float screenX, float screenY) {
         firingPos.set(Util.convertMetresToPixels(screenX),
                 Util.convertMetresToPixels(screenY));
@@ -84,7 +106,13 @@ class FoodPlate {
                 anchor.y + (distance * -MathUtils.sin(angle)));
     }
 
-    // Creates a body with a velocity based on calculations above.
+    /**
+     * Creates the physics body. A body can't be created if one already exists. The body gets its
+     * shape from the tiled map. A linear impulse is applied, with velocity based on the necessary
+     * calculations.
+     * @param world The body is created to be a part of this world
+     * @return A body for the foodPlate
+     */
     Body createBody(World world) {
         if (!isPlateFlying) {
             isPlateFlying = true;
@@ -131,7 +159,10 @@ class FoodPlate {
         }
     }
 
-    // if plate has almost stopped -> mark it for removal.
+    /**
+     * A method used to check if a foodPlate physics body has almost stopped. Marks body for removal
+     * if it has almost stopped.
+     */
     void checkIfBodyStopped() {
         if (isPlateFlying) {
             float currentSpeed = body.getLinearVelocity().len();
@@ -143,7 +174,11 @@ class FoodPlate {
         }
     }
 
-    // removes the plate body so game can continue
+    /**
+     * If body has been marked for removal, this method is used to destroy it.
+     * @param world The world to destroy the body from
+     * @param gameScreen Used to call for a camera reset
+     */
     void destroyBody(World world, GameScreen gameScreen) {
         if (removeBody) {
             world.destroyBody(body);
@@ -155,6 +190,11 @@ class FoodPlate {
         }
     }
 
+    /**
+     * If the player 'scores' (serves a guest), the game waits for a bit before resetting the camera.
+     * This way the player gets to see they actually succeeded.
+     * @param gameScreen Two methods from this object are needed here.
+     */
     void timedCameraReset(GameScreen gameScreen) {
         if (recentlyScored) {
             float timePeriod = 1.499f;
@@ -177,8 +217,10 @@ class FoodPlate {
         return body;
     }
 
-    // Sets a random texture for the foodplate. Adds a bit of visual flavor.
-    // Refactor depending on how texture files / atlas is being handled.
+
+    /**
+     * Sets a random texture for the foodPlate to add a bit of visual flavor.
+     */
     private void randomizeTexture() {
         Array<Texture> foodTextures = new Array<>();
         foodTextures.add(kingsFeast.getAssetManager().get("fruitSalad.png", Texture.class));
@@ -195,9 +237,20 @@ class FoodPlate {
         return foodTexture;
     }
 
-    // TODO: add rotation for flying food
-    //  - fine tune size etc, make sure textures don't float on top of or sink
-    //  - into platforms/floors etc.
+    /**
+     * Draws all the different states for the foodPlate.
+     *
+     * Draws the correct texture in front of every guest that has been served. When a food that is
+     * thrown hits a 'goal', the texture of it gets saved to the userdata of that 'goal'. That
+     * texture is then drawn.
+     *
+     * Draws the texture for the flying physics body. If there is no flying physics body, the
+     * texture gets drawn on the sling, wherever the current firing position is. Firing position
+     * follows touch when dragging, and so does the texture.
+     *
+     * @param batch Batch is required to draw
+     * @param world World is needed so the bodies can be fetched
+     */
     void draw(SpriteBatch batch, World world) {
         Array<Body> bodies = new Array<>();
         world.getBodies(bodies);
@@ -248,20 +301,45 @@ class FoodPlate {
         }
     }
 
+    /**
+     * A hacked together method to get the correct (or rather, a close enough correct) velocity
+     * to draw the projectile trajectory. It's not exact, but it's close enough. Almost identical
+     * to the way velocity is calculated for the body of foodPlate, but for some reason the same
+     * calculation returned a very different result when testing.
+     *
+     * @return Velocity as a Vector2 for drawing the projectile trajectory
+     */
     private Vector2 getStartingVelocity() {
         float velocityX = -(MAX_STRENGTH * -MathUtils.cos(angle) * (distance / 5.7f));
         float velocityY = -(MAX_STRENGTH * -MathUtils.sin(angle) * (distance / 5.7f));
         return new Vector2(velocityX, velocityY);
     }
 
+    /**
+     * Calculates a X coordinate at a specific time
+     * @param t time in seconds
+     * @return X coordinate at a specific time
+     */
     private float getTrajectoryX(float t) {
         return getStartingVelocity().x * t + anchor.x;
     }
 
+    /**
+     * Calculates an Y coordinate at a specific time
+     * @param t time in seconds
+     * @return Y coordinate at a specific time
+     */
     private float getTrajectoryY(float t) {
         return 0.5f * gravity.y * t * t + getStartingVelocity().y * t + anchor.y;
     }
 
+    /**
+     * Method to draw the projectile trajectory used to assist throwing. Only draws when the player
+     * is in the process of making a throw.
+     *
+     * @param sb batch is required to draw
+     * @param gameScreen GameScreen object to access its methods and variables
+     */
     void drawTrajectory(SpriteBatch sb, GameScreen gameScreen) {
         if (gameScreen.wasTouchDragged) {
             Texture texture = kingsFeast.getAssetManager().get("dot.png");
